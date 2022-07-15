@@ -9,7 +9,6 @@ children:
   - /about-github-hosted-runners
   - /monitoring-your-current-jobs
   - /customizing-github-hosted-runners
-  - /connecting-to-a-private-network
 shortTitle: Usar executores hospedados no GitHub
 ---
 

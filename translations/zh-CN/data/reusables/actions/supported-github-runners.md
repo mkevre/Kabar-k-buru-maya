@@ -15,7 +15,7 @@ Windows Server 2022
 <code>windows-latest</code> 或 <code>windows-2022</code>
 </td>
 <td>
-<code>windows-latest</code> 标签目前使用 Windows Server 2022 运行器映像。
+The <code>windows-latest</code> label currently uses the Windows Server 2022 runner image.
 </td>
 </tr>
 <tr>
@@ -30,13 +30,13 @@ Windows Server 2019
 </tr>
 <tr>
 <td>
-Ubuntu 22.04
+Windows Server 2016<sup>[deprecated]</sup>
 </td>
 <td>
-<code>ubuntu-22.04</code>
+<code>windows-2016</code>
 </td>
 <td>
-Ubuntu 22.04 目前处于公开测试阶段。
+Migrate to Windows 2019 or Windows 2022. For more information, see  <A href="https://github.blog/changelog/2021-10-19-github-actions-the-windows-2016-runner-image-will-be-removed-from-github-hosted-runners-on-march-15-2022/">the blog post</A>.
 </td>
 </tr>
 <tr>
@@ -45,6 +45,8 @@ Ubuntu 20.04
 </td>
 <td>
 <code>ubuntu-latest</code> 或 <code>ubuntu-20.04</code>
+</td>
+<td>
 </td>
 </tr>
 <tr>
@@ -59,21 +61,13 @@ Ubuntu 18.04
 </tr>
 <tr>
 <td>
-macOS Monterey 12
-</td>
-<td>
-<code>macos-12</code>
-  </td>
-</tr>
-<tr>
-<td>
 macOS Big Sur 11
 </td>
 <td>
 <code>macos-latest</code> 或 <code>macos-11</code>
 </td>
 <td>
-<code>macos-latest</code> 标签目前使用 macOS 11 运行器映像。
+The <code>macos-latest</code> label currently uses the macOS 11 runner image.
 </td>
 </tr>
 <tr>
@@ -91,12 +85,12 @@ macOS Catalina 10.15
 
 {% note %}
 
-**注意：** `-latest` 虚拟环境是 {% data variables.product.prodname_dotcom %} 提供的最新稳定映像，可能不是操作系统供应商提供的最新版本的操作系统。
+**Note:** The `-latest` virtual environments are the latest stable images that {% data variables.product.prodname_dotcom %} provides, and might not be the most recent version of the operating system available from the operating system vendor.
 
 {% endnote %}
 
 {% warning %}
 
-<b>注意：</b> 测试版和已弃用映像均按“原样”、“包含所有故障”和“可用”提供，并且不在服务级别协议和保修范围内。 测试版映像可能不在客户支持范围内。
+<b>Note:</b> Beta and Deprecated Images are provided "as-is", "with all faults" and "as available" and are excluded from the service level agreement and warranty. Beta Images may not be covered by customer support.
 
 {% endwarning %}

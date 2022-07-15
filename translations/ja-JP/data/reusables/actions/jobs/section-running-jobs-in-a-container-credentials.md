@@ -1,6 +1,6 @@
 {% data reusables.actions.registry-credentials %}
 
-#### 例: コンテナレジストリの認証情報の定義
+#### Example: Defining credentials for a container registry
 
 {% raw %}
 ```yaml

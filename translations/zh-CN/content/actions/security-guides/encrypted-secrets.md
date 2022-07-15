@@ -7,7 +7,6 @@ redirect_from:
   - /actions/configuring-and-managing-workflows/creating-and-storing-encrypted-secrets
   - /actions/configuring-and-managing-workflows/using-variables-and-secrets-in-a-workflow
   - /actions/reference/encrypted-secrets
-miniTocMaxHeadingLevel: 3
 versions:
   fpt: '*'
   ghes: '*'
@@ -26,7 +25,7 @@ versions:
 
 对于存储在环境级别的机密，您可以启用所需的审查者来控制对机密的访问。 在必要的审查者授予批准之前，工作流程作业无法访问环境机密。
 
-{% ifversion fpt or ghec or ghae-issue-4856 or ghes > 3.4 %}
+{% ifversion fpt or ghec or ghae-issue-4856 %}
 
 {% note %}
 
@@ -227,9 +226,9 @@ steps:
 ```
 {% endraw %}
 
-无法直接在 `if:` 条件中引用机密。 而应考虑将机密设置为作业级环境变量，然后引用环境变量以有条件地运行作业中的步骤。 更多信息请参阅“[上下文可用性](/actions/learn-github-actions/contexts#context-availability)”和 [`jobs.<job_id>.steps[*].if`](/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idstepsif)。
+Secrets cannot be directly referenced in `if:` conditionals. Instead, consider setting secrets as job-level environment variables, then referencing the environment variables to conditionally run steps in the job. 更多信息请参阅“[上下文可用性](/actions/learn-github-actions/contexts#context-availability)”和 [`jobs.<job_id>.steps[*].if`](/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idstepsif)。
 
-如果尚未设置机密，则引用该机密的表达式（例如示例中的 {% raw %}`${{ secrets.SuperSecret }}`{% endraw %}）的返回值将为空字符串。
+If a secret has not been set, the return value of an expression referencing the secret (such as {% raw %}`${{ secrets.SuperSecret }}`{% endraw %} in the example) will be an empty string.
 
 尽可能避免使用命令行在进程之间传递密码。 命令行进程可能对其他用户可见（使用 `ps` 命令）或通过[安全审计事件](https://docs.microsoft.com/windows-server/identity/ad-ds/manage/component-updates/command-line-process-auditing)获取。 为帮助保护密码，请考虑使用环境变量 `STDIN` 或目标进程支持的其他机制。
 
@@ -284,86 +283,73 @@ steps:
 * 如果分配仓库访问超过 100 个组织密钥，则工作流程只能使用前 100 个组织密钥（按密钥名称字母顺序排序）。
 * 所有 100 个环境机密。
 
-密码大小限于 64 KB。 要存储较大的机密，请参阅下面的“[存储大机密](#storing-large-secrets)”解决方法。
-
-### 存储大型机密
-
-要使用大于 64 KB 的密码，可以使用解决方法将加密的密码存储在仓库中，并将解密短语在 {% data variables.product.prodname_dotcom %} 上存储为密码。 例如，您可以使用 `gpg` 在本地加密包含密钥的文件，然后再将加密文件签入 {% data variables.product.prodname_dotcom %} 上的存储库。 更多信息请参阅“[gpg manpage](https://www.gnupg.org/gph/de/manual/r1023.html)”。
+密码大小限于 64 KB。 要使用大于 64 KB 的密码，可以将加密的密码存储在仓库中，并将解密短语在 {% data variables.product.prodname_dotcom %} 上存储为密码。 例如，在将文件检入您在 {% data variables.product.prodname_dotcom %} 上的仓库之前，可以使用 `gpg` 在本地对您的凭据加密。 更多信息请参阅“[gpg manpage](https://www.gnupg.org/gph/de/manual/r1023.html)”。
 
 {% warning %}
 
-**警告**：请注意，在工作流程运行时不会打印您的机密。 使用此解决方法时，{% data variables.product.prodname_dotcom %} 不会编写日志中印出的密码。
+**警告**：请注意，在操作运行时不会打印您的机密。 使用此解决方法时，{% data variables.product.prodname_dotcom %} 不会编写日志中印出的密码。
 
 {% endwarning %}
 
-1. 从终端运行以下命令，使用 `gpg` 和 AES256 密码算法加密包含密钥的文件。 在此示例中，`my_secret.json` 是包含密钥的文件。
+1. 从终端运行以下命令，以使用 `gpg` 和 AES256 密码算法对 `my_secret.json` 文件加密。
 
-   ```bash
-   gpg --symmetric --cipher-algo AES256 my_secret.json
-   ```
+ ``` shell
+ $ gpg --symmetric --cipher-algo AES256 my_secret.json
+ ```
 
 1. 将会提示您输入密码短语。 请记住该密码短语，因为需要在使用该密码短语作为值的 {% data variables.product.prodname_dotcom %} 上创建新密码。
 
-1. 创建包含密码短语的新密码。 例如，使用名称 `LARGE_SECRET_PASSPHRASE` 创建新密码，并将密码的值设为上一步使用的密码短语。
+1. 创建包含密码短语的新密码。 例如，使用名称 `LARGE_SECRET_PASSPHRASE` 创建新密码，并将密码的值设为上一步所选的密码短语。
 
-1. 将加密文件复制到存储库中的路径并提交。 在本例中，加密的文件是 `my_secret.json.gpg`。
+1. 将加密的文件复制到仓库并提交。 在本例中，加密的文件是 `my_secret.json.gpg`。
 
-   {% warning %}
+1. 创建 shell 脚本对密码解密。 将此文件另存为 `decrypt_secret.sh`。
 
-   **警告**：请确保复制以 `.gpg` 文件扩展名结尾的加密 `my_secret.json.gpg` 文件，而**非**未加密的 `my_secret.json` 文件。
+  ``` shell
+  #!/bin/sh
 
-   {% endwarning %}
-
-   ```bash
-   git add my_secret.json.gpg
-   git commit -m "Add new encrypted secret JSON file"
-   ```
-
-1. 在存储库中创建一个 shell 脚本来解密机密文件。 在此示例中，脚本名为 `decrypt_secret.sh`。
-
-   ```bash
-   #!/bin/sh
-
-   # Decrypt the file
-   mkdir $HOME/secrets
-   # --batch to prevent interactive command
-   # --yes to assume "yes" for questions
-   gpg --quiet --batch --yes --decrypt --passphrase="$LARGE_SECRET_PASSPHRASE" \
-   --output $HOME/secrets/my_secret.json my_secret.json.gpg
-   ```
+  # Decrypt the file
+  mkdir $HOME/secrets
+  # --batch to prevent interactive command
+  # --yes to assume "yes" for questions
+  gpg --quiet --batch --yes --decrypt --passphrase="$LARGE_SECRET_PASSPHRASE" \
+  --output $HOME/secrets/my_secret.json my_secret.json.gpg
+  ```
 
 1. 确保 shell 脚本在检入仓库之前可执行。
 
-   ```bash
-   chmod +x decrypt_secret.sh
-   git add decrypt_secret.sh
-   git commit -m "Add new decryption script"
-   git push
-   ```
+  ``` shell
+  $ chmod +x decrypt_secret.sh
+  $ git add decrypt_secret.sh
+  $ git commit -m "Add new decryption script"
+  $ git push
+  ```
 
-1. 在 {% data variables.product.prodname_actions %} 工作流程中，使用 `step` 调用 shell 脚本并解密密钥。 要在工作流程运行的环境中创建仓库的副本，需要使用 [`actions/checkout`](https://github.com/actions/checkout) 操作。 使用与仓库根目录相关的 `run` 命令引用 shell 脚本。
+1. 从工作流程使用 `step` 调用 shell 脚本并对密码解密。 要在工作流程运行的环境中创建仓库的副本，需要使用 [`actions/checkout`](https://github.com/actions/checkout) 操作。 使用与仓库根目录相关的 `run` 命令引用 shell 脚本。
 
-   ```yaml
-   name: Workflows with large secrets
+{% raw %}
+  ```yaml
+  name: Workflows with large secrets
 
-   on: push
+  on: push
 
-   jobs:
-     my-job:
-       name: My Job
-       runs-on: ubuntu-latest
-       steps:
-         - uses: {% data reusables.actions.action-checkout %}
-         - name: Decrypt large secret
-           run: ./decrypt_secret.sh
-           env:
-             LARGE_SECRET_PASSPHRASE: {% raw %}${{ secrets.LARGE_SECRET_PASSPHRASE }}{% endraw %}
-         # This command is just an example to show your secret being printed
-         # Ensure you remove any print statements of your secrets. GitHub does
-         # not hide secrets that use this workaround.
-         - name: Test printing your secret (Remove this step in production)
-           run: cat $HOME/secrets/my_secret.json
-   ```
+  jobs:
+    my-job:
+      name: My Job
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v2
+        - name: Decrypt large secret
+          run: ./.github/scripts/decrypt_secret.sh
+          env:
+            LARGE_SECRET_PASSPHRASE: ${{ secrets.LARGE_SECRET_PASSPHRASE }}
+        # This command is just an example to show your secret being printed
+        # Ensure you remove any print statements of your secrets. GitHub does
+        # not hide secrets that use this workaround.
+        - name: Test printing your secret (Remove this step in production)
+          run: cat $HOME/secrets/my_secret.json
+  ```
+{% endraw %}
 
 ## 将 Base64 二进制 blob 存储为机密
 
@@ -399,7 +385,7 @@ steps:
      decode-secret:
        runs-on: ubuntu-latest
        steps:
-         - uses: {% data reusables.actions.action-checkout %}
+         - uses: actions/checkout@v2
          - name: Retrieve the secret and decode it to a file
            env:
              {% raw %}CERTIFICATE_BASE64: ${{ secrets.CERTIFICATE_BASE64 }}{% endraw %}
@@ -409,3 +395,4 @@ steps:
            run: |
              openssl x509 -in cert.der -inform DER -text -noout
    ```
+

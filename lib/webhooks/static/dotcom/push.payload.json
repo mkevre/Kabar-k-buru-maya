@@ -5,7 +5,7 @@
   "created": true,
   "deleted": false,
   "forced": false,
-  "base_ref": null,
+  "base_ref": "refs/heads/main",
   "compare": "https://github.com/Codertocat/Hello-World/compare/simple-tag",
   "commits": [
 

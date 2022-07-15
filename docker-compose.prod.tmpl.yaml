@@ -16,6 +16,8 @@ services:
       HEROKU_APP_NAME: ${HEROKU_APP_NAME}
       ENABLED_LANGUAGES: ${ENABLED_LANGUAGES}
       DEPLOYMENT_ENV: ${DEPLOYMENT_ENV}
+      RATE_LIMIT_MAX: ${RATE_LIMIT_MAX}
+      SLOW_DOWN_MAX: ${SLOW_DOWN_MAX}
       HEROKU_PRODUCTION_APP: true
       PORT: 4000
       DD_AGENT_HOST: datadog-agent
@@ -24,7 +26,7 @@ services:
     restart: always
 
   datadog-agent:
-    image: 'ghdocsprod.azurecr.io/datadog/dogstatsd:7.32.4'
+    image: datadog/dogstatsd:7.32.4
     ports:
       - '8125:8125'
     environment:

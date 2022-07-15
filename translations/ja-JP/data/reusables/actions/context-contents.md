@@ -1,1 +1,1 @@
-ワークフローの実行の条件が異なれば、コンテキスト、オブジェクト、プロパティは大きく異なります。
+Contexts, objects, and properties will vary significantly under different workflow run conditions.

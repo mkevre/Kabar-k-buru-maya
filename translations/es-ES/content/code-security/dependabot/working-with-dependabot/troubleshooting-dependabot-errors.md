@@ -39,14 +39,11 @@ Cuando se bloquea al {% data variables.product.prodname_dependabot %} y no puede
 
 ![Vista de las {% data variables.product.prodname_dependabot_alerts %} que muestra un enlace a una solicitud de cambios](/assets/images/help/dependabot/dependabot-alert-pr-link.png)
 
-Hay muchas razones por las cuales una alerta podría no contar con un enlace de solicitud de cambios:
+Hay tres razones por las cuales una alerta pudiera no tener un enlace a una solicitud de cambios:
 
-1. No están habilitadas las {% data variables.product.prodname_dependabot_security_updates %} para el repositorio.
-{% ifversion GH-advisory-db-supports-malware %}
-1. La alerta es para malware y no hay una versión segura del paquete.
-{% endif %}
-1. La alerta es para una dependencia transitoria o indirecta que no se define explícitamente en un archivo de bloqueo.
-1. Un error bloqueó al {% data variables.product.prodname_dependabot %} e impidió que creara una solicitud de cambios.
+1. No se han habilitado las {% data variables.product.prodname_dependabot_security_updates %} en el repositorio.
+1. La alerta es para una dependencia transitoria o indirecta que no se definió explícitamente en un archivo de bloqueo.
+1. Un error bloqueó al {% data variables.product.prodname_dependabot %} y éste no puede crear una solicitud de cambios.
 
 Si existe un error que bloqueó al {% data variables.product.prodname_dependabot %} y éste no puede crear una solicitud de cambios, puedes mostrar los detalles del error si das clic en la alerta.
 
@@ -80,7 +77,7 @@ Las solicitudes de cambios para las actualizaciones de seguridad actúan para me
 
 Cada aplicación que tenga dependencias tiene una gráfica de dependencias, esto es, una gráfica acíclica dirigida de cada versión de paquete de la cual depende la aplicación directa o indirectamente. Cada vez que se actualiza una dependencia, esta gráfica debe resolverse o la aplicación no se compilará. Cuando un ecosistema tiene una gráfica de dependencias profunda y compleja, por ejemplo, npm y RubyGems, es a menudo imposible mejorar una sola dependencia sin mejorar todo el ecosistema.
 
-La mejor forma de evitar este problema es mantenerse actualizado con los lanzamientos de versiones más recientes, por ejemplo, habilitando las actualizaciones de versión. Esto aumenta la probabilidad de que una vulnerabilidad en alguna dependencia pueda resolverse con una mejora simple que no afecte la gráfica de dependencias. Para obtener más información, consulta la sección "[Configurar las actualizaciones de versión del {% data variables.product.prodname_dependabot %}](/code-security/supply-chain-security/keeping-your-dependencies-updated-automatically/enabling-and-disabling-dependabot-version-updates)".
+La mejor forma de evitar este problema es mantenerse actualizado con los lanzamientos de versiones más recientes, por ejemplo, habilitando las actualizaciones de versión. Esto aumenta la probabilidad de que una vulnerabilidad en alguna dependencia pueda resolverse con una mejora simple que no afecte la gráfica de dependencias. For more information, see "[Configuring {% data variables.product.prodname_dependabot %} version updates](/code-security/supply-chain-security/keeping-your-dependencies-updated-automatically/enabling-and-disabling-dependabot-version-updates)."
 
 ### El {% data variables.product.prodname_dependabot %} no puede actualizar a la versión requerida porque ya existe una solicitud de cambios abierta para la última versión
 
@@ -94,13 +91,13 @@ El {% data variables.product.prodname_dependabot %} tardó más del límite de t
 
 Es difícil tratar a este error. Si una actualización de versión excede el tiempo de espera, podrías especificar las dependencias más importantes a actualizar utilizando el parámetro `allow` o, como alternativa, utilizar el parámetro `ignore` para excluir algunas de las dependencias de estas actualizaciones. El actualizar tu configuración podría permitir que el {% data variables.product.prodname_dependabot %} revise la actualización de versión y genere la solicitud de cambios en el tiempo disponible.
 
-Si una actualización de seguridad excede el tiempo de espera, puedes reducir la probabilidad de que esto suceda si mantienes las dependencias actualizadas, por ejemplo, habilitando las actualizaciones de versión. Para obtener más información, consulta la sección "[Configurar las actualizaciones de versión del {% data variables.product.prodname_dependabot %}](/code-security/supply-chain-security/keeping-your-dependencies-updated-automatically/enabling-and-disabling-dependabot-version-updates)".
+Si una actualización de seguridad excede el tiempo de espera, puedes reducir la probabilidad de que esto suceda si mantienes las dependencias actualizadas, por ejemplo, habilitando las actualizaciones de versión. For more information, see "[Configuring {% data variables.product.prodname_dependabot %} version updates](/code-security/supply-chain-security/keeping-your-dependencies-updated-automatically/enabling-and-disabling-dependabot-version-updates)."
 
 ### El {% data variables.product.prodname_dependabot %} no puede abrir más solicitudes de cambios
 
 Hay un límite en la cantidad de solicitudes de cambios abiertas que el {% data variables.product.prodname_dependabot %} puede generar. Cuando se llega a éste límite, no se podrán abrir más solicitudes de cambios y se reportará este error. La mejor forma de resolver este error es revisar y fusionar algunas de las solicitudes de cambios abiertas.
 
-Hay límites separados para las solicitudes de cambios de actualización de seguridad y de versión, y esto es para que aquellas de actualización de versión no bloqueen la creación de las de actualización de seguridad. El límite para las solicitudes de cambios de actualizaciones de seguridad es de 10. Predeterminadamente, el límite para las actualizaciones de versión es de 5, pero puedes cambiar ésto utilizando el parámetro `open-pull-requests-limit` en el archivo de configuración. Para obtener más información, consulta la sección "[Opciones de configuración para el archivo dependabot.yml](/github/administering-a-repository/configuration-options-for-dependency-updates#open-pull-requests-limit)".
+Hay límites separados para las solicitudes de cambios de actualización de seguridad y de versión, y esto es para que aquellas de actualización de versión no bloqueen la creación de las de actualización de seguridad. El límite para las solicitudes de cambios de actualizaciones de seguridad es de 10. Predeterminadamente, el límite para las actualizaciones de versión es de 5, pero puedes cambiar ésto utilizando el parámetro `open-pull-requests-limit` en el archivo de configuración. For more information, see "[Configuration options for the dependabot.yml file](/github/administering-a-repository/configuration-options-for-dependency-updates#open-pull-requests-limit)."
 
 La mejor forma de resolver este error es fusionar o cerrar algunas de las solicitudes de cambios existentes y activar una solicitud de cambios nueva manualmente. Para obtener más información, consulta la sección "[Activar una solicitud de cambios del {% data variables.product.prodname_dependabot %} manualmente](#triggering-a-dependabot-pull-request-manually)".
 
@@ -128,5 +125,5 @@ Si desbloqueas al {% data variables.product.prodname_dependabot %}, puedes activ
 
 ## Leer más
 
-- "[Solucionar problemas de la gráfica de dependencias](/code-security/supply-chain-security/understanding-your-software-supply-chain/troubleshooting-the-dependency-graph)"
+- "[Troubleshooting the dependency graph](/code-security/supply-chain-security/understanding-your-software-supply-chain/troubleshooting-the-dependency-graph)"
 - "[Solucionar problemas en la detección de dependencias vulnerables](/code-security/dependabot/working-with-dependabot/troubleshooting-the-detection-of-vulnerable-dependencies)"

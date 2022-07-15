@@ -26,7 +26,7 @@ This guide explains how to use {% data variables.product.prodname_actions %} to 
 
 On every new push to `main` in your {% data variables.product.company_short %} repository, the {% data variables.product.prodname_actions %} workflow builds and pushes a new container image to Amazon ECR, and then deploys a new task definition to Amazon ECS.
 
-{% ifversion fpt or ghec or ghae-issue-4856 or ghes > 3.4 %}
+{% ifversion fpt or ghec or ghae-issue-4856 %}
 
 {% note %}
 
@@ -116,11 +116,11 @@ jobs:
     runs-on: ubuntu-latest
     environment: production
 
-    steps:
+    {% raw %}steps:
       - name: Checkout
-        uses: {% data reusables.actions.action-checkout %}
+        uses: actions/checkout@v2
 
-      {% raw %}- name: Configure AWS credentials
+      - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@13d241b293754004c80624b5567555c4a39ffbe3
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}

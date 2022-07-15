@@ -12,12 +12,12 @@ children:
   - /creating-a-codespace
   - /developing-in-a-codespace
   - /using-source-control-in-your-codespace
-  - /using-github-codespaces-for-pull-requests
+  - /using-codespaces-for-pull-requests
   - /deleting-a-codespace
   - /forwarding-ports-in-your-codespace
   - /default-environment-variables-for-your-codespace
   - /connecting-to-a-private-network
-  - /using-github-codespaces-in-visual-studio-code
-  - /using-github-codespaces-with-github-cli
+  - /using-codespaces-in-visual-studio-code
+  - /using-codespaces-with-github-cli
 ---
 

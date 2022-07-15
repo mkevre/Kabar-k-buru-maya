@@ -26,7 +26,7 @@ shortTitle: 部署到 Amazon ECS
 
 在每次推送到 {% data variables.product.company_short %} 仓库中的 `main` 时，{% data variables.product.prodname_actions %} 工作流程将构建新的容器映像并将其推送到 Amazon ECR，然后将新的任务定义部署到 Amazon ECS。
 
-{% ifversion fpt or ghec or ghae-issue-4856 or ghes > 3.4 %}
+{% ifversion fpt or ghec or ghae-issue-4856 %}
 
 {% note %}
 
@@ -45,8 +45,7 @@ shortTitle: 部署到 Amazon ECS
    例如，使用 [AWS CLI](https://aws.amazon.com/cli/)：
 
    {% raw %}```bash{:copy}
-   aws ecr create-repository \
-    --repository-name MY_ECR_REPOSITORY \ --region MY_AWS_REGION
+   aws ecr create-repository \ --repository-name MY_ECR_REPOSITORY \ --region MY_AWS_REGION
    ```{% endraw %}
 
    Ensure that you use the same Amazon ECR repository name (represented here by `MY_ECR_REPOSITORY`) for the `ECR_REPOSITORY` variable in the workflow below.
@@ -115,11 +114,11 @@ jobs:
     runs-on: ubuntu-latest
     environment: production
 
-    steps:
+    {% raw %}steps:
       - name: Checkout
-        uses: {% data reusables.actions.action-checkout %}
+        uses: actions/checkout@v2
 
-      {% raw %}- name: Configure AWS credentials
+      - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@13d241b293754004c80624b5567555c4a39ffbe3
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}

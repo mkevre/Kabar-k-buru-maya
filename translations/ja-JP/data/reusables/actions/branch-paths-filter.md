@@ -1,1 +1,1 @@
-`branches`フィルタと`paths`フィルタをどちらも使った場合、ワークフローは両方のフィルタが満たされた場合にのみ実行されます。
+If you use both the `branches` filter and the `paths` filter, the workflow will only run when both filters are satisfied.

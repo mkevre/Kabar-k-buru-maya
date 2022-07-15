@@ -1,5 +1,5 @@
 ---
-title: Otras políticas del sitio
+title: Other Site Policies
 versions:
   fpt: '*'
 topics:

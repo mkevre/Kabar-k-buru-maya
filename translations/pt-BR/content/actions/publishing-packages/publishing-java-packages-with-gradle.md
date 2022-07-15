@@ -87,16 +87,16 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     steps:
-      - uses: {% data reusables.actions.action-checkout %}
+      - uses: actions/checkout@v2
       - name: Set up Java
-        uses: {% data reusables.actions.action-setup-java %}
+        uses: actions/setup-java@v2
         with:
           java-version: '11'
           distribution: 'adopt'
       - name: Validate Gradle wrapper
         uses: gradle/wrapper-validation-action@e6e38bacfdf1a337459f332974bb2327a31aaf4b
       - name: Publish package
-        uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
+        uses: gradle/gradle-build-action@937999e9cc2425eddc7fd62d1053baf041147db7
         with:
           arguments: publish
         env:
@@ -154,20 +154,20 @@ on:
     types: [created]
 jobs:
   publish:
-    runs-on: ubuntu-latest 
+    runs-on: ubuntu-latest {% ifversion fpt or ghes > 3.1 or ghae or ghec %}
     permissions: 
       contents: read
-      packages: write 
+      packages: write {% endif %}
     steps:
-      - uses: {% data reusables.actions.action-checkout %}
-      - uses: {% data reusables.actions.action-setup-java %}
+      - uses: actions/checkout@v2
+      - uses: actions/setup-java@v2
         with:
           java-version: '11'
           distribution: 'adopt'
       - name: Validate Gradle wrapper
         uses: gradle/wrapper-validation-action@e6e38bacfdf1a337459f332974bb2327a31aaf4b
       - name: Publish package
-        uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
+        uses: gradle/gradle-build-action@937999e9cc2425eddc7fd62d1053baf041147db7
         with:
           arguments: publish
         env:
@@ -175,7 +175,7 @@ jobs:
 ```
 
 {% data reusables.actions.gradle-workflow-steps %}
-1. Executa a ação [`grades/gradle-build-action`](https://github.com/gradle/gradle-build-action) com o argumento `publicar` para publicar em {% data variables.product.prodname_registry %}. A variável de ambiente `GITHUB_TOKEN` será definida com o conteúdo do segredo `GITHUB_TOKEN`. A chave `permissões` especifica o acesso que o segredo `GITHUB_TOKEN` permitirá.
+1. Executa a ação [`grades/gradle-build-action`](https://github.com/gradle/gradle-build-action) com o argumento `publicar` para publicar em {% data variables.product.prodname_registry %}. A variável de ambiente `GITHUB_TOKEN` será definida com o conteúdo do segredo `GITHUB_TOKEN`. {% ifversion fpt or ghes > 3.1 or ghae or ghec %}A chave de `permissões` especifica o acesso que o segredo `GITHUB_TOKEN` permitirá.{% endif %}
 
    Para obter mais informações sobre o uso de segredos no seu fluxo de trabalho, consulte "[Criando e usando segredos encriptados](/actions/automating-your-workflow-with-github-actions/creating-and-using-encrypted-secrets)".
 
@@ -232,21 +232,21 @@ on:
     types: [created]
 jobs:
   publish:
-    runs-on: ubuntu-latest 
+    runs-on: ubuntu-latest {% ifversion fpt or ghes > 3.1 or ghae or ghec %}
     permissions: 
       contents: read
-      packages: write 
+      packages: write {% endif %}
     steps:
-      - uses: {% data reusables.actions.action-checkout %}
+      - uses: actions/checkout@v2
       - name: Set up Java
-        uses: {% data reusables.actions.action-setup-java %}
+        uses: actions/setup-java@v2
         with:
           java-version: '11'
           distribution: 'adopt'
       - name: Validate Gradle wrapper
         uses: gradle/wrapper-validation-action@e6e38bacfdf1a337459f332974bb2327a31aaf4b
       - name: Publish package
-        uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
+        uses: gradle/gradle-build-action@937999e9cc2425eddc7fd62d1053baf041147db7
         with:
           arguments: publish
         env: {% raw %}
@@ -256,6 +256,6 @@ jobs:
 ```
 
 {% data reusables.actions.gradle-workflow-steps %}
-1. Executa a ação [`grades/gradle-build`](https://github.com/gradle/gradle-build-action) com o argumento `publicar` para publicar no repositório do Maven `OSSRH` e em {% data variables.product.prodname_registry %}. A variável de ambiente `MAVEN_USERNAME` será definida com o conteúdo do seu segredo `OSSRH_USERNAME`, e a variável de ambiente `MAVEN_PASSWORD` será definida com o conteúdo do seu segredo `OSSRH_TOKEN`. A variável de ambiente `GITHUB_TOKEN` será definida com o conteúdo do segredo `GITHUB_TOKEN`. A chave `permissões` especifica o acesso que o segredo `GITHUB_TOKEN` permitirá.
+1. Executa a ação [`grades/gradle-build`](https://github.com/gradle/gradle-build-action) com o argumento `publicar` para publicar no repositório do Maven `OSSRH` e em {% data variables.product.prodname_registry %}. A variável de ambiente `MAVEN_USERNAME` será definida com o conteúdo do seu segredo `OSSRH_USERNAME`, e a variável de ambiente `MAVEN_PASSWORD` será definida com o conteúdo do seu segredo `OSSRH_TOKEN`. A variável de ambiente `GITHUB_TOKEN` será definida com o conteúdo do segredo `GITHUB_TOKEN`. {% ifversion fpt or ghes > 3.1 or ghae or ghec %}A chave de `permissões` especifica o acesso que o segredo `GITHUB_TOKEN` permitirá.{% endif %}
 
    Para obter mais informações sobre o uso de segredos no seu fluxo de trabalho, consulte "[Criando e usando segredos encriptados](/actions/automating-your-workflow-with-github-actions/creating-and-using-encrypted-secrets)".
