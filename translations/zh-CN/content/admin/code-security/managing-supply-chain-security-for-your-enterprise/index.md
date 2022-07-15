@@ -1,10 +1,10 @@
 ---
-title: 管理企业的供应链安全
+title: Managing supply chain security for your enterprise
 shortTitle: 供应链安全
-intro: 您可以可视化、维护和保护开发人员软件供应链中的依赖项。
+intro: 'You can visualize, maintain, and secure the dependencies in your developers'' software supply chain.'
 versions:
   ghes: '*'
-  ghae: '*'
+  ghae: issue-4864
 topics:
   - Enterprise
 children:

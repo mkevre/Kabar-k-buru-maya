@@ -32,14 +32,14 @@ shortTitle: 使用 GraphQL 建立调用
 
 
 ```
-repo
-repo:status
-repo_deployment{% ifversion not ghae %}
+user{% ifversion not ghae %}
 public_repo{% endif %}
+repo
+repo_deployment
+repo:status
+read:repo_hook
 read:org
 read:public_key
-read:repo_hook
-user
 read:gpg_key
 ```
 

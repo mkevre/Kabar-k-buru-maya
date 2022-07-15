@@ -27,9 +27,8 @@ export const ArticleCard = ({ tabIndex, card, typeLabel }: Props) => {
                 <li className="d-inline-block" key={topic}>
                   <Label
                     data-testid="article-card-topic"
-                    size="small"
-                    variant="accent"
-                    sx={{ mr: 1 }}
+                    variant="small"
+                    sx={{ bg: 'accent.emphasis', mr: 1 }}
                   >
                     {topic}
                   </Label>

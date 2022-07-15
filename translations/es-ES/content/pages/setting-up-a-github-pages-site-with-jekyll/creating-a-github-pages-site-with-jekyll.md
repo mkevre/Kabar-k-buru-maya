@@ -32,7 +32,6 @@ Antes de que puedas usar Jekyll para crear un sitio de {% data variables.product
 
 {% data reusables.repositories.create_new %}
 {% data reusables.repositories.owner-drop-down %}
-{% indented_data_reference reusables.pages.emu-org-only spaces=3 %}
 {% data reusables.pages.create-repo-name %}
 {% data reusables.repositories.choose-repo-visibility %}
 
@@ -119,7 +118,8 @@ $ git remote add origin https://<em>HOSTNAME</em>/<em>USER</em>/<em>REPOSITORY</
 {% data reusables.pages.navigate-site-repo %}
 {% data reusables.repositories.sidebar-settings %}
 {% data reusables.pages.sidebar-pages %}
-{% data reusables.pages.choose-visibility %}
+{% ifversion fpt or ghec %}
+{% data reusables.pages.choose-visibility %}{% endif %}
 {% data reusables.pages.visit-site %}
 {% data reusables.pages.check-workflow-run %}
 

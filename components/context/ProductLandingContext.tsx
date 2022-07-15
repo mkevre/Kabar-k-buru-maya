@@ -38,7 +38,11 @@ export type ProductLandingContextT = {
   intro: string
   beta_product: boolean
   product: Product
-  introLinks: Record<string, string> | null
+  introLinks: {
+    quickstart?: string
+    reference?: string
+    overview?: string
+  } | null
   product_video?: string
   featuredLinks: Record<string, Array<FeaturedLink>>
   productCodeExamples: Array<CodeExample>
@@ -124,7 +128,13 @@ export const getProductLandingContextFromRequest = (req: any): ProductLandingCon
       })
     ),
 
-    introLinks: page.introLinks || null,
+    introLinks: page.introLinks
+      ? {
+          quickstart: page.introLinks.quickstart,
+          reference: page.introLinks.reference,
+          overview: page.introLinks.overview,
+        }
+      : null,
 
     featuredLinks: getFeaturedLinksFromReq(req),
 

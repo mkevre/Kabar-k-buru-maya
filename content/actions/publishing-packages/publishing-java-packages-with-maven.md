@@ -73,6 +73,8 @@ With this configuration, you can create a workflow that publishes your package t
 
 In the deploy step, you’ll need to set the environment variables to the username that you authenticate with to the repository, and to a secret that you’ve configured with the password or token to authenticate with.  For more information, see "[Creating and using encrypted secrets](/github/automating-your-workflow-with-github-actions/creating-and-using-encrypted-secrets)."
 
+
+{% raw %}
 ```yaml{:copy}
 name: Publish package to the Maven Central Repository
 on:
@@ -82,9 +84,9 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     steps:
-      - uses: {% data reusables.actions.action-checkout %}
+      - uses: actions/checkout@v2
       - name: Set up Maven Central Repository
-        uses: {% data reusables.actions.action-setup-java %}
+        uses: actions/setup-java@v2
         with:
           java-version: '11'
           distribution: 'adopt'
@@ -94,9 +96,10 @@ jobs:
       - name: Publish package
         run: mvn --batch-mode deploy
         env:
-          MAVEN_USERNAME: {% raw %}${{ secrets.OSSRH_USERNAME }}{% endraw %}
-          MAVEN_PASSWORD: {% raw %}${{ secrets.OSSRH_TOKEN }}{% endraw %}
+          MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+          MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
 ```
+{% endraw %}
 
 This workflow performs the following steps:
 
@@ -142,13 +145,13 @@ on:
     types: [created]
 jobs:
   publish:
-    runs-on: ubuntu-latest 
+    runs-on: ubuntu-latest {% ifversion fpt or ghes > 3.1 or ghae or ghec %}
     permissions: 
       contents: read
-      packages: write 
+      packages: write {% endif %}
     steps:
-      - uses: {% data reusables.actions.action-checkout %}
-      - uses: {% data reusables.actions.action-setup-java %}
+      - uses: actions/checkout@v2
+      - uses: actions/setup-java@v2
         with:
           java-version: '11'
           distribution: 'adopt'
@@ -179,14 +182,14 @@ on:
     types: [created]
 jobs:
   publish:
-    runs-on: ubuntu-latest 
+    runs-on: ubuntu-latest {% ifversion fpt or ghes > 3.1 or ghae or ghec %}
     permissions: 
       contents: read
-      packages: write 
+      packages: write {% endif %}
     steps:
-      - uses: {% data reusables.actions.action-checkout %}
+      - uses: actions/checkout@v2
       - name: Set up Java for publishing to Maven Central Repository
-        uses: {% data reusables.actions.action-setup-java %}
+        uses: actions/setup-java@v2
         with:
           java-version: '11'
           distribution: 'adopt'
@@ -195,18 +198,18 @@ jobs:
           server-password: MAVEN_PASSWORD
       - name: Publish to the Maven Central Repository
         run: mvn --batch-mode deploy
-        env:
-          MAVEN_USERNAME: {% raw %}${{ secrets.OSSRH_USERNAME }}{% endraw %}
-          MAVEN_PASSWORD: {% raw %}${{ secrets.OSSRH_TOKEN }}{% endraw %}
+        env:{% raw %}
+          MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+          MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
       - name: Set up Java for publishing to GitHub Packages
-        uses: {% data reusables.actions.action-setup-java %}
+        uses: actions/setup-java@v2
         with:
           java-version: '11'
           distribution: 'adopt'
       - name: Publish to GitHub Packages
         run: mvn --batch-mode deploy
         env:
-          GITHUB_TOKEN: {% raw %}${{ secrets.GITHUB_TOKEN }}{% endraw %}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}{% endraw %}
 ```
 
 This workflow calls the `setup-java` action twice.  Each time the `setup-java` action runs, it overwrites the Maven _settings.xml_ file for publishing packages.  For authentication to the repository, the _settings.xml_ file references the distribution management repository `id`, and the username and password.

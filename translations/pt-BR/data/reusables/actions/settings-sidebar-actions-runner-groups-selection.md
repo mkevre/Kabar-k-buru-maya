@@ -1,1 +1,1 @@
-1. Na lista de grupos, clique no grupo do executor que você gostaria de configurar.
+1. In the list of groups, click the runner group you'd like to configure.
