@@ -4,14 +4,9 @@ Se você não definir um `container`, todas as etapas serão executadas diretame
 
 ### Exemplo: Executar um trabalho dentro de um contêiner
 
-```yaml{:copy}
-name: CI
-on:
-  push:
-    branches: [ main ]
+```yaml
 jobs:
-  container-test-job:
-    runs-on: ubuntu-latest
+  my_job:
     container:
       image: node:14.16
       env:
@@ -21,16 +16,12 @@ jobs:
       volumes:
         - my_docker_volume:/volume_mount
       options: --cpus 1
-    steps:
-      - name: Check for dockerenv file
-        run: (ls /.dockerenv && echo Found dockerenv) || (echo No dockerenv)
 ```
 
 Ao especificar somente uma imagem de contêiner, você pode omitir a palavra-chave `image`.
 
 ```yaml
 jobs:
-  container-test-job:
-    runs-on: ubuntu-latest
+  my_job:
     container: node:14.16
 ```

@@ -1,28 +1,34 @@
 import { useTranslation } from 'components/hooks/useTranslation'
+import { Preview } from './types'
 
 type Props = {
   slug: string
-  previews: Array<string>
+  previews: Array<Preview> | []
 }
 
 export function RestPreviewNotice({ slug, previews }: Props) {
   const { t } = useTranslation('products')
-  return (
+
+  const previewNotices = previews.map((preview, index) => {
+    return (
+      <div
+        className="extended-markdown note border rounded-1 mb-6 p-3 color-border-accent-emphasis color-bg-accent f5"
+        dangerouslySetInnerHTML={{ __html: preview.html }}
+        key={`${preview.name}-${index}`}
+      >
+        {preview.required && t('preview_header_is_required')}
+      </div>
+    )
+  })
+
+  return previews.length > 0 ? (
     <>
-      <h3 className="h4" id={`${slug}-preview-notices`}>
-        <a href={`#${slug}-preview-notices`}>
-          {previews.length > 1
-            ? `${t('rest.reference.preview_notices')}`
-            : `${t('rest.reference.preview_notice')}`}
-        </a>
-      </h3>
-      {previews.map((preview, index) => (
-        <div
-          className="extended-markdown note border rounded-1 mb-6 p-3 color-border-accent-emphasis color-bg-accent f5"
-          dangerouslySetInnerHTML={{ __html: preview }}
-          key={JSON.stringify(preview) + index}
-        />
-      ))}
+      <h4 id={`${slug}-preview-notices`}>
+        {previews.length > 1
+          ? `${t('rest.reference.preview_notices')}`
+          : `${t('rest.reference.preview_notice')}`}
+      </h4>
+      {previewNotices}
     </>
-  )
+  ) : null
 }

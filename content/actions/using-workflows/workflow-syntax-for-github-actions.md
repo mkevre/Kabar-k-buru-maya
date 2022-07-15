@@ -174,13 +174,16 @@ A boolean specifying whether the secret must be supplied.
 
 {% data reusables.actions.workflow-dispatch-inputs %}
 
+{% ifversion fpt or ghes > 3.1 or ghae or ghec %}
 ## `permissions`
 
 {% data reusables.actions.jobs.section-assigning-permissions-to-jobs %}
 
+{% endif %}
+
 ## `env`
 
-A `map` of environment variables that are available to the steps of all jobs in the workflow. You can also set environment variables that are only available to the steps of a single job or to a single step. For more information, see [`jobs.<job_id>.env`](#jobsjob_idenv) and [`jobs.<job_id>.steps[*].env`](#jobsjob_idstepsenv).
+A `map` of environment variables that are available to the steps of all jobs in the workflow. You can also set environment variables that are only available to the steps of a single job or to a single step. For more information, see [`jobs.<job_id>.env`](#jobsjob_idenv) and [`jobs.<job_id>.steps[*].env`](#jobsjob_idstepsenv). 
 
 Variables in the `env` map cannot be defined in terms of other variables in the map.
 
@@ -201,10 +204,12 @@ env:
 
 {% data reusables.actions.jobs.setting-default-values-for-jobs-defaults-run %}
 
+{% ifversion fpt or ghae or ghes > 3.1 or ghec %}
 ## `concurrency`
 
 {% data reusables.actions.jobs.section-using-concurrency %}
 
+{% endif %}
 ## `jobs`
 
 {% data reusables.actions.jobs.section-using-jobs-in-a-workflow %}
@@ -217,9 +222,12 @@ env:
 
 {% data reusables.actions.jobs.section-using-jobs-in-a-workflow-name %}
 
+{% ifversion fpt or ghes > 3.1 or ghae or ghec %}
 ### `jobs.<job_id>.permissions`
 
 {% data reusables.actions.jobs.section-assigning-permissions-to-jobs-specific %}
+
+{% endif %}
 
 ## `jobs.<job_id>.needs`
 
@@ -237,10 +245,12 @@ env:
 
 {% data reusables.actions.jobs.section-using-environments-for-jobs %}
 
+{% ifversion fpt or ghae or ghes > 3.1 or ghec %}
 ## `jobs.<job_id>.concurrency`
 
 {% data reusables.actions.jobs.section-using-concurrency-jobs %}
 
+{% endif %}
 ## `jobs.<job_id>.outputs`
 
 {% data reusables.actions.jobs.section-defining-outputs-for-jobs %}
@@ -321,7 +331,7 @@ steps:
 
 #### Example: Using status check functions
 
-The `my backup step` only runs when the previous step of a job fails. For more information, see "[Expressions](/actions/learn-github-actions/expressions#status-check-functions)."
+The `my backup step` only runs when the previous step of a job fails. For more information, see "[Expressions](/actions/learn-github-actions/expressions#job-status-check-functions)."
 
 ```yaml
 steps:
@@ -381,9 +391,9 @@ steps:
   # Reference a specific commit
   - uses: actions/checkout@a81bbbf8298c0fa03ea29cdc473d45769f953675
   # Reference the major version of a release
-  - uses: {% data reusables.actions.action-checkout %}
+  - uses: actions/checkout@v2
   # Reference a specific version
-  - uses: {% data reusables.actions.action-checkout %}.2.0
+  - uses: actions/checkout@v2.2.0
   # Reference a branch
   - uses: actions/checkout@main
 ```
@@ -431,7 +441,7 @@ jobs:
   my_first_job:
     steps:
       - name: Check out repository
-        uses: {% data reusables.actions.action-checkout %}
+        uses: actions/checkout@v2
       - name: Use local my-action
         uses: ./.github/actions/my-action
 ```
@@ -485,20 +495,22 @@ Your workflow must checkout the private repository and reference the action loca
 
 Replace `PERSONAL_ACCESS_TOKEN` in the example with the name of your secret.
 
+{% raw %}
 ```yaml
 jobs:
   my_first_job:
     steps:
       - name: Check out repository
-        uses: {% data reusables.actions.action-checkout %}
+        uses: actions/checkout@v2
         with:
           repository: octocat/my-private-repo
           ref: v1.0
-          token: {% raw %}${{ secrets.PERSONAL_ACCESS_TOKEN }}{% endraw %}
+          token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
           path: ./.github/actions/my-private-repo
       - name: Run my action
         uses: ./.github/actions/my-private-repo/my-action
 ```
+{% endraw %}
 
 ### `jobs.<job_id>.steps[*].run`
 
@@ -620,8 +632,8 @@ For information about the software included on GitHub-hosted runners, see "[Spec
 For built-in shell keywords, we provide the following defaults that are executed by {% data variables.product.prodname_dotcom %}-hosted runners. You should use these guidelines when running shell scripts.
 
 - `bash`/`sh`:
-  - Fail-fast behavior using `set -eo pipefail`: This option is set when `shell: bash` is explicitly specified. It is not applied by default.
-  - You can take full control over shell parameters by providing a template string to the shell options. For example, `bash {0}`.
+  - Fail-fast behavior using `set -eo pipefail`: Default for `bash` and built-in `shell`. It is also the default when you don't provide an option on non-Windows platforms.
+  - You can opt out of fail-fast and take full control by providing a template string to the shell options. For example, `bash {0}`.
   - sh-like shells exit with the exit code of the last command executed in a script, which is also the default behavior for actions. The runner will report the status of the step as fail/succeed based on this exit code.
 
 - `powershell`/`pwsh`
@@ -735,39 +747,11 @@ If the timeout exceeds the job execution time limit for the runner, the job will
 
 ## `jobs.<job_id>.strategy`
 
-Use `jobs.<job_id>.strategy` to use a matrix strategy for your jobs. {% data reusables.actions.jobs.about-matrix-strategy %} For more information, see "[Using a matrix for your jobs](/actions/using-jobs/using-a-matrix-for-your-jobs)."
+{% data reusables.actions.jobs.section-using-a-build-matrix-for-your-jobs-strategy %}
 
 ### `jobs.<job_id>.strategy.matrix`
 
-{% data reusables.actions.jobs.using-matrix-strategy %}
-
-#### Example: Using a single-dimension matrix
-
-{% data reusables.actions.jobs.single-dimension-matrix %}
-
-#### Example: Using a multi-dimension matrix
-
-{% data reusables.actions.jobs.multi-dimension-matrix %}
-
-#### Example: Using contexts to create matrices
-
-{% data reusables.actions.jobs.matrix-from-context %}
-
-### `jobs.<job_id>.strategy.matrix.include`
-
-{% data reusables.actions.jobs.matrix-include %}
-
-#### Example: Expanding configurations
-
-{% data reusables.actions.jobs.matrix-expand-with-include %}
-
-#### Example: Adding configurations
-
-{% data reusables.actions.jobs.matrix-add-with-include %}
-
-### `jobs.<job_id>.strategy.matrix.exclude`
-
-{% data reusables.actions.jobs.matrix-exclude %}
+{% data reusables.actions.jobs.section-using-a-build-matrix-for-your-jobs-matrix %}
 
 ### `jobs.<job_id>.strategy.fail-fast`
 
@@ -981,42 +965,6 @@ jobs:
       access-token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
 ```
 {% endraw %}
-
-{% ifversion actions-inherit-secrets-reusable-workflows %}
-
-### `jobs.<job_id>.secrets.inherit`
-
-Use the `inherit` keyword to pass all the calling workflow's secrets to the called workflow. This includes all secrets the calling workflow has access to, namely organization, repository, and environment secrets. The `inherit` keyword can be used to pass secrets across repositories within the same organization, or across organizations within the same enterprise.
-
-#### Example
-
-{% raw %}
-
-```yaml
-on:
-  workflow_dispatch:
-
-jobs:
-  pass-secrets-to-workflow:
-    uses: ./.github/workflows/called-workflow.yml
-    secrets: inherit
-```
-
-```yaml
-on:
-  workflow_call:
-
-jobs:
-  pass-secret-to-action:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Use a repo or org secret from the calling workflow.
-        run: echo ${{ secrets.CALLING_WORKFLOW_SECRET }}
-```
-
-{% endraw %}
-
-{%endif%}
 
 ### `jobs.<job_id>.secrets.<secret_id>`
 

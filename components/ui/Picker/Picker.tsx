@@ -1,19 +1,13 @@
-import React, { useState } from 'react'
-import { ActionList, ActionMenu, Box, Details, Text, useDetails } from '@primer/react'
-import { ArrowRightIcon, ChevronDownIcon, InfoIcon, LinkExternalIcon } from '@primer/octicons-react'
+import { ReactNode } from 'react'
 import cx from 'classnames'
 
-import { Link } from 'components/Link'
+import { Details, useDetails, Text, Dropdown, Box } from '@primer/react'
+import { ChevronDownIcon } from '@primer/octicons-react'
 
 export type PickerOptionsTypeT = {
   text: string
-  href: string
-  locale?: string
-  external?: boolean
-  arrow?: boolean
-  info?: boolean
+  item: ReactNode
   selected?: boolean
-  onselect?: Function | void
 }
 
 export type PickerPropsT = {
@@ -22,74 +16,72 @@ export type PickerPropsT = {
   options: Array<PickerOptionsTypeT>
 }
 
-export function Picker({ variant, defaultText, options }: PickerPropsT) {
-  const [open, setOpen] = useState(false)
-  const { getDetailsProps } = useDetails({ closeOnOutsideClick: true })
-  const selectedOption = options.find((opt) => opt.selected === true)
+type PickerWrapperPropsT = {
+  variant?: 'inline'
+  children: ReactNode
+}
 
-  function getFields() {
+function PickerSummaryWrapper({ variant, children }: PickerWrapperPropsT) {
+  if (variant === 'inline') {
     return (
-      <ActionList selectionVariant="single">
-        {options.map((option) => (
-          <ActionList.LinkItem
-            as={Link}
-            className={option.arrow || option.info ? 'f6' : ''}
-            locale={option.locale}
-            key={option.text}
-            href={option.href}
-            onClick={() => {
-              if (option.onselect) option.onselect(option.locale)
-              setOpen(!open)
-            }}
-          >
-            {option.text}
-            {option.external && <LinkExternalIcon size="small" className="ml-1" />}
-            {option.info && <InfoIcon verticalAlign="middle" size={15} className="ml-1" />}
-            {option.arrow && <ArrowRightIcon verticalAlign="middle" size={15} className="ml-1" />}
-          </ActionList.LinkItem>
-        ))}
-      </ActionList>
+      <div className="d-flex flex-items-center flex-justify-between">
+        {children}
+        <ChevronDownIcon size={24} className="arrow ml-md-1" />
+      </div>
     )
   }
+  return (
+    <>
+      {children}
+      <ChevronDownIcon size={16} className="arrow ml-md-1" />
+    </>
+  )
+}
 
-  function getInlinePicker() {
+function PickerOptionsWrapper({ variant, children }: PickerWrapperPropsT) {
+  if (variant === 'inline') {
     return (
-      <Details {...getDetailsProps()} className={cx('position-relative details-reset', 'd-block')}>
-        <summary
-          className="d-block btn btn-invisible color-fg-default"
-          aria-haspopup="true"
-          aria-label={selectedOption?.text || defaultText}
-        >
-          <div className="d-flex flex-items-center flex-justify-between">
-            <Text>{selectedOption?.text || defaultText}</Text>
-            <ChevronDownIcon size={24} className="arrow ml-md-1" />
-          </div>
-        </summary>
-        <Box>
-          <ul>{getFields()}</ul>
-        </Box>
-      </Details>
+      <Box py="2">
+        <ul>{children}</ul>
+      </Box>
     )
   }
+  return (
+    <Dropdown.Menu direction="sw" style={{ width: 'unset' }}>
+      {children}
+    </Dropdown.Menu>
+  )
+}
+
+export function Picker({ variant, defaultText, options, ...restProps }: PickerPropsT) {
+  const { getDetailsProps, setOpen } = useDetails({ closeOnOutsideClick: true })
+  const selectedOption = options.find((option) => option.selected)
 
   return (
-    <React.Fragment>
-      {variant === 'inline' ? (
-        getInlinePicker()
-      ) : (
-        <ActionMenu open={open} onOpenChange={setOpen}>
-          <ActionMenu.Button
-            aria-label="Select field type"
-            variant="invisible"
-            sx={{ color: `var(--color-fg-default)` }}
-          >
-            {selectedOption?.text || defaultText}
-          </ActionMenu.Button>
-          <ActionMenu.Overlay width="auto" align="end">
-            {getFields()}
-          </ActionMenu.Overlay>
-        </ActionMenu>
+    <Details
+      {...getDetailsProps()}
+      className={cx(
+        'position-relative details-reset',
+        variant === 'inline' ? 'd-block' : 'd-inline-block'
       )}
-    </React.Fragment>
+      {...restProps}
+    >
+      <summary
+        className="d-block btn btn-invisible color-fg-default"
+        aria-haspopup="true"
+        aria-label={selectedOption?.text || defaultText}
+      >
+        <PickerSummaryWrapper variant={variant}>
+          <Text>{selectedOption?.text || defaultText}</Text>
+        </PickerSummaryWrapper>
+      </summary>
+      <PickerOptionsWrapper variant={variant}>
+        {options.map((option) => (
+          <Dropdown.Item onClick={() => setOpen(false)} key={option.text}>
+            {option.item}
+          </Dropdown.Item>
+        ))}
+      </PickerOptionsWrapper>
+    </Details>
   )
 }

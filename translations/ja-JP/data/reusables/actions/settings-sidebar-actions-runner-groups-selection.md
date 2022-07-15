@@ -1,1 +1,1 @@
-1. グループのリストで、設定したいランナーグループをクリックしてください。
+1. In the list of groups, click the runner group you'd like to configure.

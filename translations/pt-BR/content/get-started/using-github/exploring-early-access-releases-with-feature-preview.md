@@ -1,6 +1,6 @@
 ---
 title: Explorar versões de acesso antecipado com visualização de recursos
-intro: Você pode usar a visualização de recursos para ver produtos ou recursos que estão disponíveis na versão beta e para habilitar ou desabilitar cada recurso para sua conta pessoal.
+intro: Você pode usar a visualização de recursos para ver produtos ou recursos que estão disponíveis na versão beta e para habilitar ou desabilitar cada recurso para sua conta de usuário.
 redirect_from:
   - /articles/exploring-early-access-releases-with-feature-preview
   - /github/getting-started-with-github/exploring-early-access-releases-with-feature-preview

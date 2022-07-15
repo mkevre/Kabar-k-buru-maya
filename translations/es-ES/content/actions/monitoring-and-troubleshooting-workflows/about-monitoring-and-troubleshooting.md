@@ -15,12 +15,14 @@ miniTocMaxHeadingLevel: 3
 
 ## Monitorear tus flujos de trabajo
 
-{% ifversion github-runner-dashboard %}
+{% if github-runner-dashboard %}
 ### Monitorear tus jobs actuales en tu organización o empresa
 
 {% data reusables.actions.github-hosted-runners-check-concurrency %}
 
 {% endif %}
+
+{% ifversion fpt or ghae or ghes > 3.0 or ghec %}
 
 ### Utilizar la gráfica de visualización
 
@@ -29,6 +31,8 @@ Cada ejecución de flujo de trabajo genera una gráfica en tiempo real que ilust
    ![Gráfica del flujo de trabajo](/assets/images/help/images/workflow-graph.png)
 
 Para obtener más información, consulta la sección "[Utilizar el gráfico de visualización](/actions/monitoring-and-troubleshooting-workflows/using-the-visualization-graph)".
+
+{% endif %}
 
 ### Agregar una insignia de estado de flujo de trabajo
 

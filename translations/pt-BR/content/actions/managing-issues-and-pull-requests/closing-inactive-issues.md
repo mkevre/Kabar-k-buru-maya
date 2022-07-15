@@ -37,12 +37,12 @@ No tutorial, primeiro você vai fazer um arquivo de fluxo de trabalho que usa a 
 
     jobs:
       close-issues:
-        runs-on: ubuntu-latest
+        runs-on: ubuntu-latest{% ifversion fpt or ghes > 3.1 or ghae or ghec %}
         permissions:
           issues: write
-          pull-requests: write
+          pull-requests: write{% endif %}
         steps:
-          - uses: {% data reusables.actions.action-stale %}
+          - uses: actions/stale@v3
             with:
               days-before-issue-stale: 30
               days-before-issue-close: 14

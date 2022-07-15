@@ -1,6 +1,6 @@
-一部のイベントは、ワークフローを実行すべきときを詳細に制御できるようにしてくれるフィルタを持ちます。
+Some events have filters that give you more control over when your workflow should run.
 
-たとえば`push`イベントは`branches`フィルタを持ち、これは任意のプッシュではなく、`branches`フィルタにマッチするブランチへのプッシュが生じたときにのみワークフローが実行されるようにします。
+For example, the `push` event has a `branches` filter that causes your workflow to run only when a push to a branch that matches the `branches` filter occurs, instead of when any push occurs.
 
 ```yaml
 on:

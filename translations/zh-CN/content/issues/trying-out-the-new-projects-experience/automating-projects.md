@@ -15,8 +15,6 @@ topics:
 
 {% data reusables.projects.projects-beta %}
 
-{% data reusables.projects.graphql-deprecation %}
-
 ## 简介
 
 您可以添加自动化来帮助管理项目。 项目（测试版）包括可通过 UI 配置的内置工作流程。 此外，您可以使用 GraphQL API 和 {% data variables.product.prodname_actions %} 编写自定义工作流程。
@@ -91,32 +89,23 @@ jobs:
           gh api graphql -f query='
             query($org: String!, $number: Int!) {
               organization(login: $org){
-                projectV2(number: $number) {
+                projectNext(number: $number) {
                   id
                   fields(first:20) {
                     nodes {
-                      ... on ProjectV2Field {
-                        id
-                        name
-                      }
-                      ... on ProjectV2SingleSelectField {
-                        id
-                        name
-                        options {
-                          id
-                          name
-                        }
-                      }
+                      id
+                      name
+                      settings
                     }
                   }
                 }
               }
             }' -f org=$ORGANIZATION -F number=$PROJECT_NUMBER > project_data.json
 
-          echo 'PROJECT_ID='$(jq '.data.organization.projectV2.id' project_data.json) >> $GITHUB_ENV
-          echo 'DATE_FIELD_ID='$(jq '.data.organization.projectV2.fields.nodes[] | select(.name== "Date posted") | .id' project_data.json) >> $GITHUB_ENV
-          echo 'STATUS_FIELD_ID='$(jq '.data.organization.projectV2.fields.nodes[] | select(.name== "Status") | .id' project_data.json) >> $GITHUB_ENV
-          echo 'TODO_OPTION_ID='$(jq '.data.organization.projectV2.fields.nodes[] | select(.name== "Status") | .options[] | select(.name=="Todo") |.id' project_data.json) >> $GITHUB_ENV
+          echo 'PROJECT_ID='$(jq '.data.organization.projectNext.id' project_data.json) >> $GITHUB_ENV
+          echo 'DATE_FIELD_ID='$(jq '.data.organization.projectNext.fields.nodes[] | select(.name== "Date posted") | .id' project_data.json) >> $GITHUB_ENV
+          echo 'STATUS_FIELD_ID='$(jq '.data.organization.projectNext.fields.nodes[] | select(.name== "Status") | .id' project_data.json) >> $GITHUB_ENV
+          echo 'TODO_OPTION_ID='$(jq '.data.organization.projectNext.fields.nodes[] | select(.name== "Status") |.settings | fromjson.options[] | select(.name=="Todo") |.id' project_data.json) >> $GITHUB_ENV
 
       - name: Add PR to project
         env:
@@ -125,14 +114,14 @@ jobs:
         run: |
           item_id="$( gh api graphql -f query='
             mutation($project:ID!, $pr:ID!) {
-              addProjectV2ItemById(input: {projectId: $project, contentId: $pr}) {
-                item {
+              addProjectNextItem(input: {projectId: $project, contentId: $pr}) {
+                projectNextItem {
                   id
                 }
               }
-            }' -f project=$PROJECT_ID -f pr=$PR_ID --jq '.data.addProjectV2ItemById.item.id')"
+            }' -f project=$PROJECT_ID -f pr=$PR_ID --jq '.data.addProjectNextItem.projectNextItem.id')"
 
-            echo 'ITEM_ID='$item_id >> $GITHUB_ENV
+          echo 'ITEM_ID='$item_id >> $GITHUB_ENV
 
       - name: Get date
         run: echo "DATE=$(date +"%Y-%m-%d")" >> $GITHUB_ENV
@@ -148,39 +137,34 @@ jobs:
               $status_field: ID!
               $status_value: String!
               $date_field: ID!
-              $date_value: Date!
+              $date_value: String!
             ) {
-              set_status: updateProjectV2ItemFieldValue(input: {
+              set_status: updateProjectNextItemField(input: {
                 projectId: $project
                 itemId: $item
                 fieldId: $status_field
-                value: { 
-                  singleSelectOptionId: $status_value
-                  }
+                value: $status_value
               }) {
-                projectV2Item {
+                projectNextItem {
                   id
                   }
               }
-              set_date_posted: updateProjectV2ItemFieldValue(input: {
+              set_date_posted: updateProjectNextItemField(input: {
                 projectId: $project
                 itemId: $item
                 fieldId: $date_field
-                value: { 
-                  date: $date_value
-                }
+                value: $date_value
               }) {
-                projectV2Item {
+                projectNextItem {
                   id
                 }
               }
             }' -f project=$PROJECT_ID -f item=$ITEM_ID -f status_field=$STATUS_FIELD_ID -f status_value={% raw %}${{ env.TODO_OPTION_ID }}{% endraw %} -f date_field=$DATE_FIELD_ID -f date_value=$DATE --silent
-
 ```
 
 ### 使用个人访问令牌进行身份验证的示例工作流程
 
-1. 创建具有 `project` 和 `repo` 作用域的个人访问令牌。 更多信息请参阅“[创建个人访问令牌](/github/authenticating-to-github/keeping-your-account-and-data-secure/creating-a-personal-access-token)”。
+1. 使用 `org:write` 范围创建个人访问令牌。 更多信息请参阅“[创建个人访问令牌](/github/authenticating-to-github/keeping-your-account-and-data-secure/creating-a-personal-access-token)”。
 2. 将个人访问令牌另存为存储库或组织中的机密。
 3. 在以下工作流程中，将 `YOUR_TOKEN` 替换为密码名称。 将 `YOUR_ORGANIZATION` 替换为您的组织名称。 例如 `octo-org`。 将 `YOUR_PROJECT_NUMBER` 替换为您的项目编号。 要查找项目编号，请查看项目 URL。 例如，`https://github.com/orgs/octo-org/projects/5` 有一个编号为 5 的项目。
 
@@ -203,32 +187,23 @@ jobs:
           gh api graphql -f query='
             query($org: String!, $number: Int!) {
               organization(login: $org){
-                projectV2(number: $number) {
+                projectNext(number: $number) {
                   id
                   fields(first:20) {
                     nodes {
-                      ... on ProjectV2Field {
-                        id
-                        name
-                      }
-                      ... on ProjectV2SingleSelectField {
-                        id
-                        name
-                        options {
-                          id
-                          name
-                        }
-                      }
+                      id
+                      name
+                      settings
                     }
                   }
                 }
               }
             }' -f org=$ORGANIZATION -F number=$PROJECT_NUMBER > project_data.json
 
-          echo 'PROJECT_ID='$(jq '.data.organization.projectV2.id' project_data.json) >> $GITHUB_ENV
-          echo 'DATE_FIELD_ID='$(jq '.data.organization.projectV2.fields.nodes[] | select(.name== "Date posted") | .id' project_data.json) >> $GITHUB_ENV
-          echo 'STATUS_FIELD_ID='$(jq '.data.organization.projectV2.fields.nodes[] | select(.name== "Status") | .id' project_data.json) >> $GITHUB_ENV
-          echo 'TODO_OPTION_ID='$(jq '.data.organization.projectV2.fields.nodes[] | select(.name== "Status") | .options[] | select(.name=="Todo") |.id' project_data.json) >> $GITHUB_ENV
+          echo 'PROJECT_ID='$(jq '.data.organization.projectNext.id' project_data.json) >> $GITHUB_ENV
+          echo 'DATE_FIELD_ID='$(jq '.data.organization.projectNext.fields.nodes[] | select(.name== "Date posted") | .id' project_data.json) >> $GITHUB_ENV
+          echo 'STATUS_FIELD_ID='$(jq '.data.organization.projectNext.fields.nodes[] | select(.name== "Status") | .id' project_data.json) >> $GITHUB_ENV
+          echo 'TODO_OPTION_ID='$(jq '.data.organization.projectNext.fields.nodes[] | select(.name== "Status") |.settings | fromjson.options[] | select(.name=="Todo") |.id' project_data.json) >> $GITHUB_ENV
 
       - name: Add PR to project
         env:
@@ -237,14 +212,14 @@ jobs:
         run: |
           item_id="$( gh api graphql -f query='
             mutation($project:ID!, $pr:ID!) {
-              addProjectV2ItemById(input: {projectId: $project, contentId: $pr}) {
-                item {
+              addProjectNextItem(input: {projectId: $project, contentId: $pr}) {
+                projectNextItem {
                   id
                 }
               }
-            }' -f project=$PROJECT_ID -f pr=$PR_ID --jq '.data.addProjectV2ItemById.item.id')"
+            }' -f project=$PROJECT_ID -f pr=$PR_ID --jq '.data.addProjectNextItem.projectNextItem.id')"
 
-            echo 'ITEM_ID='$item_id >> $GITHUB_ENV
+          echo 'ITEM_ID='$item_id >> $GITHUB_ENV
 
       - name: Get date
         run: echo "DATE=$(date +"%Y-%m-%d")" >> $GITHUB_ENV
@@ -260,29 +235,25 @@ jobs:
               $status_field: ID!
               $status_value: String!
               $date_field: ID!
-              $date_value: Date!
+              $date_value: String!
             ) {
-              set_status: updateProjectV2ItemFieldValue(input: {
+              set_status: updateProjectNextItemField(input: {
                 projectId: $project
                 itemId: $item
                 fieldId: $status_field
-                value: { 
-                  singleSelectOptionId: $status_value
-                  }
+                value: $status_value
               }) {
-                projectV2Item {
+                projectNextItem {
                   id
                   }
               }
-              set_date_posted: updateProjectV2ItemFieldValue(input: {
+              set_date_posted: updateProjectNextItemField(input: {
                 projectId: $project
                 itemId: $item
                 fieldId: $date_field
-                value: { 
-                  date: $date_value
-                }
+                value: $date_value
               }) {
-                projectV2Item {
+                projectNextItem {
                   id
                 }
               }
@@ -381,34 +352,23 @@ env:
 gh api graphql -f query='
   query($org: String!, $number: Int!) {
     organization(login: $org){
-      projectV2(number: $number) {
+      projectNext(number: $number) {
         id
         fields(first:20) {
           nodes {
-            ... on ProjectV2Field {
-              id
-              name
-            }
-            ... on ProjectV2SingleSelectField {
-              id
-              name
-              options {
-                id
-                name
-              }
-            }
+            id
+            name
+            settings
           }
         }
       }
     }
-  }'  -f org=$ORGANIZATION -F number=$PROJECT_NUMBER > project_data.json
+  }' -f org=$ORGANIZATION -F number=$PROJECT_NUMBER > project_data.json
 ```
 
 </td>
 <td>
-<p>使用 <a href="https://cli.github.com/manual/">{% data variables.product.prodname_cli %}</a> 查询项目 ID 的 API 以及项目前 20 个字段的名称和 ID。 <code>fields</code> 返回并集，查询使用内联分段 (<code>... on</code>) 返回有关任何 <code>ProjectV2Field</code> 和 <code>ProjectV2SingleSelectfield</code> 字段的信息。</p>
-
-<p>响应存储在一个名为 <code>project_data.json</code> 的文件中。</p>
+使用 <a href="https://cli.github.com/manual/">{% data variables.product.prodname_cli %}</a> 查询项目 ID 的 API 以及项目前 20 个字段的 ID、名称和设置。 响应存储在一个名为 <code>project_data.json</code> 的文件中。
 </td>
 </tr>
 
@@ -416,18 +376,18 @@ gh api graphql -f query='
 <td>
 
 ```yaml
-echo 'PROJECT_ID='$(jq '.data.organization.projectV2.id' project_data.json) >> $GITHUB_ENV
-echo 'DATE_FIELD_ID='$(jq '.data.organization.projectV2.fields.nodes[] | select(.name== "Date posted") | .id' project_data.json) >> $GITHUB_ENV
-echo 'STATUS_FIELD_ID='$(jq '.data.organization.projectV2.fields.nodes[] | select(.name== "Status") | .id' project_data.json) >> $GITHUB_ENV
-echo 'TODO_OPTION_ID='$(jq '.data.organization.projectV2.fields.nodes[] | select(.name== "Status") | .options[] | select(.name=="Todo") |.id' project_data.json) >> $GITHUB_ENV
+echo 'PROJECT_ID='$(jq '.data.organization.projectNext.id' project_data.json) >> $GITHUB_ENV
+echo 'DATE_FIELD_ID='$(jq '.data.organization.projectNext.fields.nodes[] | select(.name== "Date posted") | .id' project_data.json) >> $GITHUB_ENV
+echo 'STATUS_FIELD_ID='$(jq '.data.organization.projectNext.fields.nodes[] | select(.name== "Status") | .id' project_data.json) >> $GITHUB_ENV
+echo 'TODO_OPTION_ID='$(jq '.data.organization.projectNext.fields.nodes[] | select(.name== "Status") |.settings | fromjson.options[] | select(.name=="Todo") |.id' project_data.json) >> $GITHUB_ENV
 ```
 
 </td>
 <td>
 解析 API 查询的响应，并将相关 ID 存储为环境变量。 修改此选项以获取不同字段或选项的 ID。 例如：
 <ul>
-<li>要获取名为 <code>Team</code> 的字段的 ID，请添加 <code>echo 'TEAM_FIELD_ID='$(jq '.data.organization.projectV2.fields.nodes[] | select(.name== "Team") | .id' project_data.json) >> $GITHUB_ENV</code>。</li>
-<li>要为 <code>Team</code> 单选字段获取名为 <code>Octoteam</code> 的选项的 ID，请添加 <code>echo 'OCTOTEAM_OPTION_ID='$(jq '.data.organization.projectV2.fields.nodes[] | select(.name== "Team") |.options[] | select(.name=="Octoteam") |.id' project_data.json) >> $GITHUB_ENV</code></li>
+<li>要获取名为 <code>Team</code> 的字段的 ID，请添加 <code>echo 'TEAM_FIELD_ID='$(jq 'data. rbodiation.projectNext.fields.nodes[] | select(.name== "Team") | .id' project_data.json) >> $GITHUB_ENV</code>。</li>
+<li>要为 <code>Team</code> 字段获取名为 <code>Octoteam</code> 的选项的 ID，请添加 <code>echo 'OCTOTEAM_OPTION_ID='$(jq '.data.organization.projectNext.fields.nodes[] | select(.name== "Team") |.settings | fromjson.options[] | select(.name=="Octoteam") |.id' project_data.json) >> $GITHUB_ENV</code></li>
 </ul>
 <strong>注意：</strong>此工作流假定您有一个名为“状态”的单选字段，其中包括一个名为“待办”的选项和一个名为“发布日期”的日期字段。 您必须修改此部分以匹配表中存在的字段。
 </td>
@@ -465,12 +425,12 @@ env:
 ```yaml
 item_id="$( gh api graphql -f query='
   mutation($project:ID!, $pr:ID!) {
-    addProjectV2ItemById(input: {projectId: $project, contentId: $pr}) {
-      item {
+    addProjectNextItem(input: {projectId: $project, contentId: $pr}) {
+      projectNextItem {
         id
       }
     }
-  }' -f project=$PROJECT_ID -f pr=$PR_ID --jq '.data.addProjectV2ItemById.item.id')"
+  }' -f project=$PROJECT_ID -f pr=$PR_ID --jq '.data.addProjectNextItem.projectNextItem.id')"
 ```
 
 </td>
@@ -540,29 +500,25 @@ gh api graphql -f query='
     $status_field: ID!
     $status_value: String!
     $date_field: ID!
-    $date_value: Date!
+    $date_value: String!
   ) {
-    set_status: updateProjectV2ItemFieldValue(input: {
+    set_status: updateProjectNextItemField(input: {
       projectId: $project
       itemId: $item
       fieldId: $status_field
-      value: { 
-        singleSelectOptionId: $status_value
-        }
+      value: $status_value
     }) {
-      projectV2Item {
+      projectNextItem {
         id
         }
     }
-    set_date_posted: updateProjectV2ItemFieldValue(input: {
+    set_date_posted: updateProjectNextItemField(input: {
       projectId: $project
       itemId: $item
       fieldId: $date_field
-      value: { 
-        date: $date_value
-      }
+      value: $date_value
     }) {
-      projectV2Item {
+      projectNextItem {
         id
       }
     }

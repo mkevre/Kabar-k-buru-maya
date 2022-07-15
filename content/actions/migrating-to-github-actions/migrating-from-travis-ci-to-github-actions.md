@@ -60,9 +60,9 @@ Travis CI can use `stages` to run jobs in parallel. Similarly, {% data variables
 Travis CI and {% data variables.product.prodname_actions %} both support status badges, which let you indicate whether a build is passing or failing.
 For more information, see ["Adding a workflow status badge to your repository](/actions/managing-workflow-runs/adding-a-workflow-status-badge)."
 
-### Using a matrix
+### Using a build matrix
 
-Travis CI and {% data variables.product.prodname_actions %} both support a matrix, allowing you to perform testing using combinations of operating systems and software packages. For more information, see "[Using a matrix for your jobs](/actions/using-jobs/using-a-matrix-for-your-jobs)."
+Travis CI and {% data variables.product.prodname_actions %} both support a build matrix, allowing you to perform testing using combinations of operating systems and software packages. For more information, see "[Using a build matrix](/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix)."
 
 Below is an example comparing the syntax for each system:
 
@@ -165,13 +165,13 @@ git:
 {% endraw %}
 </td>
 <td class="d-table-cell v-align-top">
-
+{% raw %}
 ```yaml
-- uses: {% data reusables.actions.action-checkout %}
+- uses: actions/checkout@v2
   with:
     submodules: false
 ```
-
+{% endraw %}
 </td>
 </tr>
 </table>
@@ -209,8 +209,7 @@ The concurrent jobs and workflow execution times in {% data variables.product.pr
 ### Using different languages in {% data variables.product.prodname_actions %}
 
 When working with different languages in {% data variables.product.prodname_actions %}, you can create a step in your job to set up your language dependencies. For more information about working with a particular language, see the specific guide:
-  - [Building and testing Node.js](/actions/guides/building-and-testing-nodejs)
-  - [Building and testing Python](/actions/guides/building-and-testing-python)
+  - [Building and testing Node.js or Python](/actions/guides/building-and-testing-nodejs-or-python)
   - [Building and testing PowerShell](/actions/guides/building-and-testing-powershell)
   - [Building and testing Java with Maven](/actions/guides/building-and-testing-java-with-maven)
   - [Building and testing Java with Gradle](/actions/guides/building-and-testing-java-with-gradle)
@@ -285,30 +284,26 @@ script:
 {% endraw %}
 </td>
 <td class="d-table-cell v-align-top">
-
+{% raw %}
 ```yaml
 jobs:
   run_python:
     runs-on: ubuntu-latest
     steps:
-      - uses: {% data reusables.actions.action-setup-python %}
+      - uses: actions/setup-python@v2
         with:
           python-version: '3.7'
           architecture: 'x64'
       - run: python script.py
 ```
-
+{% endraw %}
 </td>
 </tr>
 </table>
 
 ## Caching dependencies
 
-Travis CI and {% data variables.product.prodname_actions %} let you manually cache dependencies for later reuse.
-
-{% ifversion actions-caching %}
-
-This example demonstrates the cache syntax for each system.
+Travis CI and {% data variables.product.prodname_actions %} let you manually cache dependencies for later reuse. This example demonstrates the cache syntax for each system.
 
 <table>
 <tr>
@@ -329,25 +324,21 @@ cache: npm
 {% endraw %}
 </td>
 <td class="d-table-cell v-align-top">
-
+{% raw %}
 ```yaml
 - name: Cache node modules
-  uses: {% data reusables.actions.action-cache %}
+  uses: actions/cache@v2
   with:
     path: ~/.npm
-    key: {% raw %}v1-npm-deps-${{ hashFiles('**/package-lock.json') }}{% endraw %}
+    key: v1-npm-deps-${{ hashFiles('**/package-lock.json') }}
     restore-keys: v1-npm-deps-
 ```
-
+{% endraw %}
 </td>
 </tr>
 </table>
 
-{% else %}
-
-{% data reusables.actions.caching-availability %}
-
-{% endif %}
+{% data variables.product.prodname_actions %} caching is only applicable for repositories hosted on {% data variables.product.prodname_dotcom_the_website %}. For more information, see "<a href="/actions/guides/caching-dependencies-to-speed-up-workflows" class="dotcom-only">Caching dependencies to speed up workflows</a>."
 
 ## Examples of common tasks
 
@@ -412,7 +403,7 @@ script:
 {% endraw %}
 </td>
 <td>
-
+{% raw %}
 ```yaml
 name: Node.js CI
 on: [push]
@@ -420,16 +411,16 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: {% data reusables.actions.action-checkout %}
+      - uses: actions/checkout@v2
       - name: Use Node.js
-        uses: {% data reusables.actions.action-setup-node %}
+        uses: actions/setup-node@v2
         with:
           node-version: '12.x'
       - run: npm install
       - run: npm run build
       - run: npm test
 ```
-
+{% endraw %}
 </td>
 </tr>
 </table>

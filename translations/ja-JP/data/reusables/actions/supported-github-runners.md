@@ -15,7 +15,7 @@ Windows Server 2022
 <code>windows-latest</code>もしくは<code>windows-2022</code>
 </td>
 <td>
-現在<code>windows-latest</code>ラベルはWindows Server 2022のランナーイメージを使用しています。
+The <code>windows-latest</code> label currently uses the Windows Server 2022 runner image.
 </td>
 </tr>
 <tr>
@@ -30,13 +30,13 @@ Windows Server 2019
 </tr>
 <tr>
 <td>
-Ubuntu 22.04
+Windows Server 2016<sup>[deprecated]</sup>
 </td>
 <td>
-<code>ubuntu-22.04</code>
+<code>windows-2016</code>
 </td>
 <td>
-Ubuntu 22.04は現在パブリックベータです。
+Migrate to Windows 2019 or Windows 2022. For more information, see  <A href="https://github.blog/changelog/2021-10-19-github-actions-the-windows-2016-runner-image-will-be-removed-from-github-hosted-runners-on-march-15-2022/">the blog post</A>.
 </td>
 </tr>
 <tr>
@@ -45,6 +45,8 @@ Ubuntu 20.04
 </td>
 <td>
 <code>ubuntu-latest</code>または<code>ubuntu-20.04</code>
+</td>
+<td>
 </td>
 </tr>
 <tr>
@@ -59,21 +61,13 @@ Ubuntu 18.04
 </tr>
 <tr>
 <td>
-macOS Monterey 12
-</td>
-<td>
-<code>macos-12</code>
-  </td>
-</tr>
-<tr>
-<td>
 macOS Big Sur 11
 </td>
 <td>
 <code>macos-latest</code>もしくは<code>macos-11</code>
 </td>
 <td>
-現在<code>macos-latest</code>ラベルはmacOS 11のランナーイメージを使用しています。
+The <code>macos-latest</code> label currently uses the macOS 11 runner image.
 </td>
 </tr>
 <tr>
@@ -91,12 +85,12 @@ macOS Catalina 10.15
 
 {% note %}
 
-**ノート:** `-latest`の仮想環境は、{% data variables.product.prodname_dotcom %}が提供している最新の安定版イメージであり、オペレーティングシステムのベンダーから提供されているオペレーティングシステムの最新バージョンではないことがあります。
+**Note:** The `-latest` virtual environments are the latest stable images that {% data variables.product.prodname_dotcom %} provides, and might not be the most recent version of the operating system available from the operating system vendor.
 
 {% endnote %}
 
 {% warning %}
 
-<b>ノート:</b> ベータ及び非推奨のイメージは"as-is"、"with all faults"、"as available"で提供されており、サービスレベルアグリーメント及び保証の対象外です。 ベータのイメージは、カスタマーサポートの対象外になっていることがあります。
+<b>Note:</b> Beta and Deprecated Images are provided "as-is", "with all faults" and "as available" and are excluded from the service level agreement and warranty. Beta Images may not be covered by customer support.
 
 {% endwarning %}

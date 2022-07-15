@@ -1,6 +1,6 @@
 ---
-title: 撤销存储库安全通告
-intro: 您可以撤销已发布的仓库安全通告。
+title: Withdrawing a repository security advisory
+intro: You can withdraw a repository security advisory that you've published.
 redirect_from:
   - /github/managing-security-vulnerabilities/withdrawing-a-security-advisory
   - /code-security/security-advisories/withdrawing-a-security-advisory
@@ -11,7 +11,7 @@ type: how_to
 topics:
   - Security advisories
   - Vulnerabilities
-shortTitle: 撤销存储库通告
+shortTitle: Withdraw repository advisories
 ---
 
 {% data reusables.security-advisory.repository-level-advisory-note %}
@@ -20,4 +20,4 @@ shortTitle: 撤销存储库通告
 
 ## 延伸阅读
 
-- "[编辑存储库安全通告](/code-security/repository-security-advisories/editing-a-repository-security-advisory)"
+- "[Editing a repository security advisory](/code-security/repository-security-advisories/editing-a-repository-security-advisory)"

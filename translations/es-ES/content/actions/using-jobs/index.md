@@ -1,7 +1,7 @@
 ---
 title: Utilizar jobs
 shortTitle: Utilizar jobs
-intro: 'Crear y administrar jobs de {% data variables.product.prodname_actions %}.'
+intro: 'Creating and managing {% data variables.product.prodname_actions %} jobs.'
 redirect_from:
   - /actions/jobs
 versions:
@@ -13,7 +13,7 @@ children:
   - /using-jobs-in-a-workflow
   - /choosing-the-runner-for-a-job
   - /using-conditions-to-control-job-execution
-  - /using-a-matrix-for-your-jobs
+  - /using-a-build-matrix-for-your-jobs
   - /using-concurrency
   - /using-environments-for-jobs
   - /running-jobs-in-a-container

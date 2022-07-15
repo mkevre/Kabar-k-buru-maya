@@ -1,11 +1,10 @@
 ---
-title: 端到端供应链
-intro: 如何考虑保护用户帐户、代码和构建过程
+title: End-to-end supply chain
+intro: 'How to think about securing your user accounts, your code, and your build process'
 versions:
   fpt: '*'
   ghec: '*'
   ghes: '*'
-  ghae: '*'
 topics:
   - Security overview
   - Organizations
