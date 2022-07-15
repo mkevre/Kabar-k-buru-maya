@@ -1,7 +1,4 @@
-import {
-  readCompressedJsonFileFallbackLazily,
-  readCompressedJsonFileFallback,
-} from '../../lib/read-json-file.js'
+import { readCompressedJsonFileFallbackLazily } from '../../lib/read-json-file.js'
 import { allVersions } from '../../lib/all-versions.js'
 const previews = readCompressedJsonFileFallbackLazily('./lib/graphql/static/previews.json')
 const upcomingChanges = readCompressedJsonFileFallbackLazily(
@@ -23,17 +20,6 @@ const explorerUrl =
     ? 'https://graphql.github.com/explorer'
     : 'http://localhost:3000'
 
-const graphQLVersionSchemaCache = new Map()
-function readGraphQLVersionSchema(graphqlVersion) {
-  if (!graphQLVersionSchemaCache.has(graphqlVersion)) {
-    graphQLVersionSchemaCache.set(
-      graphqlVersion,
-      readCompressedJsonFileFallback(`lib/graphql/static/schema-${graphqlVersion}.json`)
-    )
-  }
-  return graphQLVersionSchemaCache.get(graphqlVersion)
-}
-
 export default function graphqlContext(req, res, next) {
   const currentVersionObj = allVersions[req.context.currentVersion]
   // ignore requests to non-GraphQL reference paths
@@ -48,7 +34,9 @@ export default function graphqlContext(req, res, next) {
   const graphqlVersion = currentVersionObj.miscVersionName
 
   req.context.graphql = {
-    schemaForCurrentVersion: readGraphQLVersionSchema(graphqlVersion),
+    schemaForCurrentVersion: readCompressedJsonFileFallbackLazily(
+      `lib/graphql/static/schema-${graphqlVersion}.json`
+    )(),
     previewsForCurrentVersion: previews()[graphqlVersion],
     upcomingChangesForCurrentVersion: upcomingChanges()[graphqlVersion],
     prerenderedObjectsForCurrentVersion: prerenderedObjects()[graphqlVersion],

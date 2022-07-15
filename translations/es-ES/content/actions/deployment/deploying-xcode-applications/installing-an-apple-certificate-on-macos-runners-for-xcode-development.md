@@ -74,6 +74,7 @@ Crea secretos en tu repositorio u organización para los siguientes elementos:
 
 Este flujo de trabajo de ejemplo incluye un paso que importa el certificado de Apple y perfil de aprovisionamiento desde los secretos de {% data variables.product.prodname_dotcom %} y los instala en el ejecutor.
 
+{% raw %}
 ```yaml{:copy}
 name: App build
 on: push
@@ -84,13 +85,13 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: {% data reusables.actions.action-checkout %}
+        uses: actions/checkout@v2
       - name: Install the Apple certificate and provisioning profile
         env:
-          BUILD_CERTIFICATE_BASE64: {% raw %}${{ secrets.BUILD_CERTIFICATE_BASE64 }}{% endraw %}
-          P12_PASSWORD: {% raw %}${{ secrets.P12_PASSWORD }}{% endraw %}
-          BUILD_PROVISION_PROFILE_BASE64: {% raw %}${{ secrets.BUILD_PROVISION_PROFILE_BASE64 }}{% endraw %}
-          KEYCHAIN_PASSWORD: {% raw %}${{ secrets.KEYCHAIN_PASSWORD }}{% endraw %}
+          BUILD_CERTIFICATE_BASE64: ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
+          P12_PASSWORD: ${{ secrets.P12_PASSWORD }}
+          BUILD_PROVISION_PROFILE_BASE64: ${{ secrets.BUILD_PROVISION_PROFILE_BASE64 }}
+          KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
         run: |
           # create variables
           CERTIFICATE_PATH=$RUNNER_TEMP/build_certificate.p12
@@ -116,6 +117,7 @@ jobs:
       - name: Build app
         ...
 ```
+{% endraw %}
 
 ## Limpieza requerida en los ejecutores auto-hospedados
 

@@ -48,6 +48,7 @@ shortTitle: 构建和测试 Java & Ant
 
 您也可以通过在仓库的 `.github/workflow` 目录中创建新文件来手动添加此工作流程。
 
+{% raw %}
 ```yaml{:copy}
 name: Java CI
 
@@ -58,15 +59,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: {% data reusables.actions.action-checkout %}
+      - uses: actions/checkout@v2
       - name: Set up JDK 11
-        uses: {% data reusables.actions.action-setup-java %}
+        uses: actions/setup-java@v2
         with:
           java-version: '11'
           distribution: 'adopt'
       - name: Build with Ant
         run: ant -noinput -buildfile build.xml
 ```
+{% endraw %}
 
 此工作流程执行以下步骤：
 
@@ -88,16 +90,18 @@ jobs:
 
 如果使用不同的命令来构建项目，或者想要运行不同的目标，则可以指定这些命令。 例如，您可能想要运行在 `_build-ci.xml_` 文件中配置的 `jar` 目标。
 
+{% raw %}
 ```yaml{:copy}
 steps:
-  - uses: {% data reusables.actions.action-checkout %}
-  - uses: {% data reusables.actions.action-setup-java %}
+  - uses: actions/checkout@v2
+  - uses: actions/setup-java@v2
     with:
       java-version: '11'
       distribution: 'adopt'
   - name: Run the Ant jar target
     run: ant -noinput -buildfile build-ci.xml jar
 ```
+{% endraw %}
 
 ## 将工作流数据打包为构件
 
@@ -105,17 +109,19 @@ steps:
 
 Ant 通常会在 `build/jar` 目录中创建 JAR、EAR 或 WAR 等输出文件。 您可以使用 `upload-artifact` 操作上传该目录的内容。
 
+{% raw %}
 ```yaml{:copy}
 steps:
-  - uses: {% data reusables.actions.action-checkout %}
-  - uses: {% data reusables.actions.action-setup-java %}
+  - uses: actions/checkout@v2
+  - uses: actions/setup-java@v2
     with:
       java-version: '11'
       distribution: 'adopt'
 
   - run: ant -noinput -buildfile build.xml
-  - uses: {% data reusables.actions.action-upload-artifact %}
+  - uses: actions/upload-artifact@v3
     with:
       name: Package
       path: build/jar
 ```
+{% endraw %}

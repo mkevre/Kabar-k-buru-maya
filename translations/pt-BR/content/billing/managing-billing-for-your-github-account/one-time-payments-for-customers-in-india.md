@@ -23,7 +23,7 @@ O regulamento aplica-se a todas as transações recorrentes, incluindo:
 - Compras de e{% data variables.product.prodname_marketplace %}
 - Transações de {% data variables.product.prodname_sponsors %}
 - Compras de grandes armazenamento de arquivos do Git
-- {% data variables.product.prodname_actions %}, {% data variables.product.prodname_registry %}, e consumo de {% data variables.product.prodname_github_codespaces %}
+- {% data variables.product.prodname_actions %}, {% data variables.product.prodname_registry %}, e consumo de {% data variables.product.prodname_codespaces %}
 
 A fim de minimizar as interrupções, os pagamentos recorrentes para os nossos clientes afetados foram pausados no dia 29 de outubro de 2021 de 2021. Os recursos e serviços pagos permaneceram disponíveis para os clientes afetados pelo regulamento do RBI.
 
@@ -63,4 +63,3 @@ Os patrocínios existentes permanecerão em vigor durante este período e os man
 4. Revise suas informações de cobrança e pagamento. Se você precisar fazer uma edição, clique em **Editar** ao lado da seção relevante. Caso contrário, clique em **Enviar pagamento**. ![Resumo de pagamento único](/assets/images/help/billing/payment-summary.png)
 5. Opcionalmente, se você clicou em **Editar**, faça as alterações necessárias e, em seguida, clique em **Enviar pagamento**. ![Resumo de edição de pagamento único](/assets/images/help/billing/payment-summary-edit.png)
 6. Uma vez que o pagamento do ciclo de cobrança atual foi realizado com sucesso, o botão **Pagar agora** na página de "planos de& cobrança" será desabilitado até o seu próximo pagamento ser devido. ![Botão de pagamento único "pague agora" desativado](/assets/images/help/billing/pay-now-button-disabled.png)
-  

@@ -9,13 +9,10 @@
 
 import fs from 'fs'
 import path from 'path'
-import { program } from 'commander'
+import program from 'commander'
 import walk from 'walk-sync'
 
-const EXCEPTIONS = new Set([
-  'assets/images/site/favicon.ico',
-  'assets/images/site/apple-touch-icon.png',
-])
+const EXCEPTIONS = new Set(['assets/images/site/favicon.ico'])
 
 function isExceptionPath(imagePath) {
   // We also check for .DS_Store because any macOS user that has opened
@@ -23,11 +20,7 @@ function isExceptionPath(imagePath) {
   // to git anyway thanks to our .DS_Store.
   // But if we don't make it a valid exception, it can become inconvenient
   // to run this script locally.
-  return (
-    EXCEPTIONS.has(imagePath) ||
-    path.basename(imagePath) === '.DS_Store' ||
-    imagePath.split(path.sep).includes('early-access')
-  )
+  return EXCEPTIONS.has(imagePath) || path.basename('.DS_Store')
 }
 
 program
@@ -68,7 +61,7 @@ async function main(opts) {
         root,
         Object.assign(
           {
-            globs: ['!**/*.+(png|jpe?g|csv|graphql|json|svg)'],
+            globs: ['!**/*.+(png|csv|graphql|json|svg)'],
           },
           walkOptions
         )

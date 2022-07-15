@@ -2,9 +2,8 @@ import React, { useState, useEffect, useRef, ReactNode, RefObject } from 'react'
 import { useRouter } from 'next/router'
 import useSWR from 'swr'
 import cx from 'classnames'
-import { Flash, Label, ActionList, ActionMenu } from '@primer/react'
-import { ItemInput } from '@primer/react/lib/deprecated/ActionList/List'
-import { InfoIcon } from '@primer/octicons-react'
+import { ActionList, DropdownMenu, Flash, Label, Overlay } from '@primer/react'
+import { ItemInput } from '@primer/react/lib/ActionList/List'
 
 import { useTranslation } from 'components/hooks/useTranslation'
 import { sendEvent, EventType } from 'components/lib/events'
@@ -219,11 +218,7 @@ export function Search({
       <div className="position-relative z-2">
         <form role="search" className="width-full d-flex" noValidate onSubmit={onFormSubmit}>
           <label className="text-normal width-full">
-            <span
-              className="visually-hidden"
-              aria-label={t`label`}
-              aria-describedby={t`description`}
-            >{t`placeholder`}</span>
+            <span className="visually-hidden">{t`placeholder`}</span>
             <input
               data-testid="site-search-input"
               ref={inputRef}
@@ -242,15 +237,13 @@ export function Search({
               )}
               type="search"
               placeholder={t`placeholder`}
-              autoComplete={localQuery ? 'on' : 'off'}
+              autoComplete="off"
               autoCorrect="off"
               autoCapitalize="off"
               spellCheck="false"
               maxLength={512}
               onChange={onSearch}
               value={localQuery}
-              aria-label={t`label`}
-              aria-describedby={t`description`}
             />
           </label>
           <button className="d-none" type="submit" title="Submit the search query." hidden />
@@ -288,6 +281,8 @@ function useDebounce<T>(value: T, delay?: number): [T, (value: T) => void] {
 
 function ShowSearchError({
   error,
+  isHeaderSearch,
+  isMobileSearch,
 }: {
   error: Error
   isHeaderSearch: boolean
@@ -295,7 +290,10 @@ function ShowSearchError({
 }) {
   const { t } = useTranslation('search')
   return (
-    <Flash variant="danger" sx={{ margin: '2rem 2rem 0 2em' }}>
+    <Flash
+      variant="danger"
+      sx={{ margin: isMobileSearch || isHeaderSearch ? '2rem 2rem 0 2em' : '1rem' }}
+    >
       <p>{t('search_error')}</p>
       {process.env.NODE_ENV === 'development' && (
         <p>
@@ -309,9 +307,12 @@ function ShowSearchError({
 }
 
 function ShowSearchResults({
+  anchorRef,
   isHeaderSearch,
+  isMobileSearch,
   isLoading,
   results,
+  closeSearch,
   debug,
   query,
 }: {
@@ -324,13 +325,12 @@ function ShowSearchResults({
   debug: boolean
   query: string
 }) {
-  const { t } = useTranslation(['pages', 'search'])
+  const { t } = useTranslation('search')
   const router = useRouter()
   const { currentVersion } = useVersion()
   const { allVersions } = useMainContext()
   const searchVersion = allVersions[currentVersion].versionTitle
   const [selectedVersion, setSelectedVersion] = useState<ItemInput | undefined>()
-  const currentVersionPathSegment = currentVersion === DEFAULT_VERSION ? '' : `/${currentVersion}`
 
   const latestVersions = new Set(
     Object.keys(allVersions)
@@ -341,7 +341,7 @@ function ShowSearchResults({
   const versions = Array.from(latestVersions).map((version) => {
     return {
       title: allVersions[version].versionTitle,
-      version,
+      version: version,
     }
   })
 
@@ -393,38 +393,13 @@ function ShowSearchResults({
             You're searching the <strong>{searchVersion}</strong> version.
           </p>
           <div className="float-right mr-4">
-            <p
-              aria-describedby={`You're searching the ${searchVersion} version`}
-              className={cx(styles.selectWording, 'f6 d-inline-block')}
-            >
-              Select version:
-            </p>
-            <ActionMenu>
-              <ActionMenu.Button sx={{ display: 'inline-block' }}>
-                {selectedVersion ? selectedVersion.text : searchVersion}
-              </ActionMenu.Button>
-              <ActionMenu.Overlay>
-                <ActionList selectionVariant="single">
-                  {searchVersions.map((searchVersion) => {
-                    return (
-                      <ActionList.Item
-                        onSelect={() => setSelectedVersion(searchVersion)}
-                        key={searchVersion.key}
-                      >
-                        {searchVersion.text}
-                      </ActionList.Item>
-                    )
-                  })}
-
-                  <ActionList.LinkItem
-                    className="f6"
-                    href={`/${router.locale}${currentVersionPathSegment}/get-started/learning-about-github/about-versions-of-github-docs`}
-                  >
-                    {t('about_versions')} <InfoIcon />
-                  </ActionList.LinkItem>
-                </ActionList>
-              </ActionMenu.Overlay>
-            </ActionMenu>
+            <p className={cx(styles.selectWording, 'f6 d-inline-block')}>Select version:</p>
+            <DropdownMenu
+              placeholder={searchVersion}
+              items={searchVersions}
+              selectedItem={selectedVersion}
+              onChange={setSelectedVersion}
+            />
           </div>
         </div>
         {/* We might have results AND isLoading. For example, the user typed
@@ -441,66 +416,112 @@ function ShowSearchResults({
           {t('matches_displayed')}: {results.length === 0 ? t('no_results') : results.length}
         </p>
 
-        <ActionList variant="full">
-          {results.map(({ url, breadcrumbs, title, content, score, popularity }) => {
-            return (
-              <ActionList.Item className="width-full" key={url}>
-                <Link href={url} className="no-underline color-fg-default">
-                  <div
-                    data-testid="search-result"
-                    className={cx('list-style-none', styles.resultsContainer)}
-                  >
-                    <div className={cx('py-2 px-3')}>
-                      {/* Breadcrumbs in search records don't include the page title. These fields may contain <mark> elements that we need to render */}
-                      <Label size="small" variant="accent">
-                        {breadcrumbs.length === 0
-                          ? title.replace(/<\/?[^>]+(>|$)|(\/)/g, '')
-                          : breadcrumbs
-                              .split(' / ')
-                              .slice(0, 1)
-                              .join(' ')
-                              .replace(/<\/?[^>]+(>|$)|(\/)/g, '')}
-                      </Label>
-                      {debug && (
-                        <small className="float-right">
-                          score: {score.toFixed(4)} popularity: {popularity.toFixed(4)}
-                        </small>
-                      )}
-                      <h2
-                        className={cx('mt-2 text-normal f3 d-block')}
-                        dangerouslySetInnerHTML={{
-                          __html: title,
-                        }}
-                      />
-                      <div
-                        className={cx(styles.searchResultContent, 'mt-1 d-block overflow-hidden')}
-                        style={{ maxHeight: '2.5rem' }}
-                        dangerouslySetInnerHTML={{ __html: content }}
-                      />
-                      <div
-                        className={'d-block mt-2 opacity-70 text-small'}
-                        dangerouslySetInnerHTML={
-                          breadcrumbs.length === 0
-                            ? { __html: `${title}`.replace(/<\/?[^>]+(>|$)|(\/)/g, '') }
-                            : {
-                                __html: breadcrumbs
-                                  .split(' / ')
-                                  .slice(0, breadcrumbs.length - 1)
-                                  .join(' / ')
-                                  .replace(/<\/?[^>]+(>|$)/g, ''),
-                              }
-                        }
-                      />
-                    </div>
-                  </div>
-                </Link>
-              </ActionList.Item>
-            )
+        <ActionList
+          items={results.map(({ url, breadcrumbs, title, content, score, popularity }) => {
+            return {
+              key: url,
+              text: title,
+              renderItem: () => (
+                <ActionList.Item as="div">
+                  <Link href={url} className="no-underline color-fg-default">
+                    <li
+                      data-testid="search-result"
+                      className={cx('list-style-none', styles.resultsContainer)}
+                    >
+                      <div className={cx('py-2 px-3')}>
+                        {/* Breadcrumbs in search records don't include the page title. These fields may contain <mark> elements that we need to render */}
+                        <Label variant="small" sx={{ bg: 'accent.emphasis' }}>
+                          {breadcrumbs.length === 0
+                            ? title.replace(/<\/?[^>]+(>|$)|(\/)/g, '')
+                            : breadcrumbs
+                                .split(' / ')
+                                .slice(0, 1)
+                                .join(' ')
+                                .replace(/<\/?[^>]+(>|$)|(\/)/g, '')}
+                        </Label>
+                        {debug && (
+                          <small className="float-right">
+                            score: {score.toFixed(4)} popularity: {popularity.toFixed(4)}
+                          </small>
+                        )}
+                        <h2
+                          className={cx('mt-2 text-normal f3 d-block')}
+                          dangerouslySetInnerHTML={{
+                            __html: title,
+                          }}
+                        />
+                        <div
+                          className={cx(styles.searchResultContent, 'mt-1 d-block overflow-hidden')}
+                          style={{ maxHeight: '2.5rem' }}
+                          dangerouslySetInnerHTML={{ __html: content }}
+                        />
+                        <div
+                          className={'d-block mt-2 opacity-70 text-small'}
+                          dangerouslySetInnerHTML={
+                            breadcrumbs.length === 0
+                              ? { __html: `${title}`.replace(/<\/?[^>]+(>|$)|(\/)/g, '') }
+                              : {
+                                  __html: breadcrumbs
+                                    .split(' / ')
+                                    .slice(0, breadcrumbs.length - 1)
+                                    .join(' / ')
+                                    .replace(/<\/?[^>]+(>|$)/g, ''),
+                                }
+                          }
+                        />
+                      </div>
+                    </li>
+                  </Link>
+                </ActionList.Item>
+              ),
+            }
           })}
-        </ActionList>
+        />
       </div>
     )
-    return <div>{ActionListResults}</div>
+    // When there are search results, it doesn't matter if this is overlay or not.
+    return (
+      <div>
+        {!isHeaderSearch && !isMobileSearch ? (
+          <>
+            <Overlay
+              initialFocusRef={anchorRef}
+              returnFocusRef={anchorRef}
+              ignoreClickRefs={[anchorRef]}
+              onEscape={() => closeSearch()}
+              onClickOutside={() => closeSearch()}
+              aria-labelledby="title"
+              sx={
+                isHeaderSearch
+                  ? {
+                      background: 'none',
+                      boxShadow: 'none',
+                      position: 'static',
+                      overflowY: 'auto',
+                      maxHeight: '80vh',
+                      maxWidth: '96%',
+                      margin: '1.5em 2em 0 0.5em',
+                      scrollbarWidth: 'none',
+                    }
+                  : window.innerWidth < 1012
+                  ? {
+                      marginTop: '28rem',
+                      marginLeft: '5rem',
+                    }
+                  : {
+                      marginTop: '15rem',
+                      marginLeft: '5rem',
+                    }
+              }
+            >
+              {ActionListResults}
+            </Overlay>
+          </>
+        ) : (
+          ActionListResults
+        )}
+      </div>
+    )
   }
 
   // We have no results at all, but perhaps we're waiting.

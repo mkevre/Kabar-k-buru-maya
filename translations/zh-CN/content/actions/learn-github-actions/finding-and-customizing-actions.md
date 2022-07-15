@@ -24,7 +24,7 @@ topics:
 
 在工作流程中使用的操作可以定义于：
 
-- 与工作流程文件相同的仓库{% ifversion internal-actions %}
+- 与工作流程文件相同的仓库{% if internal-actions %}
 - 在同一企业帐户中被配置为允许访问工作流程的内部仓库{% endif %}
 - 任何公共仓库
 - Docker Hub 上发布的 Docker 容器图像
@@ -96,7 +96,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # This step checks out a copy of your repository.
-      - uses: {% data reusables.actions.action-checkout %}
+      - uses: actions/checkout@v2
       # This step references the directory that contains the action.
       - uses: ./.github/actions/hello-world-action
 ```
@@ -107,14 +107,14 @@ jobs:
 
 如果在与工作流程文件不同的仓库中定义了某个操作，则可以在工作流程文件中使用 `{owner}/{repo}@{ref}` 语法引用该操作。
 
-该操作必须存储在公共仓库{% ifversion internal-actions %} 或配置为允许访问工作流程的内部仓库中。 更多信息请参阅“[与您的企业分享操作和工作流程](/actions/creating-actions/sharing-actions-and-workflows-with-your-enterprise)。”{% else %}。{% endif %}
+该操作必须存储在公共仓库{% if internal-actions %} 或配置为允许访问工作流程的内部仓库中。 更多信息请参阅“[与您的企业分享操作和工作流程](/actions/creating-actions/sharing-actions-and-workflows-with-your-enterprise)。”{% else %}。{% endif %}
 
 ```yaml
 jobs:
   my_first_job:
     steps:
       - name: My first step
-        uses: {% data reusables.actions.action-setup-node %}
+        uses: actions/setup-node@v1.1.0
 ```
 
 ### 引用 Docker Hub 上的容器
@@ -155,7 +155,7 @@ steps:
 
 ### 使用 SHA
 
-如果需要更可靠的版本控制，应使用与操作版本关联的 SHA 值。 SHA 是不可变的，因此比标记或分支更可靠。 但是，此方法意味着您不会自动接收操作的更新，包括重要的 Bug 修复和安全更新。 必须使用提交的完整 SHA 值，而不是缩写值。 此示例针对操作的 SHA：
+如果需要更可靠的版本控制，应使用与操作版本关联的 SHA 值。 SHA 是不可变的，因此比标记或分支更可靠。 但是，此方法意味着您不会自动接收操作的更新，包括重要的 Bug 修复和安全更新。 {% ifversion fpt or ghes > 3.0 or ghae or ghec %}您必须使用提交的完整 SHA 值，而不是缩写值。 {% endif %}此示例针对操作的 SHA：
 
 ```yaml
 steps:

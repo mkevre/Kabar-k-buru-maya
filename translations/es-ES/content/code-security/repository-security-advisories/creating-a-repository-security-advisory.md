@@ -1,5 +1,5 @@
 ---
-title: Crear una asesoría de seguridad de repositorio
+title: Creating a repository security advisory
 intro: Puedes crear un borrador de asesoría de seguridad para debatir en privado y arreglar una vulnerabilidad de seguridad en tu proyecto de código abierto.
 redirect_from:
   - /articles/creating-a-maintainer-security-advisory
@@ -13,7 +13,7 @@ type: how_to
 topics:
   - Security advisories
   - Vulnerabilities
-shortTitle: Crear asesorías de repositorio
+shortTitle: Create repository advisories
 ---
 
 Cualquier usuario con permisos de administrador puede crear un aviso de seguridad.

@@ -1,7 +1,7 @@
 ---
-title: 将环境用于作业
-shortTitle: 将环境用于作业
-intro: 为作业指定环境。
+title: Using environments for jobs
+shortTitle: Using environments for jobs
+intro: Specify an environment for a job.
 versions:
   fpt: '*'
   ghes: '> 3.0'

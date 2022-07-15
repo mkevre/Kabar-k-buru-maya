@@ -1,1 +1,1 @@
-Os executores auto-hospedados podem ser físicos, virtuais, estar em um container, no local ou em uma nuvem.
+Self-hosted runners can be physical, virtual, in a container, on-premises, or in a cloud.

@@ -1,6 +1,5 @@
 import cheerio from 'cheerio'
 import got from 'got'
-import { omitBy, isUndefined } from 'lodash-es'
 
 export async function get(
   route,
@@ -10,25 +9,19 @@ export async function get(
     followRedirects: false,
     followAllRedirects: false,
     headers: {},
-    cookieJar: undefined,
   }
 ) {
   const method = opts.method || 'get'
   const fn = got[method]
   if (!fn || typeof fn !== 'function') throw new Error(`No method function for '${method}'`)
   const absURL = `http://localhost:4000${route}`
-  const xopts = omitBy(
-    {
-      body: opts.body,
-      headers: opts.headers,
-      retry: { limit: 0 },
-      cookieJar: opts.cookieJar,
-      throwHttpErrors: false,
-      followRedirect: opts.followAllRedirects || opts.followRedirects,
-    },
-    isUndefined
-  )
-  const res = await fn(absURL, xopts)
+  const res = await fn(absURL, {
+    body: opts.body,
+    headers: opts.headers,
+    retry: { limit: 0 },
+    throwHttpErrors: false,
+    followRedirect: opts.followAllRedirects || opts.followRedirects,
+  })
   // follow all redirects, or just follow one
   if (opts.followAllRedirects && [301, 302].includes(res.status)) {
     // res = await get(res.headers.location, opts)
@@ -62,14 +55,9 @@ export function post(route, opts) {
 
 export async function getDOM(
   route,
-  { headers, allow500s, allow404, cookieJar } = {
-    headers: undefined,
-    allow500s: false,
-    allow404: false,
-    cookieJar: undefined,
-  }
+  { headers, allow500s, allow404 } = { headers: undefined, allow500s: false, allow404: false }
 ) {
-  const res = await get(route, { followRedirects: true, headers, cookieJar })
+  const res = await get(route, { followRedirects: true, headers })
   if (!allow500s && res.status >= 500) {
     throw new Error(`Server error (${res.status}) on ${route}`)
   }

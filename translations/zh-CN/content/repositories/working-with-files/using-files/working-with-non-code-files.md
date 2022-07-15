@@ -41,9 +41,7 @@ shortTitle: 使用非代码文件
 
 {% note %}
 
-**注:**
-- {% data variables.product.prodname_dotcom %} 不支持比较 PSD 文件之间的差异。
-- 如果您使用 Firefox 浏览器，则 {% data variables.product.prodname_dotcom %} 上的 SVG 可能无法呈现。
+**注：**如果您使用 Firefox 浏览器，则 {% data variables.product.prodname_dotcom %} 上的 SVG 可能无法呈现。
 
 {% endnote %}
 
@@ -132,7 +130,7 @@ SVG 目前不支持内联脚本或动画。
 
 {% endtip %}
 
-{% ifversion mermaid %}
+{% if mermaid %}
 ### 在 Markdown 中渲染
 
 您可以直接在 Markdown 中嵌入 ASCII STL 语法。 更多信息请参阅“[创建示意图](/get-started/writing-on-github/working-with-advanced-formatting/creating-diagrams#creating-stl-3d-models)”。
@@ -245,7 +243,6 @@ GitHub 支持呈现 PDF 文档。
 
 {% data variables.product.product_name %} 上的地图使用 [Leaflet.js](http://leafletjs.com)，并且支持 [geoJSON 规格](http://www.geojson.org/geojson-spec.html)中列出的所有几何类型（Point、LineString、Polygon、MultiPoint、MultiLineString、MultiPolygon 和 GeometryCollection）。 TopoJSON 文件类型应为 "Topology"（拓扑），并且遵守 [topoJSON 规格](https://github.com/mbostock/topojson/wiki/Specification)。
 
-{% ifversion geoJSON-with-MapBox %}
 ### 样式功能
 
 您可以传递 geoJSON 对象属性中的其他元数据，自定义功能显示的方式，例如指定特定的颜色或添加描述性图标。 选项包括：
@@ -260,7 +257,6 @@ GitHub 支持呈现 PDF 文档。
 * `fill-opacity` - 多边形内部的不透明度 (0.0-1.0)
 
 更多信息请参阅[开放简单样式规格 1.1.0 版](https://github.com/mapbox/simplestyle-spec/tree/master/1.1.0)。
-{% endif %}
 
 ### 在其他位置嵌入您的地图
 
@@ -284,7 +280,7 @@ GitHub 支持呈现 PDF 文档。
 
 {% endtip %}
 
-{% ifversion mermaid %}
+{% if mermaid %}
 ### 在 Markdown 嵌入地图
 
 您可以直接在 Markdown 中嵌入 geoJSON 和 topoJSON。 更多信息请参阅“[创建示意图](/get-started/writing-on-github/working-with-advanced-formatting/creating-diagrams#creating-geojson-and-topojson-maps)”。
@@ -310,12 +306,8 @@ GitHub 支持呈现 PDF 文档。
 
 ### 延伸阅读
 
-{% ifversion geoJSON-with-MapBox %}
-* [Leaflet.js 文档](https://leafletjs.com/)
+* [Leaflet.js geojson 文档](http://leafletjs.com/examples/geojson.html)
 * [MapBox marker-styling 文档](http://www.mapbox.com/developers/simplestyle/)
-{%- else %}
-* [Azure Maps 文档](https://docs.microsoft.com/en-us/azure/azure-maps/)
-{%- endif %}
 * [TopoJSON Wiki](https://github.com/mbostock/topojson/wiki)
 
 ## 在 {% data variables.product.prodname_dotcom %} 上使用 Jupyter Notebook 文件
@@ -339,9 +331,9 @@ $ jupyter nbconvert --to html <em>NOTEBOOK-NAME.ipynb</em>
 ### 延伸阅读
 
 - [Jupyter Notebook 的 GitHub 仓库](https://github.com/jupyter/jupyter_notebook)
-- [Jupyter Notebook 的图片库](https://github.com/jupyter/jupyter/wiki)
+- [Jupyter Notebook 的图片库](https://github.com/jupyter/jupyter/wiki/A-gallery-of-interesting-Jupyter-Notebooks)
 
-{% ifversion mermaid %}
+{% if mermaid %}
 ## 在 {% data variables.product.prodname_dotcom %} 上显示 Mermaid 文件
 
 {% data variables.product.product_name %} 支持在存储库中呈现 Mermaid 文件。 像往常一样使用 `.mermaid` 或 `.mmd` 扩展名提交文件。 然后，导航到 {% data variables.product.prodname_dotcom %}上的 Mermaid 文件的路径。
