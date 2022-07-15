@@ -13,11 +13,11 @@ topics:
 
 {% endnote %}
 
-## About followers on {% data variables.product.product_name %}
+## 关于 {% data variables.product.product_name %} 上的关注者
 
-When you follow organizations, you'll see their public activity on your personal dashboard. For more information, see "[About your personal dashboard](/account-and-profile/setting-up-and-managing-your-personal-account-on-github/managing-personal-account-settings/about-your-personal-dashboard#staying-updated-with-activity-from-the-community)."
+When you follow organizations, you'll see their public activity on your personal dashboard. 更多信息请参阅“[关于个人仪表板](/account-and-profile/setting-up-and-managing-your-github-user-account/managing-user-account-settings/about-your-personal-dashboard#staying-updated-with-activity-from-the-community)”。
 
-You can unfollow an organization if you do not wish to see their {% ifversion fpt or ghec %}public{% endif %} activity on {% data variables.product.product_name %}.
+You can unfollow an organization if you do not wish to see their public activity on {% data variables.product.product_name %}.
 
 ## Following an organization on {% data variables.product.product_name %}
 
@@ -35,16 +35,16 @@ You can unfollow an organization if you do not wish to see their {% ifversion fp
 
 ## Viewing people and organizations a user follows on {% data variables.product.product_name %}
 
-1. Click a user image to display that user's profile.
+1. 单击用户图像以显示该用户的配置文件。
 
-  ![User image](/assets/images/help/profile/user-profile-image.png)
+  ![用户图像](/assets/images/help/profile/user-profile-image.png)
 
-2. Click **following** under their profile image.
+2. 在其个人资料图片下点击**关注**。
 
-  ![User following](/assets/images/help/profile/user-profile-following.png)
+  ![用户关注](/assets/images/help/profile/user-profile-following.png)
 
 {% ifversion fpt or ghec %}
-## Further reading
+## 延伸阅读
 
 - "[Following people](/get-started/exploring-projects-on-github/following-people)"
 {% endif %}

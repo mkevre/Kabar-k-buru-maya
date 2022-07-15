@@ -1,11 +1,12 @@
 ---
 title: Viewing the security overview
 intro: Navigate to the different views available in the security overview
-permissions: '{% data reusables.security-center.permissions %}'
+permissions: Organization owners and security managers can access the security overview for organizations. Members of a team can see the security overview for repositories that the team has admin privileges for.
 product: '{% data reusables.gated-features.security-center %}'
 versions:
+  fpt: '*'
   ghae: issue-5503
-  ghes: '*'
+  ghes: '>3.1'
   ghec: '*'
 type: how_to
 topics:
@@ -17,9 +18,7 @@ topics:
 shortTitle: View the security overview
 ---
 
-{% ifversion ghes < 3.5 or ghae %}
 {% data reusables.security-center.beta %}
-{% endif %}
 
 ## Viewing the security overview for an organization
 
@@ -28,8 +27,8 @@ shortTitle: View the security overview
 1. To view aggregate information about alert types, click **Show more**.
   ![Show more button](/assets/images/help/organizations/security-overview-show-more-button.png)
 {% data reusables.organizations.filter-security-overview %}
-{% ifversion security-overview-views %}
-{% data reusables.organizations.security-overview-feature-specific-page %}
+{% if security-overview-views %}
+1. Alternatively and optionally, use the sidebar on the left to filter information per security feature. On each page, you can use filters that are specific to each feature to fine-tune your search.
   ![Screenshot of the code scanning-specific page](/assets/images/help/organizations/security-overview-code-scanning-alerts.png)
 
 ## Viewing alerts across your organization
@@ -45,10 +44,7 @@ shortTitle: View the security overview
 ## Viewing the security overview for an enterprise
 
 {% data reusables.enterprise-accounts.access-enterprise-on-dotcom %}
-1. In the left sidebar, click {% octicon "shield" aria-label="The shield icon" %} **Code Security**.
-{% ifversion security-overview-feature-specific-alert-page %}
-{% data reusables.organizations.security-overview-feature-specific-page %}
-{% endif %}
+1. In the left sidebar, click {% octicon "shield" aria-label="The shield icon" %} **Security**.
 {% endif %}
 
 ## Viewing alerts for a repository

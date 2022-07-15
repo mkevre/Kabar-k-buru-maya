@@ -1,6 +1,6 @@
 ---
-title: Precompilar tus codespaces
-intro: 'Para agilizar la creación de codespaces, puedes configurar tu proyecto para que los precompile para ramas específicas en regiones específicas.'
+title: Prebuilding your codespaces
+intro: 'To speed up codespace creation, you can configure your project to prebuild codespaces for specific branches in specific regions.'
 product: '{% data reusables.gated-features.codespaces %}'
 versions:
   fpt: '*'
@@ -10,9 +10,10 @@ topics:
 redirect_from:
   - /codespaces/customizing-your-codespace/prebuilding-codespaces-for-your-project
 children:
-  - /about-github-codespaces-prebuilds
+  - /about-codespaces-prebuilds
   - /configuring-prebuilds
   - /managing-prebuilds
   - /testing-dev-container-changes
 ---
-
+ 
+{% data reusables.codespaces.prebuilds-beta-note %}

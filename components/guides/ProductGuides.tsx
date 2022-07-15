@@ -9,8 +9,7 @@ import { useTranslation } from 'components/hooks/useTranslation'
 
 export const ProductGuides = () => {
   const { title, learningTracks, includeGuides } = useProductGuidesContext()
-  const { t } = useTranslation('product_guides')
-
+  const { t } = useTranslation('sub_landing')
   return (
     <DefaultLayout>
       <LandingSection className="pt-3">

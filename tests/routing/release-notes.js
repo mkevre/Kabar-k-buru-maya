@@ -4,7 +4,7 @@ import nock from 'nock'
 import { get, getDOM } from '../helpers/e2etest.js'
 import enterpriseServerReleases from '../../lib/enterprise-server-releases.js'
 
-jest.useFakeTimers({ legacyFakeTimers: true })
+jest.useFakeTimers('legacy')
 
 describe('release notes', () => {
   jest.setTimeout(60 * 1000)

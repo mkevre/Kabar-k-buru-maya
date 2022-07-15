@@ -15,8 +15,8 @@ security_advisories:
     - /code-security/repository-security-advisories/removing-a-collaborator-from-a-repository-security-advisory
 #Feature available on dotcom and GHES 3.3+, so articles available on GHAE and earlier GHES hidden to hide the learning track
 dependabot_alerts:
-  title: 'Obtén notificaciones para las dependencias inseguras'
-  description: 'Configura el Dependabot para que te alerta de las vulnerabilidades{% ifversion GH-advisory-db-supports-malware %} o malware{% endif %} nuevos en tus dependencias.'
+  title: 'Obtén notificaciones para las dependencias vulnerables'
+  description: 'Configurar al Dependabot para alertarte sobre vulnerabilidades nuevas en tus dependencias.'
   guides:
     - /code-security/dependabot/dependabot-alerts/about-dependabot-alerts
     - '{% ifversion fpt or ghec or ghes > 3.2 %}/github/administering-a-repository/managing-repository-settings/managing-security-and-analysis-settings-for-your-repository{% endif %}'
@@ -105,7 +105,7 @@ code_security_ci:
     - /code-security/code-scanning/using-codeql-code-scanning-with-your-existing-ci-system/troubleshooting-codeql-runner-in-your-ci-system
 #Feature available in all versions
 end_to_end_supply_chain:
-  title: 'Cadena de suministro de extremo a extremo'
+  title: 'End-to-end supply chain'
   description: 'Cómo considerar asegurar tus cuentas de usuario, tu código y tu proceso de compilación.'
   guides:
     - /code-security/supply-chain-security/end-to-end-supply-chain/end-to-end-supply-chain-overview

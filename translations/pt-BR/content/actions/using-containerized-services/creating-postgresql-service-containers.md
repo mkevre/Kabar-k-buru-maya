@@ -41,6 +41,7 @@ Também pode ser útil ter um entendimento básico de YAML, a sintaxe para {% da
 
 {% data reusables.actions.copy-workflow-file %}
 
+{% raw %}
 ```yaml{:copy}
 name: PostgreSQL service example
 on: push
@@ -72,7 +73,7 @@ jobs:
     steps:
       # Downloads a copy of the code in your repository before running CI tests
       - name: Check out repository code
-        uses: {% data reusables.actions.action-checkout %}
+        uses: actions/checkout@v2
 
       # Performs a clean installation of all dependencies in the `package.json` file
       # For more information, see https://docs.npmjs.com/cli/ci.html
@@ -90,6 +91,7 @@ jobs:
           # A porta-padrão do PostgreSQL
           POSTGRES_PORT: 5432
 ```
+{% endraw %}
 
 ### Configurar o trabalho executor
 
@@ -131,7 +133,7 @@ trabalhos:
 steps:
   # Downloads a copy of the code in your repository before running CI tests
   - name: Check out repository code
-    uses: {% data reusables.actions.action-checkout %}
+    uses: actions/checkout@v2
 
   # Performs a clean installation of all dependencies in the `package.json` file
   # For more information, see https://docs.npmjs.com/cli/ci.html
@@ -161,6 +163,7 @@ Ao executar um trabalho diretamente na máquina executora, você deverá mapear 
 
 {% data reusables.actions.copy-workflow-file %}
 
+{% raw %}
 ```yaml{:copy}
 name: PostgreSQL Service Example
 on: push
@@ -193,7 +196,7 @@ jobs:
     steps:
       # Downloads a copy of the code in your repository before running CI tests
       - name: Check out repository code
-        uses: {% data reusables.actions.action-checkout %}
+        uses: actions/checkout@v2
 
       # Performs a clean installation of all dependencies in the `package.json` file
       # For more information, see https://docs.npmjs.com/cli/ci.html
@@ -212,6 +215,7 @@ jobs:
           # A porta-padrão do PostgreSQL
           POSTGRES_PORT: 5432
 ```
+{% endraw %}
 
 ### Configurar o trabalho executor
 
@@ -256,7 +260,7 @@ trabalhos:
 steps:
   # Downloads a copy of the code in your repository before running CI tests
   - name: Check out repository code
-    uses: {% data reusables.actions.action-checkout %}
+    uses: actions/checkout@v2
 
   # Performs a clean installation of all dependencies in the `package.json` file
   # For more information, see https://docs.npmjs.com/cli/ci.html

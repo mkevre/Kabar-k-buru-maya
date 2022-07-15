@@ -1,5 +1,5 @@
 {% ifversion fpt %}
-1. Navega a la página principal de la organización en donde está registrado tu ejecutor auto-hospedado.
+1. Navigate to the main page of the organization where your self-hosted runner is registered.
 2. Haz clic en {% octicon "gear" aria-label="The Settings gear" %} **Ajustes**.
 {% data reusables.organizations.settings-sidebar-actions-runners %}
 {% elsif ghec or ghes or ghae %}
@@ -9,7 +9,7 @@
 
 {% indented_data_reference reusables.enterprise-accounts.access-enterprise spaces=5 %}
 1. Navega a los ajustes de {% data variables.product.prodname_actions %}:
-   * **En una organización**:
+   * **In an organization**:
 
 {% indented_data_reference reusables.actions.settings-ui.settings-actions-runners spaces=5 %}
    * **Si utilizas un ejecutor a nivel de empresa**:

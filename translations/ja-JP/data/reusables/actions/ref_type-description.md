@@ -1,1 +1,1 @@
-ワークフローの実行をトリガーしたrefの種類。 有効な値は`branch`もしくは`tag`。
+The type of ref that triggered the workflow run. Valid values are `branch` or `tag`.

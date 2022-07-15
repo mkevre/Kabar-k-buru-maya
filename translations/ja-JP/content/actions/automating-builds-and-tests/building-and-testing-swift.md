@@ -37,6 +37,7 @@ Swift パッケージの基本を理解しておくことをお勧めします�
 
 To get started quickly, add the starter workflow to the `.github/workflows` directory of your repository.
 
+{% raw %}
 ```yaml{:copy}
 name: Swift
 
@@ -48,12 +49,13 @@ jobs:
     runs-on: macos-latest
 
     steps:
-      - uses: {% data reusables.actions.action-checkout %}
+      - uses: actions/checkout@v2
       - name: Build
         run: swift build
       - name: Run tests
         run: swift test
 ```
+{% endraw %}
 
 ## Swift バージョンの指定
 
@@ -65,7 +67,7 @@ jobs:
 
 ### 複数の Swift バージョンを使用する
 
-You can configure your job to use multiple versions of Swift in a matrix.
+ビルドマトリックスで Swift の複数のバージョンを使用するようにジョブを設定できます。
 
 ```yaml{:copy}
 {% data reusables.actions.actions-not-certified-by-github-comment %}
@@ -86,7 +88,7 @@ jobs:
       - uses: fwal/setup-swift@2040b795e5c453c3a05fcb8316496afc8a74f192
         with:
           swift-version: {% raw %}${{ matrix.swift }}{% endraw %}
-      - uses: {% data reusables.actions.action-checkout %}
+      - uses: actions/checkout@v2
       - name: Build
         run: swift build
       - name: Run tests
@@ -112,9 +114,10 @@ steps:
 
 ローカルで使うのと同じコマンドを使用して、Swift でコードをビルドおよびテストできます。 以下は、ジョブでの `swift build` と `swift test` の使用例です。
 
+{% raw %}
 ```yaml{:copy}
 steps:
-  - uses: {% data reusables.actions.action-checkout %}
+  - uses: actions/checkout@v2
   - uses: fwal/setup-swift@2040b795e5c453c3a05fcb8316496afc8a74f192
     with:
       swift-version: "5.3.3"
@@ -123,3 +126,4 @@ steps:
   - name: Run tests
     run: swift test
 ```
+{% endraw %}

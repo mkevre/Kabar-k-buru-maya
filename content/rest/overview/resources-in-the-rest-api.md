@@ -16,6 +16,19 @@ topics:
 
 This describes the resources that make up the official {% data variables.product.product_name %} REST API. If you have any problems or requests, please contact {% data variables.contact.contact_support %}.
 
+## Current version
+
+By default, all requests to `{% data variables.product.api_url_code %}` receive the **v3** [version](/developers/overview/about-githubs-apis) of the REST API.
+We encourage you to [explicitly request this version via the `Accept` header](/rest/overview/media-types#request-specific-version).
+
+    Accept: application/vnd.github.v3+json
+
+{% ifversion fpt or ghec %}
+
+For information about GitHub's GraphQL API, see the [v4 documentation]({% ifversion ghec %}/free-pro-team@latest{% endif %}/graphql). For information about migrating to GraphQL, see "[Migrating from REST]({% ifversion ghec%}/free-pro-team@latest{% endif %}/graphql/guides/migrating-from-rest-to-graphql)."
+
+{% endif %}
+
 ## Schema
 
 {% ifversion fpt or ghec %}All API access is over HTTPS, and{% else %}The API is{% endif %} accessed from `{% data variables.product.api_url_code %}`.  All data is
@@ -120,7 +133,7 @@ You will be unable to authenticate using your OAuth2 key and secret while in pri
 
 {% ifversion fpt or ghec %}
 
-Read [more about unauthenticated rate limiting](#increasing-the-unauthenticated-rate-limit-for-oauth-apps).
+Read [more about unauthenticated rate limiting](#increasing-the-unauthenticated-rate-limit-for-oauth-applications).
 
 {% endif %}
 
@@ -184,7 +197,7 @@ $ curl {% ifversion fpt or ghae or ghec %}
 
 ## GraphQL global node IDs
 
-See the guide on "[Using Global Node IDs](/graphql/guides/using-global-node-ids)" for detailed information about how to find `node_id`s via the REST API and use them in GraphQL operations.
+See the guide on "[Using Global Node IDs]({% ifversion ghec%}/free-pro-team@latest{% endif %}/graphql/guides/using-global-node-ids)" for detailed information about how to find `node_id`s via the REST API and use them in GraphQL operations.
 
 ## Client errors
 
@@ -240,7 +253,7 @@ Resources may also send custom validation errors (where `code` is `custom`). Cus
 
 ## HTTP redirects
 
-The {% data variables.product.product_name %} REST API uses HTTP redirection where appropriate. Clients should assume that any
+API v3 uses HTTP redirection where appropriate. Clients should assume that any
 request may result in a redirection. Receiving an HTTP redirection is *not* an
 error and clients should follow that redirect. Redirect responses will have a
 `Location` header field which contains the URI of the resource to which the
@@ -255,7 +268,7 @@ Other redirection status codes may be used in accordance with the HTTP 1.1 spec.
 
 ## HTTP verbs
 
-Where possible, the {% data variables.product.product_name %} REST API strives to use appropriate HTTP verbs for each
+Where possible, API v3 strives to use appropriate HTTP verbs for each
 action.
 
 Verb | Description
@@ -352,7 +365,7 @@ Additionally, the Search API has dedicated limits. For more information, see "[S
 
 {% data reusables.rest-api.always-check-your-limit %}
 
-### Requests from personal accounts
+### Requests from user accounts
 
 Direct API requests that you authenticate with a personal access token are user-to-server requests. An OAuth App or GitHub App can also make a user-to-server request on your behalf after you authorize the app. For more information, see "[Creating a personal access token](/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token)," "[Authorizing OAuth Apps](/authentication/keeping-your-account-and-data-secure/authorizing-oauth-apps)," and "[Authorizing GitHub Apps](/authentication/keeping-your-account-and-data-secure/authorizing-github-apps)."
 
@@ -436,7 +449,7 @@ If you exceed the rate limit, an error response returns:
 If your OAuth App needs to make unauthenticated calls with a higher rate limit, you can pass your app's client ID and secret before the endpoint route.
 
 ```shell
-$ curl -u my_client_id:my_client_secret -I {% data variables.product.api_url_pre %}/user/repos
+$ curl -u my_client_id:my_client_secret {% data variables.product.api_url_pre %}/user/repos
 > HTTP/2 200
 > Date: Mon, 01 Jul 2013 17:27:06 GMT
 > x-ratelimit-limit: 5000

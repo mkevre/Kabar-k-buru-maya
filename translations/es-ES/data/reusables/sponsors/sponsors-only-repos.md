@@ -1,1 +1,1 @@
-Puedes otorgar acceso a un repositorio privado a todos los patrocinadores de un nivel si agregas dicho repositorio al nivel en cuestión.
+You can give all sponsors in a tier access to a private repository by adding the repository to the tier.

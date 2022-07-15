@@ -32,11 +32,9 @@ SSL が有効な場合、{% data variables.product.prodname_ghe_server %} アプ
 
 プロダクションでTLSを利用するには、暗号化されていないPEMフォーマットで、信頼済みの証明書認証局によって署名された証明書がなければなりません。
 
-また、証明書には"[Subdomain Isolationの有効化](/enterprise/admin/guides/installation/enabling-subdomain-isolation#about-subdomain-isolation)"のリストにあるサブドメインに設定されたSubject Alternative Namesが必要で、中間証明書認証局によって署名されたものであれば、完全な証明書チェーンを含んでいる必要があります。 詳しい情報についてはWikipediaの"[Subject Alternative Name](http://en.wikipedia.org/wiki/SubjectAltName)"を参照してください。
+また、証明書には"[Subdomain Isolationの有効化](/enterprise/{{ currentVersion }}/admin/guides/installation/enabling-subdomain-isolation#about-subdomain-isolation)"のリストにあるサブドメインに設定されたSubject Alternative Namesが必要で、中間証明書認証局によって署名されたものであれば、完全な証明書チェーンを含んでいる必要があります。 詳しい情報についてはWikipediaの"[Subject Alternative Name](http://en.wikipedia.org/wiki/SubjectAltName)"を参照してください。
 
-`ghe-ssl-generate-csr` コマンドを使用すれば、インスタンス用の証明書署名要求 (CSR) を生成できます。 詳しい情報については、「[コマンドラインユーティリティ](/enterprise/admin/guides/installation/command-line-utilities/#ghe-ssl-generate-csr)」を参照してください。
-
-Your key must be an RSA key and must not have a passphrase. 詳しい情報については"[キーファイルからのパスフレーズの除去](/admin/guides/installation/troubleshooting-ssl-errors#removing-the-passphrase-from-your-key-file)"を参照してください。
+`ghe-ssl-generate-csr` コマンドを使用すれば、インスタンス用の証明書署名要求 (CSR) を生成できます。 詳細は「[コマンドラインユーティリティ](/enterprise/{{ currentVersion }}/admin/guides/installation/command-line-utilities/#ghe-ssl-generate-csr)」を参照してください。
 
 ## カスタムのTLS証明書のアップロード
 
@@ -50,6 +48,11 @@ Your key must be an RSA key and must not have a passphrase. 詳しい情報に�
 5. "Certificate（証明書）"の下で**Choose File（ファイルの選択）**をクリックし、インストールしたいTLS証明書もしくは証明書チェーン（PEMフォーマット）を選択してください。 このファイルは通常、*.pem*、*.crt*、*.cer* といった拡張子を持ちます。 ![TLS 証明書ファイルを見つけるためのボタン](/assets/images/enterprise/management-console/install-tls-certificate.png)
 6. Under "Unencrypted key", click **Choose File** to choose an RSA key (in PEM format) to install. このファイルは通常*.key*という拡張子を持ちます。 ![TLS鍵ファイルを見つけるためのボタン](/assets/images/enterprise/management-console/install-tls-key.png)
 
+  {% warning %}
+
+  **Warning**: Your key must be an RSA key and must not have a passphrase. 詳しい情報については"[キーファイルからのパスフレーズの除去](/admin/guides/installation/troubleshooting-ssl-errors#removing-the-passphrase-from-your-key-file)"を参照してください。
+
+  {% endwarning %}
 {% data reusables.enterprise_management_console.save-settings %}
 
 ## Let's Encryptのサポートについて
@@ -60,7 +63,7 @@ Let's Encryptは公開の証明書認証者で、ACMEプロトコルを使って
 
 Let's Encryptを使ったTLS証明書管理の自動化を有効にすると、{% data variables.product.product_location %}はLet's Encryptのサーバに接続して証明書を取得します。 証明書を更新するには、Let's EncryptのサーバはインバウンドのHTTPリクエストで設定されたドメイン名の制御を検証しなければなりません。
 
-また、{% data variables.product.product_location %}上でコマンドラインユーティリティの`ghe-ssl-acme`を使っても、自動的にLet's Encryptの証明書を生成できます。 詳細は「[コマンドラインユーティリティ](/enterprise/admin/guides/installation/command-line-utilities#ghe-ssl-acme)」を参照してください。
+また、{% data variables.product.product_location %}上でコマンドラインユーティリティの`ghe-ssl-acme`を使っても、自動的にLet's Encryptの証明書を生成できます。 詳細は「[コマンドラインユーティリティ](/enterprise/{{ currentVersion }}/admin/guides/installation/command-line-utilities#ghe-ssl-acme)」を参照してください。
 
 ## Let's Encryptを使ったTLSの設定
 

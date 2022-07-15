@@ -1,1 +1,1 @@
-`GITHUB_TOKEN`は、ジョブの完了時もしくは最大24時間後に期限切れになります。
+The `GITHUB_TOKEN` expires when a job finishes or after a maximum of 24 hours.

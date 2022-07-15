@@ -39,14 +39,11 @@ topics:
 
 ![プルリクエストリンクを示す {% data variables.product.prodname_dependabot_alerts %} ビュー](/assets/images/help/dependabot/dependabot-alert-pr-link.png)
 
-アラートにPull Requestリンクがない理由はいくつかあります。
+アラートにプルリクエストリンクがない理由は 3 つあります。
 
 1. {% data variables.product.prodname_dependabot_security_updates %} がリポジトリに対して有効になっていない。
-{% ifversion GH-advisory-db-supports-malware %}
-1. アラートがマルウェアに対するものであり、そのパッケージのセキュアなバージョンがない。
-{% endif %}
 1. アラートが、ロックファイルで明示的に定義されていない間接的または推移的な依存関係に対するものである。
-1. エラーにより {% data variables.product.prodname_dependabot %} のプルリクエストの作成がブロックされた。
+1. エラーにより {% data variables.product.prodname_dependabot %} のプルリクエストの作成がブロックされました。
 
 エラーによって {% data variables.product.prodname_dependabot %} によるプルリクエストの作成がブロックされた場合は、アラートをクリックしてエラーの詳細を表示できます。
 
@@ -64,7 +61,7 @@ topics:
 
 {% else %}
 
-マニフェストファイルのログを表示するには、**Last checked TIME ago**リンクをクリックし、続いて**View logs**をクリックしてください。
+To see the logs for any manifest file, click the **Last checked TIME ago** link, and then click **View logs**.
 
 ![{% data variables.product.prodname_dependabot %} バージョン更新エラーとログ ](/assets/images/enterprise/3.3/dependabot/dependabot-version-update-error.png)
 
@@ -80,7 +77,7 @@ topics:
 
 依存関係を含むすべてのアプリケーションには、依存関係グラフ、つまり、アプリケーションが直接または間接的に依存するすべてのパッケージバージョンの有向非巡回グラフがあります。 依存関係が更新されるたびに、このグラフを解決する必要があります。解決しない場合、アプリケーションがビルドされません。 npm や RubyGems のように、エコシステムに深く複雑な依存関係グラフがある場合、エコシステム全体をアップグレードせずに単一の依存関係をアップグレードすることは不可能な場合があります。
 
-この問題を回避する最善策としては、たとえばバージョン更新を有効化するなどして、最新のリリースバージョンで最新の状態に保つことです。 これにより、依存関係グラフを壊さない単純なアップグレードで 1 つの依存関係の脆弱性を解決できる可能性が高くなります。 詳しい情報については「[{% data variables.product.prodname_dependabot %}のバージョンアップデートの設定](/code-security/supply-chain-security/keeping-your-dependencies-updated-automatically/enabling-and-disabling-dependabot-version-updates)」を参照してください。
+この問題を回避する最善策としては、たとえばバージョン更新を有効化するなどして、最新のリリースバージョンで最新の状態に保つことです。 これにより、依存関係グラフを壊さない単純なアップグレードで 1 つの依存関係の脆弱性を解決できる可能性が高くなります。 For more information, see "[Configuring {% data variables.product.prodname_dependabot %} version updates](/code-security/supply-chain-security/keeping-your-dependencies-updated-automatically/enabling-and-disabling-dependabot-version-updates)."
 
 ### 最新バージョンのオープンプルリクエストがすでに存在するため、{% data variables.product.prodname_dependabot %} を必要なバージョンに更新できない
 
@@ -94,13 +91,13 @@ topics:
 
 これは対処が難しいエラーです。 バージョン更新がタイムアウトした場合は、`allow` パラメーターを使用して更新する最も重要な依存関係を指定するか、または、`ignore` パラメーターを使用して更新から一部の依存関係を除外できます。 設定を更新すると、{% data variables.product.prodname_dependabot %} がバージョンの更新を確認し、利用可能な時間内にプルリクエストを生成できます。
 
-セキュリティアップデートがタイムアウトする場合、たとえばバージョン更新を有効にするなどして依存関係を最新に保つことで、タイムアウトが発生する可能性を減らすことができます。 詳しい情報については「[{% data variables.product.prodname_dependabot %}のバージョンアップデートの設定](/code-security/supply-chain-security/keeping-your-dependencies-updated-automatically/enabling-and-disabling-dependabot-version-updates)」を参照してください。
+セキュリティアップデートがタイムアウトする場合、たとえばバージョン更新を有効にするなどして依存関係を最新に保つことで、タイムアウトが発生する可能性を減らすことができます。 For more information, see "[Configuring {% data variables.product.prodname_dependabot %} version updates](/code-security/supply-chain-security/keeping-your-dependencies-updated-automatically/enabling-and-disabling-dependabot-version-updates)."
 
 ### {% data variables.product.prodname_dependabot %} で追加のプルリクエストをオープンできない
 
 {% data variables.product.prodname_dependabot %} が生成するオープンプルリクエスト数には制限があります。 上限に達すると、新しいプルリクエストはオープンされず、このエラーが報告されます。 エラーを解決する最善策として、複数のオープンプルリクエストを確認してマージします。
 
-セキュリティアップデートとバージョン更新のプルリクエストには個別の制限があるため、オープンなバージョン更新のプルリクエストがセキュリティアップデートのプルリクエストの作成をブロックすることはできません。 セキュリティアップデートのプルリクエストの上限は 10 件です。 デフォルトではバージョン更新の上限は 5 件ですが、設定ファイルの `open-pull-requests-limit` パラメータを使用して変更できます。 詳しい情報については「[dependabot.ymlファイルの設定オプション](/github/administering-a-repository/configuration-options-for-dependency-updates#open-pull-requests-limit)」を参照してください。
+セキュリティアップデートとバージョン更新のプルリクエストには個別の制限があるため、オープンなバージョン更新のプルリクエストがセキュリティアップデートのプルリクエストの作成をブロックすることはできません。 セキュリティアップデートのプルリクエストの上限は 10 件です。 デフォルトではバージョン更新の上限は 5 件ですが、設定ファイルの `open-pull-requests-limit` パラメータを使用して変更できます。 For more information, see "[Configuration options for the dependabot.yml file](/github/administering-a-repository/configuration-options-for-dependency-updates#open-pull-requests-limit)."
 
 このエラーを解決する最善策として、既存のプルリクエストの一部をマージまたはクローズして、新しいプルリクエストを手動でトリガーします。 詳しい情報については、「[{% data variables.product.prodname_dependabot %} のプルリクエストを手動でトリガーする](#triggering-a-dependabot-pull-request-manually)」を参照してください。
 
@@ -128,5 +125,5 @@ topics:
 
 ## 参考リンク
 
-- "[依存関係グラフのトラブルシューティング ](/code-security/supply-chain-security/understanding-your-software-supply-chain/troubleshooting-the-dependency-graph)"
+- "[Troubleshooting the dependency graph](/code-security/supply-chain-security/understanding-your-software-supply-chain/troubleshooting-the-dependency-graph)"
 - 「[脆弱性のある依存関係の検出のトラブルシューティング](/code-security/dependabot/working-with-dependabot/troubleshooting-the-detection-of-vulnerable-dependencies)」

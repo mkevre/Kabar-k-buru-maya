@@ -171,8 +171,8 @@ async function run() {
   const updateProjectNextItemMutation = generateUpdateProjectNextItemFieldMutation({
     item: newItemID,
     author: firstTimeContributor ? 'first time contributor' : process.env.AUTHOR_LOGIN,
-    turnaround,
-    feature,
+    turnaround: turnaround,
+    feature: feature,
   })
 
   // Determine which variable to use for the contributor type
@@ -192,16 +192,16 @@ async function run() {
 
   await graphql(updateProjectNextItemMutation, {
     project: projectID,
-    statusID,
+    statusID: statusID,
     statusValueID: readyForReviewID,
-    datePostedID,
-    reviewDueDateID,
-    contributorTypeID,
-    contributorType,
-    sizeTypeID,
-    sizeType,
-    featureID,
-    authorID,
+    datePostedID: datePostedID,
+    reviewDueDateID: reviewDueDateID,
+    contributorTypeID: contributorTypeID,
+    contributorType: contributorType,
+    sizeTypeID: sizeTypeID,
+    sizeType: sizeType,
+    featureID: featureID,
+    authorID: authorID,
     headers: {
       authorization: `token ${process.env.TOKEN}`,
       'GraphQL-Features': 'projects_next_graphql',

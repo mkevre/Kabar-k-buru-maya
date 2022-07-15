@@ -24,7 +24,7 @@ Como demonstração, usaremos:
 
 - Uma conta externa denominada **extuser**
 - Um host Git externo denominado `https://external-host.com`
-- Uma conta pessoal de {% data variables.product.product_name %} denominada **ghuser**
+- Uma conta de usuário {% data variables.product.product_name %} pessoal denominada **ghuser**
 - Um repositório em {% ifversion ghae %}{% data variables.product.product_name %}{% else %}{% data variables.product.product_location %}{% endif %} chamado **repo.git**
 
 {% endtip %}

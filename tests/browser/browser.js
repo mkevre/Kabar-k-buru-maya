@@ -2,7 +2,7 @@ import { jest } from '@jest/globals'
 import { latest, oldestSupported } from '../../lib/enterprise-server-releases.js'
 import languages from '../../lib/languages.js'
 
-jest.useFakeTimers({ legacyFakeTimers: true })
+jest.useFakeTimers('legacy')
 
 /* global page, browser */
 describe('homepage', () => {
@@ -16,6 +16,15 @@ describe('homepage', () => {
 
 describe('browser search', () => {
   jest.setTimeout(60 * 1000)
+
+  it('works on the homepage', async () => {
+    await page.goto('http://localhost:4000/en')
+    await page.click('[data-testid=site-search-input]')
+    await page.type('[data-testid=site-search-input]', 'actions')
+    await page.waitForSelector('[data-testid=search-results]')
+    const hits = await page.$$('[data-testid=search-result]')
+    expect(hits.length).toBeGreaterThan(5)
+  })
 
   it('works on mobile landing pages', async () => {
     await page.goto('http://localhost:4000/en/actions')
@@ -203,8 +212,8 @@ describe('platform picker', () => {
   it('should have a platform picker', async () => {
     await page.goto(pageWithPlatformPicker)
     const nav = await page.$$('[data-testid=platform-picker]')
-    const switches = await page.$$('[data-testid=platform-picker] div a')
-    const selectedSwitch = await page.$$('[data-testid=platform-picker] div a.PRC-selected')
+    const switches = await page.$$('[data-testid=platform-picker] button')
+    const selectedSwitch = await page.$$('[data-testid=platform-picker] .selected')
     expect(nav).toHaveLength(1)
     expect(switches.length).toBeGreaterThan(1)
     expect(selectedSwitch).toHaveLength(1)
@@ -213,8 +222,8 @@ describe('platform picker', () => {
   it('should NOT have a platform picker', async () => {
     await page.goto(pageWithoutPlatformPicker)
     const nav = await page.$$('[data-testid=platform-picker]')
-    const switches = await page.$$('[data-testid=platform-picker] div a')
-    const selectedSwitch = await page.$$('[data-testid=platform-picker] div a.PRC-selected')
+    const switches = await page.$$('[data-testid=platform-picker] button')
+    const selectedSwitch = await page.$$('[data-testid=platform-picker] .selected')
     expect(nav).toHaveLength(0)
     expect(switches).toHaveLength(0)
     expect(selectedSwitch).toHaveLength(0)
@@ -225,7 +234,7 @@ describe('platform picker', () => {
       await page.setUserAgent(agent.ua)
       await page.goto(pageWithPlatformPicker)
       const selectedPlatformElement = await page.waitForSelector(
-        '[data-testid=platform-picker] div a.PRC-selected'
+        '[data-testid=platform-picker] .selected'
       )
       const selectedPlatform = await page.evaluate(
         (el) => el.dataset.platform,
@@ -244,7 +253,7 @@ describe('platform picker', () => {
         (el) => el.dataset.defaultPlatform
       )
       const selectedPlatformElement = await page.waitForSelector(
-        '[data-testid=platform-picker] div a.PRC-selected'
+        '[data-testid=platform-picker] .selected'
       )
       const selectedPlatform = await page.evaluate((el) => el.textContent, selectedPlatformElement)
       expect(defaultPlatform).toBe(linuxUserAgent.id)
@@ -263,7 +272,7 @@ describe('platform picker', () => {
       await page.waitForSelector(`.extended-markdown.${platform}`, { visible: true, timeout: 3000 })
 
       // only a single tab should be selected
-      const selectedSwitch = await page.$$('[data-testid=platform-picker] .PRC-selected')
+      const selectedSwitch = await page.$$('[data-testid=platform-picker] .selected')
       expect(selectedSwitch).toHaveLength(1)
 
       // content for NOT selected platforms is expected to become hidden
@@ -286,8 +295,8 @@ describe('tool specific content', () => {
   it('should have a tool switcher if a tool switcher is included', async () => {
     await page.goto(pageWithSingleSwitcher)
     const nav = await page.$$('[data-testid="tool-picker"]')
-    const switches = await page.$$('[data-testid="tool-picker"] div a')
-    const selectedSwitch = await page.$$('[data-testid="tool-picker"] div a.PRC-selected')
+    const switches = await page.$$('[data-testid="tool-picker"] button')
+    const selectedSwitch = await page.$$('[data-testid="tool-picker"] button.selected')
     expect(nav).toHaveLength(1)
     expect(switches.length).toBeGreaterThan(1)
     expect(selectedSwitch).toHaveLength(1)
@@ -296,8 +305,8 @@ describe('tool specific content', () => {
   it('should NOT have a tool switcher if no tool switcher is included', async () => {
     await page.goto(pageWithoutSwitcher)
     const nav = await page.$$('[data-testid="tool-picker"]')
-    const switches = await page.$$('[data-testid="tool-picker"] div a')
-    const selectedSwitch = await page.$$('[data-testid="tool-picker"] div a.PRC-selected')
+    const switches = await page.$$('[data-testid="tool-picker"] button')
+    const selectedSwitch = await page.$$('[data-testid="tool-picker"] button.selected')
     expect(nav).toHaveLength(0)
     expect(switches).toHaveLength(0)
     expect(selectedSwitch).toHaveLength(0)
@@ -306,7 +315,7 @@ describe('tool specific content', () => {
   it('should use cli if no defaultTool is specified and if webui is not one of the tools', async () => {
     await page.goto(pageWithMultipleSwitcher)
     const selectedToolElement = await page.waitForSelector(
-      '[data-testid="tool-picker"] div a.PRC-selected'
+      '[data-testid="tool-picker"] button.selected'
     )
     const selectedTool = await page.evaluate((el) => el.textContent, selectedToolElement)
     expect(selectedTool).toBe('GitHub CLI')
@@ -315,7 +324,7 @@ describe('tool specific content', () => {
   it('should use webui if no defaultTool is specified and if webui is one of the tools', async () => {
     await page.goto(pageWithSingleSwitcher)
     const selectedToolElement = await page.waitForSelector(
-      '[data-testid="tool-picker"] div a.PRC-selected'
+      '[data-testid="tool-picker"] button.selected'
     )
     const selectedTool = await page.evaluate((el) => el.textContent, selectedToolElement)
     expect(selectedTool).toBe('Web browser')
@@ -325,7 +334,7 @@ describe('tool specific content', () => {
     // With no user data, the selected tool is GitHub.com
     await page.goto(pageWithSingleSwitcher)
     let selectedToolElement = await page.waitForSelector(
-      '[data-testid="tool-picker"] div a.PRC-selected'
+      '[data-testid="tool-picker"] button.selected'
     )
     let selectedTool = await page.evaluate((el) => el.textContent, selectedToolElement)
     expect(selectedTool).toBe('Web browser')
@@ -334,9 +343,7 @@ describe('tool specific content', () => {
 
     // Revisiting the page after CLI is selected results in CLI as the selected tool
     await page.goto(pageWithSingleSwitcher)
-    selectedToolElement = await page.waitForSelector(
-      '[data-testid="tool-picker"] div a.PRC-selected'
-    )
+    selectedToolElement = await page.waitForSelector('[data-testid="tool-picker"] button.selected')
     selectedTool = await page.evaluate((el) => el.textContent, selectedToolElement)
     expect(selectedTool).toBe('GitHub CLI')
   })
@@ -352,7 +359,7 @@ describe('tool specific content', () => {
       await page.waitForSelector(`.extended-markdown.${tool}`, { visible: true, timeout: 3000 })
 
       // only a single tab should be selected
-      const selectedSwitch = await page.$$('[data-testid="tool-picker"] div a.PRC-selected')
+      const selectedSwitch = await page.$$('[data-testid="tool-picker"] button.selected')
       expect(selectedSwitch).toHaveLength(1)
 
       // content for NOT selected tools is expected to become hidden
@@ -407,7 +414,7 @@ describe('filter cards', () => {
     await page.goto('http://localhost:4000/en/code-security/guides')
     // 2nd element is 'Overview'
     await page.click('[data-testid=card-filter-types] button')
-    await page.click('[data-testid=types-dropdown] > div > ul > li:nth-child(2)')
+    await page.click('[data-testid=types-dropdown] > div > div:nth-child(2)')
     const shownCards = await page.$$('[data-testid=article-card]')
     const shownCardTypes = await page.$$eval('[data-testid=article-card-type]', (cardTypes) =>
       cardTypes.map((cardType) => cardType.textContent)
@@ -420,7 +427,7 @@ describe('filter cards', () => {
     await page.goto(`http://localhost:4000/en/enterprise-server@${latest}/code-security/guides`)
     // 2nd element is 'Overview'
     await page.click('[data-testid=card-filter-types] button')
-    await page.click('[data-testid=types-dropdown] > div > ul > li:nth-child(2)')
+    await page.click('[data-testid=types-dropdown] > div > div:nth-child(2)')
     const shownCards = await page.$$('[data-testid=article-card]')
     const shownCardTypes = await page.$$eval('[data-testid=article-card-type]', (cardTypes) =>
       cardTypes.map((cardType) => cardType.textContent)

@@ -12,7 +12,7 @@ redirect_from:
 versions:
   fpt: '*'
   ghes: '*'
-  ghae: '*'
+  ghae: issue-4864
   ghec: '*'
 type: how_to
 topics:
@@ -33,7 +33,7 @@ O gráfico de dependências mostra as dependências{% ifversion fpt or ghec %} e
 {% data reusables.repositories.click-dependency-graph %}{% ifversion fpt or ghec %}
 4. Opcionalmente, em "Gráfico de dependência", clique em **Dependentes**. ![Dependents tab on the dependency graph page](/assets/images/help/graphs/dependency-graph-dependents-tab.png){% endif %}
 
-{% ifversion ghes %}
+{% ifversion ghes or ghae-issue-4864 %}
 Os proprietários das empresas podem configurar o gráfico de dependências a nível da empresa. Para obter mais informações, consulte "[Habilitando o gráfico de dependências para sua empresa](/admin/code-security/managing-supply-chain-security-for-your-enterprise/enabling-the-dependency-graph-for-your-enterprise)".
 {% endif %}
 
@@ -41,10 +41,6 @@ Os proprietários das empresas podem configurar o gráfico de dependências a n�
 
 {% ifversion fpt or ghec %}
 As dependências são agrupadas por ecossistema. Você pode expandir sua dependência para visualizar suas dependências.  Dependências de repositórios privados, pacotes privados ou arquivos não reconhecidos são exibidos em texto sem formatação. Se o gerenciador de pacotes para a dependência estiver em um repositório público, {% data variables.product.product_name %} irá exibir um link para o repositório.
-
-{% ifversion dependency-submission-api %}
-As dependências enviadas a um projeto usando a API de envio de dependências (beta), embora também agrupadas por ecossistema, são exibidas separadamente das dependências identificadas por meio de manifesto ou arquivos de bloqueio no repositório. Essas dependências enviadas aparecem no gráfico de dependências como "dependências de instantânero" porque elas são enviadas como um instanâneo ou conjunto de dependências. Para obter mais informações sobre o uso da API de envio de dependências, consulte "[Usando a API de envio de dependência](/code-security/supply-chain-security/understanding-your-software-supply-chain/using-the-dependency-submission-api)".
-{% endif %}
 
 Se foram detectadas vulnerabilidades no repositório, estas são exibidas na parte superior da visualização para usuários com acesso ao {% data variables.product.prodname_dependabot_alerts %}.
 
@@ -74,7 +70,16 @@ Para repositórios públicos, a vista de dependentes mostra como o repositório 
 
 ## Habilitar e desabilitar o gráfico de dependências para um repositório privado
 
-{% data reusables.dependabot.enabling-disabling-dependency-graph-private-repo %}
+Os administradores de repositórios podem habilitar ou desabilitar o gráfico de dependências em repositórios privados.
+
+Você também pode habilitar ou desabilitar o gráfico de dependências para todos os repositórios pertencentes à sua conta de usuário ou organização. Para mais informações consulte "[Gerenciar as configurações de segurança e análise da sua conta de usuário](/github/setting-up-and-managing-your-github-user-account/managing-security-and-analysis-settings-for-your-user-account)" ou "[Gerenciar as configurações de segurança e análise da sua organização](/organizations/keeping-your-organization-secure/managing-security-and-analysis-settings-for-your-organization)".
+
+{% data reusables.repositories.navigate-to-repo %}
+{% data reusables.repositories.sidebar-settings %}
+{% data reusables.repositories.navigate-to-security-and-analysis %}
+4. Leia a mensagem sobre a concessão de acesso somente leitura pelo {% data variables.product.product_name %} aos dados do repositório para habilitar o gráfico de dependências e, em seguida, ao lado de "Gráfico de Dependência", clique em **Habilitar**. ![Botão "Habilitar" para o gráfico de dependência](/assets/images/help/repository/dependency-graph-enable-button.png)
+
+Você pode desabilitar o gráfico de dependências a qualquer momento clicando em **Desabilitar** ao lado de "Gráfico de dependência" na aba de análise & de Segurança &.
 
 ## Alterar o pacote "Usado por"
 
@@ -93,7 +98,7 @@ A seção "Usado por" representa um único pacote do repositório. Se você tive
 
 {% data reusables.repositories.navigate-to-repo %}
 {% data reusables.repositories.sidebar-settings %}
-{% data reusables.repositories.navigate-to-code-security-and-analysis %}
+{% data reusables.repositories.navigate-to-security-and-analysis %}
 4. Em "Segurança e análise de código" clique no menu suspenso na seção "Usado pelo contador" e escolha um pacote. ![Escolha um pacote "Usado por"](/assets/images/help/repository/choose-used-by-package.png)
 
 {% endif %}
@@ -105,12 +110,12 @@ Se seu gráfico de dependências estiver vazio, poderá haver um problema com o 
 {% ifversion fpt or ghec %}
 Se o arquivo estiver formatado corretamente, verifique o seu tamanho. O gráfico de dependências ignora arquivos de manifesto individual e os arquivos e bloqueio com tamanho superior a 1.5 Mb, a menos que você seja um usuário do {% data variables.product.prodname_enterprise %}. Ele processa até 20 arquivos de manifesto ou de bloqueio por repositório por padrão; logo você pode dividir dependências em arquivos menores em subdiretórios do repositório.{% endif %}
 
-Se um arquivo de manifesto ou de bloqueio não for processado, suas dependências serão omitidas no gráfico de dependências e não será possível verificar se há dependências inseguras.
+Se um arquivo de manifesto ou de bloqueio não for processado, suas dependências serão omitidas no gráfico de dependências e não será possível verificar se há dependências.
 
 ## Leia mais
 
 - "[Sobre o gráfico de dependências](/github/visualizing-repository-data-with-graphs/about-the-dependency-graph)"
-- "[Visualizando e atualizando {% data variables.product.prodname_dependabot_alerts %}](/code-security/dependabot/dependabot-alerts/viewing-and-updating-dependabot-alerts)"{% ifversion ghec %}
-- "[Visualizando insights para a sua organização](/organizations/collaborating-with-groups-in-organizations/viewing-insights-for-your-organization)"{% endif %}{% ifversion fpt or ghec %}
+- "[Visualizando {% data variables.product.prodname_dependabot_alerts %} para dependências vulneráveis](/github/managing-security-vulnerabilities/viewing-and-updating-vulnerable-dependencies-in-your-repository)"{% ifversion fpt or ghec %}
+- "[Visualizar informações da sua organização](/organizations/collaborating-with-groups-in-organizations/viewing-insights-for-your-organization)"
 - "[Entender como o {% data variables.product.prodname_dotcom %} usa e protege seus dados](/get-started/privacy-on-github)"
 {% endif %}

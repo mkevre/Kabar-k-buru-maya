@@ -9,7 +9,7 @@ versions:
 redirect_from:
   - /codespaces/getting-started-with-codespaces
 children:
-  - /introduction-to-dev-containers
+  - /configuring-codespaces-for-your-project
   - /setting-up-your-project-for-codespaces
   - /setting-up-your-nodejs-project-for-codespaces
   - /setting-up-your-dotnet-project-for-codespaces

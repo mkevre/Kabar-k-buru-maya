@@ -33,19 +33,19 @@ You can set up a trial of {% data variables.product.prodname_ghe_cloud %} to eva
 
 ## {% data variables.product.prodname_ghe_cloud %} のトライアルについて
 
-You can set up a 30-day trial to evaluate {% data variables.product.prodname_ghe_cloud %}. 支払方法が必要な {% data variables.product.prodname_marketplace %} アプリを Organization に追加しない限り、トライアル期間中に支払方法を指定する必要はありません。 詳しい情報については、[{% data variables.product.prodname_marketplace %}の支払いについて](/enterprise-cloud@latest/articles/about-billing-for-github-marketplace/)を参照してください。
+You can set up a 30-day trial to evaluate {% data variables.product.prodname_ghe_cloud %}. 支払方法が必要な {% data variables.product.prodname_marketplace %} アプリを Organization に追加しない限り、トライアル期間中に支払方法を指定する必要はありません。 詳しい情報については、「<a href="/articles/about-billing-for-github-marketplace/" class="dotcom-only">{% data variables.product.prodname_marketplace %}の支払いについて</a>」を参照してください。
 
 トライアルには50シートが含まれています。 {% data variables.product.prodname_ghe_cloud %} を評価するためにより多くのシートが必要な場合は、{% data variables.contact.contact_enterprise_sales %} にお問い合わせください。 トライアルの終了時に、別のシート数を選択できます。
 
 {% data reusables.saml.saml-accounts %}
 
-詳しい情報については{% ifversion not ghec %}、{% data variables.product.prodname_ghe_cloud %}ドキュメンテーションの{% else %}、{% endif %}「[SAMLシングルサインオンを使うアイデンティティ及びアクセス管理について](/enterprise-cloud@latest/organizations/managing-saml-single-sign-on-for-your-organization/about-identity-and-access-management-with-saml-single-sign-on)を参照してください。
+For more information, see "[About identity and access management with SAML single sign-on](/enterprise-cloud@latest/organizations/managing-saml-single-sign-on-for-your-organization/about-identity-and-access-management-with-saml-single-sign-on){% ifversion not ghec %}" in the {% data variables.product.prodname_ghe_cloud %} documentation.{% else %}."{% endif %}
 
 {% data variables.product.prodname_emus %} is not part of the free trial of {% data variables.product.prodname_ghe_cloud %}. If you're interested in {% data variables.product.prodname_emus %}, please contact [{% data variables.product.prodname_dotcom %}'s Sales team](https://enterprise.github.com/contact).
 
 ## {% data variables.product.prodname_ghe_cloud %} のトライアルを設定する
 
-Before you can try {% data variables.product.prodname_ghe_cloud %}, you must be signed into a personal account. If you don't already have a personal account on {% data variables.product.prodname_dotcom_the_website %}, you must create one. 詳しい情報については、「[新しい {% data variables.product.prodname_dotcom %} アカウントにサインアップする](/free-pro-team@latest/articles/signing-up-for-a-new-github-account)」を参照してください。
+Before you can try {% data variables.product.prodname_ghe_cloud %}, you must be signed into a user account. If you don't already have a user account on {% data variables.product.prodname_dotcom_the_website %}, you must create one. 詳しい情報については、「<a href="/articles/signing-up-for-a-new-github-account" class="dotcom-only">新しい {% data variables.product.prodname_dotcom %} アカウントにサインアップする</a>」を参照してください。
 
 1. Navigate to [{% data variables.product.prodname_dotcom %} for enterprises](https://github.com/enterprise).
 1. Click **Start a free trial**. !["Start a free trial" button](/assets/images/help/organizations/start-a-free-trial-button.png)
@@ -54,9 +54,7 @@ Before you can try {% data variables.product.prodname_ghe_cloud %}, you must be 
 
 ## {% data variables.product.prodname_ghe_cloud %} に触れる
 
-After you set up your trial, you can explore {% data variables.product.prodname_ghe_cloud %} by following the suggested tasks on the "Overview" tab of your organization. If you've previously dismissed the tasks, you can access them again by clicking **Get started with suggested tasks** at the top of the page.
-
-!["Get started with suggested tasks" button](/assets/images/help/organizations/suggested-tasks-button.png)
+トライアルを設定したら、[エンタープライズオンボーディングガイド](https://resources.github.com/enterprise-onboarding/)に従って {% data variables.product.prodname_ghe_cloud %} を試してみることができます。
 
 {% data reusables.docs.you-can-read-docs-for-your-product %}
 

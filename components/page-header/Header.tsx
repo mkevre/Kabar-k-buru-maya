@@ -6,7 +6,6 @@ import { useVersion } from 'components/hooks/useVersion'
 
 import { Link } from 'components/Link'
 import { useMainContext } from 'components/context/MainContext'
-import { useAuth } from 'components/context/DotComAuthenticatedContext'
 import { LanguagePicker } from './LanguagePicker'
 import { HeaderNotifications } from 'components/page-header/HeaderNotifications'
 import { ProductPicker } from 'components/page-header/ProductPicker'
@@ -18,7 +17,7 @@ import styles from './Header.module.scss'
 
 export const Header = () => {
   const router = useRouter()
-  const { error } = useMainContext()
+  const { relativePath, error } = useMainContext()
   const { currentVersion } = useVersion()
   const { t } = useTranslation(['header', 'homepage'])
   const [isMenuOpen, setIsMenuOpen] = useState(
@@ -26,11 +25,8 @@ export const Header = () => {
   )
   const [scroll, setScroll] = useState(false)
 
-  const { isDotComAuthenticated } = useAuth()
-
   const signupCTAVisible =
-    !isDotComAuthenticated &&
-    (currentVersion === 'free-pro-team@latest' || currentVersion === 'enterprise-cloud@latest')
+    currentVersion === 'free-pro-team@latest' || currentVersion === 'enterprise-cloud@latest'
 
   useEffect(() => {
     function onScroll() {
@@ -78,7 +74,10 @@ export const Header = () => {
             <Breadcrumbs />
           </div>
           <div className="d-flex flex-items-center">
-            <VersionPicker />
+            <div className="mr-2">
+              <VersionPicker />
+            </div>
+
             <LanguagePicker />
 
             {signupCTAVisible && (
@@ -93,7 +92,7 @@ export const Header = () => {
             )}
 
             {/* <!-- GitHub.com homepage and 404 page has a stylized search; Enterprise homepages do not --> */}
-            {error !== '404' && (
+            {relativePath !== 'index.md' && error !== '404' && (
               <div className="d-inline-block ml-3">
                 <Search iconSize={16} isHeaderSearch={true} />
               </div>
@@ -158,7 +157,7 @@ export const Header = () => {
               )}
 
               {/* <!-- GitHub.com homepage and 404 page has a stylized search; Enterprise homepages do not --> */}
-              {error !== '404' && (
+              {relativePath !== 'index.md' && error !== '404' && (
                 <div className="my-2 pt-2">
                   <Search iconSize={16} isMobileSearch={true} />
                 </div>
