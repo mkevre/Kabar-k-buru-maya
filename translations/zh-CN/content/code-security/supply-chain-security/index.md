@@ -8,7 +8,7 @@ redirect_from:
 versions:
   fpt: '*'
   ghes: '*'
-  ghae: '*'
+  ghae: issue-4864
   ghec: '*'
 topics:
   - Dependabot

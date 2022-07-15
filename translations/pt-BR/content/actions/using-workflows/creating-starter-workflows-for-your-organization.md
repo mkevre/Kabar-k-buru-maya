@@ -66,7 +66,7 @@ Este procedimento demonstra como criar um arquivo de metadados e fluxo de trabal
        runs-on: ubuntu-latest
 
        steps:
-         - uses: {% data reusables.actions.action-checkout %}
+         - uses: actions/checkout@v2
 
          - name: Run a one-line script
            run: echo Hello from Octo Organization

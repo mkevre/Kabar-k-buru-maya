@@ -1,7 +1,7 @@
 ---
-title: 在工作流程中使用作业
-shortTitle: 在工作流程中使用作业
-intro: 使用工作流程运行多个作业。
+title: Using jobs in a workflow
+shortTitle: Using jobs in a workflow
+intro: Use workflows to run multiple jobs.
 versions:
   fpt: '*'
   ghes: '*'
@@ -17,14 +17,14 @@ miniTocMaxHeadingLevel: 4
 
 {% data reusables.actions.jobs.section-using-jobs-in-a-workflow %}
 
-## 设置作业的 ID
+## Setting an ID for a job
 
 {% data reusables.actions.jobs.section-using-jobs-in-a-workflow-id %}
 
-## 设置作业的名称
+## Setting a name for a job
 
 {% data reusables.actions.jobs.section-using-jobs-in-a-workflow-name %}
 
-## 定义必备作业
+## Defining prerequisite jobs
 
 {% data reusables.actions.jobs.section-using-jobs-in-a-workflow-needs %}

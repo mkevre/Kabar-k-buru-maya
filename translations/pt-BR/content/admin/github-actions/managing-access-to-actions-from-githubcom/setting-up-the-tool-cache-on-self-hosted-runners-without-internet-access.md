@@ -31,7 +31,7 @@ Você pode preencher o cache da ferramenta do executor, executando um fluxo de t
 
 {% note %}
 
-**Observação:** Você só pode usar um cache de ferramenta do executor hospedado em {% data variables.product.prodname_dotcom %} para um executor auto-hospedado que possua um sistema operacional e arquitetura idênticos. Por exemplo, se você estiver usando uma `ubuntu-18. 4` do executor hospedado em {% data variables.product.prodname_dotcom %} para gerar um cache de ferramentas, seu executor auto-hospedado deverá ser uma máquina Ubuntu 18.04 de 64 bits. Para mais informações sobre executores hospedados no {% data variables.product.prodname_dotcom %}, consulte "[Ambientes virtuais para executores hospedados no GitHub](/free-pro-team@latest/actions/using-github-hosted-runners/about-github-hosted-runners#supported-runners-and-hardware-resources)".
+**Observação:** Você só pode usar um cache de ferramenta do executor hospedado em {% data variables.product.prodname_dotcom %} para um executor auto-hospedado que possua um sistema operacional e arquitetura idênticos. Por exemplo, se você estiver usando uma `ubuntu-18. 4` do executor hospedado em {% data variables.product.prodname_dotcom %} para gerar um cache de ferramentas, seu executor auto-hospedado deverá ser uma máquina Ubuntu 18.04 de 64 bits. Para mais informações sobre executores hospedados no {% data variables.product.prodname_dotcom %}, consulte "<a href="/actions/reference/virtual-environments-for-github-hosted-runners#supported-runners-and-hardware-resources" class="dotcom-only">Ambientes virtuais para executores hospedados no GitHub</a>".
 
 {% endnote %}
 
@@ -48,6 +48,7 @@ Você pode preencher o cache da ferramenta do executor, executando um fluxo de t
 
    O exemplo a seguir demonstra um fluxo de trabalho que faz o upload do cache da ferramenta para um ambiente do Ubuntu 18.04, usando a ação `setup-node` com as versões 10 e 12 do Node.js.
 
+   {% raw %}
    ```yaml
    name: Upload Node.js 10 and 12 tool cache
    on: push
@@ -57,25 +58,26 @@ Você pode preencher o cache da ferramenta do executor, executando um fluxo de t
        steps:
          - name: Clear any existing tool cache
            run: |
-             mv "{% raw %}${{ runner.tool_cache }}" "${{ runner.tool_cache }}.old"{% endraw %}
-             mkdir -p "{% raw %}${{ runner.tool_cache }}{% endraw %}"
+             mv "${{ runner.tool_cache }}" "${{ runner.tool_cache }}.old"
+             mkdir -p "${{ runner.tool_cache }}"
          - name: Setup Node 10
-           uses: {% data reusables.actions.action-setup-node %}
+           uses: actions/setup-node@v2
            with:
              node-version: 10.x
          - name: Setup Node 12
-           uses: {% data reusables.actions.action-setup-node %}
+           uses: actions/setup-node@v2
            with:
              node-version: 12.x
          - name: Archive tool cache
            run: |
-             cd "{% raw %}${{ runner.tool_cache }}{% endraw %}"
+             cd "${{ runner.tool_cache }}"
              tar -czf tool_cache.tar.gz *
          - name: Upload tool cache artifact
-           uses: {% data reusables.actions.action-upload-artifact %}
+           uses: actions/upload-artifact@v3
            with:
-             path: {% raw %}${{runner.tool_cache}}/tool_cache.tar.gz{% endraw %}
+             path: ${{runner.tool_cache}}/tool_cache.tar.gz
    ```
+   {% endraw %}
 1. Faça o download do artefato do cache da ferramenta da execução do fluxo de trabalho. Para obter instruções sobre o download de artefatos, consulte "[Fazer download de artefatos de fluxo de trabalho](/actions/managing-workflow-runs/downloading-workflow-artifacts)".
 1. Transfira o artefato de cache das ferramentas para o seu executor hospedado e extraia-o para o diretório de cache das ferramentas locais. O diretório de cache da ferramenta padrão é `RUNNER_DIR/_work/_tool`. Se o executor ainda não processou nenhum trabalho, você pode precisar criar os diretórios `_work/_tool`.
 

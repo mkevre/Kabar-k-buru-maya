@@ -1,8 +1,8 @@
-{% ifversion codeql-ml-queries %}
+{% if codeql-ml-queries %}
 
 {% note %}
 
-**Nota:** Las alertas experimentales para el {% data variables.product.prodname_code_scanning %} se crean utilizando tecnología experimental en la acción del {% data variables.product.prodname_codeql %}. Esta característica se encuentra disponible actualmente como un lanzamiento beta para el código de JavaScript y está sujeta a cambios.
+**Note:** Experimental alerts for {% data variables.product.prodname_code_scanning %} are created using experimental technology in the {% data variables.product.prodname_codeql %} action. This feature is currently available as a beta release for JavaScript code and is subject to change.
 
 {% endnote %}
 
