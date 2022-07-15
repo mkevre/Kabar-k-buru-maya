@@ -15,8 +15,6 @@ topics:
 
 {% data reusables.projects.projects-beta %}
 
-{% data reusables.projects.graphql-deprecation %}
-
 ## Introdução
 
 Você pode adicionar a automação para ajudar a gerenciar seu projeto. Os projetos (beta) incluem fluxos de trabalho internos que você pode configurar por meio da interface do usuário. Além disso, você pode escrever fluxos de trabalho personalizados com a API do GraphQL e {% data variables.product.prodname_actions %}.
@@ -91,32 +89,23 @@ jobs:
           gh api graphql -f query='
             query($org: String!, $number: Int!) {
               organization(login: $org){
-                projectV2(number: $number) {
+                projectNext(number: $number) {
                   id
                   fields(first:20) {
                     nodes {
-                      ... on ProjectV2Field {
-                        id
-                        name
-                      }
-                      ... on ProjectV2SingleSelectField {
-                        id
-                        name
-                        options {
-                          id
-                          name
-                        }
-                      }
+                      id
+                      name
+                      settings
                     }
                   }
                 }
               }
             }' -f org=$ORGANIZATION -F number=$PROJECT_NUMBER > project_data.json
 
-          echo 'PROJECT_ID='$(jq '.data.organization.projectV2.id' project_data.json) >> $GITHUB_ENV
-          echo 'DATE_FIELD_ID='$(jq '.data.organization.projectV2.fields.nodes[] | select(.name== "Date posted") | .id' project_data.json) >> $GITHUB_ENV
-          echo 'STATUS_FIELD_ID='$(jq '.data.organization.projectV2.fields.nodes[] | select(.name== "Status") | .id' project_data.json) >> $GITHUB_ENV
-          echo 'TODO_OPTION_ID='$(jq '.data.organization.projectV2.fields.nodes[] | select(.name== "Status") | .options[] | select(.name=="Todo") |.id' project_data.json) >> $GITHUB_ENV
+          echo 'PROJECT_ID='$(jq '.data.organization.projectNext.id' project_data.json) >> $GITHUB_ENV
+          echo 'DATE_FIELD_ID='$(jq '.data.organization.projectNext.fields.nodes[] | select(.name== "Date posted") | .id' project_data.json) >> $GITHUB_ENV
+          echo 'STATUS_FIELD_ID='$(jq '.data.organization.projectNext.fields.nodes[] | select(.name== "Status") | .id' project_data.json) >> $GITHUB_ENV
+          echo 'TODO_OPTION_ID='$(jq '.data.organization.projectNext.fields.nodes[] | select(.name== "Status") |.settings | fromjson.options[] | select(.name=="Todo") |.id' project_data.json) >> $GITHUB_ENV
 
       - name: Add PR to project
         env:
@@ -125,14 +114,14 @@ jobs:
         run: |
           item_id="$( gh api graphql -f query='
             mutation($project:ID!, $pr:ID!) {
-              addProjectV2ItemById(input: {projectId: $project, contentId: $pr}) {
-                item {
+              addProjectNextItem(input: {projectId: $project, contentId: $pr}) {
+                projectNextItem {
                   id
                 }
               }
-            }' -f project=$PROJECT_ID -f pr=$PR_ID --jq '.data.addProjectV2ItemById.item.id')"
+            }' -f project=$PROJECT_ID -f pr=$PR_ID --jq '.data.addProjectNextItem.projectNextItem.id')"
 
-            echo 'ITEM_ID='$item_id >> $GITHUB_ENV
+          echo 'ITEM_ID='$item_id >> $GITHUB_ENV
 
       - name: Get date
         run: echo "DATE=$(date +"%Y-%m-%d")" >> $GITHUB_ENV
@@ -148,39 +137,34 @@ jobs:
               $status_field: ID!
               $status_value: String!
               $date_field: ID!
-              $date_value: Date!
+              $date_value: String!
             ) {
-              set_status: updateProjectV2ItemFieldValue(input: {
+              set_status: updateProjectNextItemField(input: {
                 projectId: $project
                 itemId: $item
                 fieldId: $status_field
-                value: { 
-                  singleSelectOptionId: $status_value
-                  }
+                value: $status_value
               }) {
-                projectV2Item {
+                projectNextItem {
                   id
                   }
               }
-              set_date_posted: updateProjectV2ItemFieldValue(input: {
+              set_date_posted: updateProjectNextItemField(input: {
                 projectId: $project
                 itemId: $item
                 fieldId: $date_field
-                value: { 
-                  date: $date_value
-                }
+                value: $date_value
               }) {
-                projectV2Item {
+                projectNextItem {
                   id
                 }
               }
             }' -f project=$PROJECT_ID -f item=$ITEM_ID -f status_field=$STATUS_FIELD_ID -f status_value={% raw %}${{ env.TODO_OPTION_ID }}{% endraw %} -f date_field=$DATE_FIELD_ID -f date_value=$DATE --silent
-
 ```
 
 ### Exemplo de fluxo de trabalho que efetua a autenticação com um token de acesso pessoal
 
-1. Crie um token de acesso pessoal com os escopos `projeto` e `repositório`. Para obter mais informações, consulte "[Criando um token de acesso pessoal](/github/authenticating-to-github/keeping-your-account-and-data-secure/creating-a-personal-access-token)."
+1. Crie um token de acesso pessoal com escopo `org:write`. Para obter mais informações, consulte "[Criando um token de acesso pessoal](/github/authenticating-to-github/keeping-your-account-and-data-secure/creating-a-personal-access-token)."
 2. Salve o token de acesso pessoal como um segredo no seu repositório ou organização.
 3. No fluxo de trabalho a seguir, substitua `YOUR_TOKEN` pelo nome do segredo. Substitua `YOUR_ORGANIZATION` pelo nome da sua organização. Por exemplo, `octo-org`. Substitua `YOUR_PROJECT_NUMBER` pelo número do seu projeto. Para encontrar o número do projeto, consulte a URL do projeto. Por exemplo, `https://github.com/orgs/octo-org/projects/5` tem um número de projeto de 5.
 
@@ -203,32 +187,23 @@ jobs:
           gh api graphql -f query='
             query($org: String!, $number: Int!) {
               organization(login: $org){
-                projectV2(number: $number) {
+                projectNext(number: $number) {
                   id
                   fields(first:20) {
                     nodes {
-                      ... on ProjectV2Field {
-                        id
-                        name
-                      }
-                      ... on ProjectV2SingleSelectField {
-                        id
-                        name
-                        options {
-                          id
-                          name
-                        }
-                      }
+                      id
+                      name
+                      settings
                     }
                   }
                 }
               }
             }' -f org=$ORGANIZATION -F number=$PROJECT_NUMBER > project_data.json
 
-          echo 'PROJECT_ID='$(jq '.data.organization.projectV2.id' project_data.json) >> $GITHUB_ENV
-          echo 'DATE_FIELD_ID='$(jq '.data.organization.projectV2.fields.nodes[] | select(.name== "Date posted") | .id' project_data.json) >> $GITHUB_ENV
-          echo 'STATUS_FIELD_ID='$(jq '.data.organization.projectV2.fields.nodes[] | select(.name== "Status") | .id' project_data.json) >> $GITHUB_ENV
-          echo 'TODO_OPTION_ID='$(jq '.data.organization.projectV2.fields.nodes[] | select(.name== "Status") | .options[] | select(.name=="Todo") |.id' project_data.json) >> $GITHUB_ENV
+          echo 'PROJECT_ID='$(jq '.data.organization.projectNext.id' project_data.json) >> $GITHUB_ENV
+          echo 'DATE_FIELD_ID='$(jq '.data.organization.projectNext.fields.nodes[] | select(.name== "Date posted") | .id' project_data.json) >> $GITHUB_ENV
+          echo 'STATUS_FIELD_ID='$(jq '.data.organization.projectNext.fields.nodes[] | select(.name== "Status") | .id' project_data.json) >> $GITHUB_ENV
+          echo 'TODO_OPTION_ID='$(jq '.data.organization.projectNext.fields.nodes[] | select(.name== "Status") |.settings | fromjson.options[] | select(.name=="Todo") |.id' project_data.json) >> $GITHUB_ENV
 
       - name: Add PR to project
         env:
@@ -237,14 +212,14 @@ jobs:
         run: |
           item_id="$( gh api graphql -f query='
             mutation($project:ID!, $pr:ID!) {
-              addProjectV2ItemById(input: {projectId: $project, contentId: $pr}) {
-                item {
+              addProjectNextItem(input: {projectId: $project, contentId: $pr}) {
+                projectNextItem {
                   id
                 }
               }
-            }' -f project=$PROJECT_ID -f pr=$PR_ID --jq '.data.addProjectV2ItemById.item.id')"
+            }' -f project=$PROJECT_ID -f pr=$PR_ID --jq '.data.addProjectNextItem.projectNextItem.id')"
 
-            echo 'ITEM_ID='$item_id >> $GITHUB_ENV
+          echo 'ITEM_ID='$item_id >> $GITHUB_ENV
 
       - name: Get date
         run: echo "DATE=$(date +"%Y-%m-%d")" >> $GITHUB_ENV
@@ -260,29 +235,25 @@ jobs:
               $status_field: ID!
               $status_value: String!
               $date_field: ID!
-              $date_value: Date!
+              $date_value: String!
             ) {
-              set_status: updateProjectV2ItemFieldValue(input: {
+              set_status: updateProjectNextItemField(input: {
                 projectId: $project
                 itemId: $item
                 fieldId: $status_field
-                value: { 
-                  singleSelectOptionId: $status_value
-                  }
+                value: $status_value
               }) {
-                projectV2Item {
+                projectNextItem {
                   id
                   }
               }
-              set_date_posted: updateProjectV2ItemFieldValue(input: {
+              set_date_posted: updateProjectNextItemField(input: {
                 projectId: $project
                 itemId: $item
                 fieldId: $date_field
-                value: { 
-                  date: $date_value
-                }
+                value: $date_value
               }) {
-                projectV2Item {
+                projectNextItem {
                   id
                 }
               }
@@ -381,34 +352,23 @@ Substitua <code>YOUR_PROJECT_NUMBER</code> pelo número do seu projeto. Para enc
 gh api graphql -f query='
   query($org: String!, $number: Int!) {
     organization(login: $org){
-      projectV2(number: $number) {
+      projectNext(number: $number) {
         id
         fields(first:20) {
           nodes {
-            ... on ProjectV2Field {
-              id
-              name
-            }
-            ... on ProjectV2SingleSelectField {
-              id
-              name
-              options {
-                id
-                name
-              }
-            }
+            id
+            name
+            settings
           }
         }
       }
     }
-  }'  -f org=$ORGANIZATION -F number=$PROJECT_NUMBER > project_data.json
+  }' -f org=$ORGANIZATION -F number=$PROJECT_NUMBER > project_data.json
 ```
 
 </td>
 <td>
-<p>Usa <a href="https://cli.github.com/manual/">{% data variables.product.prodname_cli %}</a> para consultar a API para o ID do projeto e devolver o nome e o ID dos primeiros 20 campos do projeto. <code>campos</code> retorna uma união e a consulta usa fragmentos inline (<code>... on</code>) para retornar informações sobre os campos <code>ProjectV2Field</code> e <code>ProjectV2SingleSelectField</code>.</p>
-
-<p>A resposta é armazenada em um arquivo denominado <code>project_data.json</code>.</p>
+Usa <a href="https://cli.github.com/manual/">{% data variables.product.prodname_cli %}</a> para consultar a API para o ID do projeto e para o ID, nome e configurações para os primeiros 20 campos do projeto. A resposta é armazenada em um arquivo denominado <code>project_data.json</code>.
 </td>
 </tr>
 
@@ -416,18 +376,18 @@ gh api graphql -f query='
 <td>
 
 ```yaml
-echo 'PROJECT_ID='$(jq '.data.organization.projectV2.id' project_data.json) >> $GITHUB_ENV
-echo 'DATE_FIELD_ID='$(jq '.data.organization.projectV2.fields.nodes[] | select(.name== "Date posted") | .id' project_data.json) >> $GITHUB_ENV
-echo 'STATUS_FIELD_ID='$(jq '.data.organization.projectV2.fields.nodes[] | select(.name== "Status") | .id' project_data.json) >> $GITHUB_ENV
-echo 'TODO_OPTION_ID='$(jq '.data.organization.projectV2.fields.nodes[] | select(.name== "Status") | .options[] | select(.name=="Todo") |.id' project_data.json) >> $GITHUB_ENV
+echo 'PROJECT_ID='$(jq '.data.organization.projectNext.id' project_data.json) >> $GITHUB_ENV
+echo 'DATE_FIELD_ID='$(jq '.data.organization.projectNext.fields.nodes[] | select(.name== "Date posted") | .id' project_data.json) >> $GITHUB_ENV
+echo 'STATUS_FIELD_ID='$(jq '.data.organization.projectNext.fields.nodes[] | select(.name== "Status") | .id' project_data.json) >> $GITHUB_ENV
+echo 'TODO_OPTION_ID='$(jq '.data.organization.projectNext.fields.nodes[] | select(.name== "Status") |.settings | fromjson.options[] | select(.name=="Todo") |.id' project_data.json) >> $GITHUB_ENV
 ```
 
 </td>
 <td>
 Analisa a resposta da consulta da API e armazena os IDs relevantes como variáveis de ambiente. Modifique este ID para obter o ID para diferentes campos ou opções. Por exemplo:
 <ul>
-<li>Para obter o ID de um campo denominado <code>Team</code>, adicione <code>echo 'TEAM_FIELD_ID='$(jq '.data.organization.projectV2.fields.nodes[] | select(.name== "Team") | .id' project_data.json) >> $GITHUB_ENV</code>.</li>
-<li>Para obter o ID de uma opção denominada <code>Octoteam</code> para <code>Team</code> selecione o campo, adicione <code>echo 'OCTOTEAM_OPTION_ID='$(jq '.data.organization.projectV2.fields.nodes[] | select(.name== "Team") |.options[] | select(.name=="Octoteam") |.id' project_data.json) >> $GITHUB_ENV</code></li>
+<li>Para obter o ID de um campo denominado <code>Team</code>, adicione <code>echo 'TEAM_FIELD_ID='$(jq '.data.organization.projectNext.fields.nodes[] | select(.name== "Team") | .id' project_data.json) >> $GITHUB_ENV</code>.</li>
+<li>Para obter o ID de uma opção denominada <code>Octoteam</code> para o campo <code>Team</code>, adicione <code>echo 'OCTOTEAM_OPTION_ID='$(jq '.data.organization.projectNext.fields.nodes[] | select(.name== "Team") |.settings | fromjson.options[] | select(.name=="Octoteam") |.id' project_data.json) >> $GITHUB_ENV</code></li>
 </ul>
 <strong>Observação: </strong>Este fluxo de trabalho pressupõe que você tem um projeto com um único campo selecionado denominado "Status" que inclui uma opção denominada "Todo" e um campo de data denominado "Date posted". Você deve modificar esta seção para corresponder aos campos presentes na sua tabela.
 </td>
@@ -465,12 +425,12 @@ Define variáveis de ambiente para esta etapa. <code>GITHUB_TOKEN</code> está d
 ```yaml
 item_id="$( gh api graphql -f query='
   mutation($project:ID!, $pr:ID!) {
-    addProjectV2ItemById(input: {projectId: $project, contentId: $pr}) {
-      item {
+    addProjectNextItem(input: {projectId: $project, contentId: $pr}) {
+      projectNextItem {
         id
       }
     }
-  }' -f project=$PROJECT_ID -f pr=$PR_ID --jq '.data.addProjectV2ItemById.item.id')"
+  }' -f project=$PROJECT_ID -f pr=$PR_ID --jq '.data.addProjectNextItem.projectNextItem.id')"
 ```
 
 </td>
@@ -540,29 +500,25 @@ gh api graphql -f query='
     $status_field: ID!
     $status_value: String!
     $date_field: ID!
-    $date_value: Date!
+    $date_value: String!
   ) {
-    set_status: updateProjectV2ItemFieldValue(input: {
+    set_status: updateProjectNextItemField(input: {
       projectId: $project
       itemId: $item
       fieldId: $status_field
-      value: { 
-        singleSelectOptionId: $status_value
-        }
+      value: $status_value
     }) {
-      projectV2Item {
+      projectNextItem {
         id
         }
     }
-    set_date_posted: updateProjectV2ItemFieldValue(input: {
+    set_date_posted: updateProjectNextItemField(input: {
       projectId: $project
       itemId: $item
       fieldId: $date_field
-      value: { 
-        date: $date_value
-      }
+      value: $date_value
     }) {
-      projectV2Item {
+      projectNextItem {
         id
       }
     }

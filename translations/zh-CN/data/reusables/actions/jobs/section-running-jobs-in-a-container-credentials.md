@@ -1,6 +1,6 @@
 {% data reusables.actions.registry-credentials %}
 
-#### 示例：定义容器注册表的凭据
+#### Example: Defining credentials for a container registry
 
 {% raw %}
 ```yaml

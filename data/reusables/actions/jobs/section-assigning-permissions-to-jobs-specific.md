@@ -19,5 +19,5 @@ jobs:
       pull-requests: write
 
     steps:
-      - uses: {% data reusables.actions.action-stale %}
+      - uses: actions/stale@v3
 ```

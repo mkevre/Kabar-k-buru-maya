@@ -1,8 +1,6 @@
 Ao usar o evento `workflow_dispatch`, você pode, opcionalmente, especificar as entradas que são passadas para o fluxo de trabalho.
 
-The triggered workflow receives the inputs in the {% ifversion actions-unified-inputs %}`inputs`{% else %}`github.event.inputs`{% endif %} context. For more information, see "[Contexts]({% ifversion actions-unified-inputs %}/actions/learn-github-actions/contexts#inputs-context{% else %}/actions/learn-github-actions/contexts#github-context{% endif %})."
-
-{% data reusables.actions.inputs-vs-github-event-inputs %}
+O fluxo de trabalho acionado recebe as entradas no contexto `github.event.inputs`. Para obter mais informações, consulte "[Contextos](/actions/learn-github-actions/contexts#github-context)".
 
 ```yaml
 on:
@@ -33,8 +31,8 @@ on:
 jobs:
   print-tag:
     runs-on: ubuntu-latest
-    if: {% ifversion actions-unified-inputs %}{% raw %} ${{ inputs.print_tags }} {% endraw %}{% else %}{% raw %} ${{ github.event.inputs.print_tags == 'true' }} {% endraw %}{% endif %}
+    if: {% raw %} ${{ github.event.inputs.print_tags == 'true' }} {% endraw %}
     steps:
       - name: Print the input tag to STDOUT
-        run: {% ifversion actions-unified-inputs %}echo {% raw %} The tags are ${{ inputs.tags }} {% endraw %}{% else %}echo {% raw %} The tags are ${{ github.event.inputs.tags }} {% endraw %}{% endif %}
+        run: echo {% raw %} The tag is ${{ github.event.inputs.tag }} {% endraw %}
 ```

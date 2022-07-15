@@ -88,8 +88,6 @@ Por ejemplo, si un flujo de trabajo definió las entradas de `numOctocats` y `oc
 
 **Opcional** Los parámetros de salida te permiten declarar datos que una acción establece. Las acciones que se ejecutan más tarde en un flujo de trabajo pueden usar el conjunto de datos de salida en acciones de ejecución anterior.  Por ejemplo, si tuviste una acción que realizó la adición de dos entradas (x + y = z), la acción podría dar como resultado la suma (z) para que otras acciones la usen como entrada.
 
-{% data reusables.actions.output-limitations %}
-
 Si no declaras una salida en tu archivo de metadatos de acción, todavía puedes configurar las salidas y utilizarlas en un flujo de trabajo. Para obtener más información acerca de la configuración de salidas en una acción, consulta "[Comandos de flujo de trabajo para {% data variables.product.prodname_actions %}](/actions/reference/workflow-commands-for-github-actions/#setting-an-output-parameter)".
 
 ### Ejemplo: Declarar las salidas para las acciones de contenedores de Docker y JavaScript
@@ -111,8 +109,6 @@ outputs:
 ## `outputs` para las acciones compuestas
 
 Las `outputs` **opcionales** utilizan los mismos parámetros que `outputs.<output_id>` y `outputs.<output_id>.description` (consulta la sección de "[`outputs` para acciones de contenedores de Docker y JavaScript](#outputs-for-docker-container-and-javascript-actions)"), pero también incluye el token `value`.
-
-{% data reusables.actions.output-limitations %}
 
 ### Ejemplo: Declarar las salidas para las acciones compuestas
 
@@ -227,7 +223,7 @@ Por ejemplo, este `cleanup.js` únicamente se ejecutará en ejecutores basados e
 
 ### `runs.steps`
 
-{% ifversion fpt or ghes > 3.2 or ghae or ghec %}
+{% ifversion fpt or ghes > 3.2 or ghae-issue-4853 or ghec %}
 **Requerido** Los pasos que planeas ejecutar en esta acción. Estos pueden ser ya sea pasos de `run` o de `uses`.
 {% else %}
 **Requerido** Los pasos que planeas ejecutar en esta acción.
@@ -235,7 +231,7 @@ Por ejemplo, este `cleanup.js` únicamente se ejecutará en ejecutores basados e
 
 #### `runs.steps[*].run`
 
-{% ifversion fpt or ghes > 3.2 or ghae or ghec %}
+{% ifversion fpt or ghes > 3.2 or ghae-issue-4853 or ghec %}
 **Opcional** El comando que quieres ejecutar. Este puede estar dentro de la línea o ser un script en tu repositorio de la acción:
 {% else %}
 **Requerido** El comando que quieres ejecutar. Este puede estar dentro de la línea o ser un script en tu repositorio de la acción:
@@ -265,7 +261,7 @@ Para obtener más información, consulta la sección "[``](/actions/reference/co
 
 #### `runs.steps[*].shell`
 
-{% ifversion fpt or ghes > 3.2 or ghae or ghec %}
+{% ifversion fpt or ghes > 3.2 or ghae-issue-4853 or ghec %}
 **Opcional** El shell en donde quieres ejecutar el comando. Puedes utilizar cualquiera de los shells listados [aquí](/actions/reference/workflow-syntax-for-github-actions#jobsjob_idstepsshell). Requerido si se configuró `run`.
 {% else %}
 **Requerido** El shell en donde quieres ejecutar el comando. Puedes utilizar cualquiera de los shells listados [aquí](/actions/reference/workflow-syntax-for-github-actions#jobsjob_idstepsshell). Requerido si se configuró `run`.
@@ -290,7 +286,7 @@ steps:
 
 **Ejemplo: Utilizando funciones de verificación de estado**
 
-`my backup step` solo se ejecutará cuando falle el paso previo de una acción compuesta. Para obtener más información, consulta la sección "[Expresiones](/actions/learn-github-actions/expressions#status-check-functions)".
+`my backup step` solo se ejecutará cuando falle el paso previo de una acción compuesta. Para obtener más información, consulta la sección "[Expresiones](/actions/learn-github-actions/expressions#job-status-check-functions)".
 
 ```yaml
 steps:
@@ -318,7 +314,7 @@ steps:
 
 **Opcional**  Especifica el directorio de trabajo en donde se ejecuta un comando.
 
-{% ifversion fpt or ghes > 3.2 or ghae or ghec %}
+{% ifversion fpt or ghes > 3.2 or ghae-issue-4853 or ghec %}
 #### `runs.steps[*].uses`
 
 **Opcional**  Selecciona una acción a ejecutar como parte de un paso en tu job. Una acción es una unidad de código reutilizable. Puedes usar una acción definida en el mismo repositorio que el flujo de trabajo, un repositorio público o en una [imagen del contenedor Docker publicada](https://hub.docker.com/).
@@ -337,9 +333,9 @@ runs:
     # Reference a specific commit
     - uses: actions/checkout@a81bbbf8298c0fa03ea29cdc473d45769f953675
     # Reference the major version of a release
-    - uses: {% data reusables.actions.action-checkout %}
+    - uses: actions/checkout@v2
     # Reference a specific version
-    - uses: {% data reusables.actions.action-checkout %}.2.0
+    - uses: actions/checkout@v2.2.0
     # Reference a branch
     - uses: actions/checkout@main
     # References a subdirectory in a public GitHub repository at a specific branch, ref, or SHA
@@ -368,10 +364,6 @@ runs:
         last_name: Octocat  
 ```
 {% endif %}
-
-#### `runs.steps[*].continue-on-error`
-
-**Opcional** Impide que la acción falle cuando falla un paso. Se configura en `true` para permitir que la acción pase cuando falla este paso.
 
 ## `runs` para las acciones de contenedores de Docker
 
@@ -451,7 +443,7 @@ Los `args` se usan en el lugar de la instrucción `CMD` en un `Dockerfile`. Si u
 
 {% data reusables.actions.dockerfile-guidelines %}
 
-Si necesitas pasar variables de ambiente a una acción, asegúrate que ésta ejecute un shell de comandos para realizar la sustitución de variables. Por ejemplo, si se configura tu atributo `entrypoint` como `"sh -c"`, entonces `args` se ejecutará en un shell de comandos. Como alternativa, si tu `Dockerfile` utiliza un `ENTRYPOINT` para ejecutar el mismo comando (`"sh -c"`), entonces `args` se ejecutará en un shell de comandos.
+Si necesitas pasar variables de ambiente a una acción, asegúrate que ésta ejecute un shell de comandos para realizar la sustitución de variables. Por ejemplo, si se configura tu atributo `entrypoint` como `"sh -c"`, entoces `args` se ejecutará en un shell de comandos. Como alternativa, si tu `Dockerfile` utiliza un `ENTRYPOINT` para ejecutar el mismo comando (`"sh -c"`), entonces `args` se ejecutará en un shell de comandos.
 
 Para obtener más información sobre el uso de la instrucción `CMD` con {% data variables.product.prodname_actions %}, consulta la sección "[Soporte de Dockerfile para {% data variables.product.prodname_actions %}](/actions/creating-actions/dockerfile-support-for-github-actions/#cmd)".
 
@@ -471,7 +463,7 @@ runs:
 
 ## `branding`
 
-Puedes usar un color y un icono de [Feather](https://feathericons.com/) para crear una insignia que personalice y diferencie tu acción. Los distintivos se muestran junto al nombre de tu acción en [{% data variables.product.prodname_marketplace %}](https://github.com/marketplace?type=actions).
+Puedes usar un color y un icono de [Pluma](https://feathericons.com/) para crear una insignia que personalice y diferencie tu acción. Los distintivos se muestran junto al nombre de tu acción en [{% data variables.product.prodname_marketplace %}](https://github.com/marketplace?type=actions).
 
 ### Ejemplo: Configurar la personalización de una acción
 
@@ -483,7 +475,7 @@ branding:
 
 ### `branding.color`
 
-El color de fondo del distintivo. Puede ser: `white`, `yellow`, `blue`, `green`, `orange`, `red`, `purple`, o `gray-dark`.
+El color de fondo de la insignia. Puede ser: `blanco`, `amarillow`, `azul`, `verde`, `anaranjado`, `rojo`, `púrpura` o `gris oscuro`.
 
 ### `branding.icon`
 
@@ -664,249 +656,254 @@ Aquí mostramos una lista exhaustiva de todos los iconos compatibles actualmente
 <td>eye</td>
 </tr>
 <tr>
-<td>avance rápido</td>
+<td>facebook</td>
+<td>fast-forward</td>
 <td>feather</td>
 <td>file-minus</td>
+</tr>
+<tr>
 <td>file-plus</td>
-</tr>
-<tr>
 <td>file-text</td>
-<td>archivo</td>
+<td>file</td>
 <td>film</td>
-<td>filter</td>
 </tr>
 <tr>
+<td>filter</td>
 <td>marcador</td>
 <td>folder-minus</td>
 <td>folder-plus</td>
-<td>folder</td>
 </tr>
 <tr>
+<td>folder</td>
 <td>gift</td>
 <td>git-branch</td>
 <td>git-commit</td>
-<td>git-merge</td>
 </tr>
 <tr>
+<td>git-merge</td>
 <td>git-pull-request</td>
 <td>globe</td>
 <td>grid</td>
-<td>hard-drive</td>
 </tr>
 <tr>
+<td>hard-drive</td>
 <td>hash</td>
 <td>headphones</td>
 <td>heart</td>
-<td>help-circle</td>
 </tr>
 <tr>
+<td>help-circle</td>
 <td>home</td>
 <td>image</td>
 <td>inbox</td>
-<td>info</td>
 </tr>
 <tr>
+<td>info</td>
 <td>italic</td>
 <td>layers</td>
 <td>layout</td>
-<td>life-buoy</td>
 </tr>
 <tr>
+<td>life-buoy</td>
 <td>link-2</td>
 <td>link</td>
 <td>list</td>
-<td>loader</td>
 </tr>
 <tr>
+<td>loader</td>
 <td>lock</td>
 <td>log-in</td>
 <td>log-out</td>
-<td>mail</td>
 </tr>
 <tr>
+<td>mail</td>
 <td>map-pin</td>
 <td>map</td>
 <td>maximize-2</td>
-<td>maximize</td>
 </tr>
 <tr>
+<td>maximize</td>
 <td>menu</td>
 <td>message-circle</td>
 <td>message-square</td>
-<td>mic-off</td>
 </tr>
 <tr>
+<td>mic-off</td>
 <td>mic</td>
 <td>minimize-2</td>
 <td>minimize</td>
-<td>minus-circle</td>
 </tr>
 <tr>
+<td>minus-circle</td>
 <td>minus-square</td>
 <td>minus</td>
 <td>monitor</td>
-<td>moon</td>
 </tr>
 <tr>
+<td>moon</td>
 <td>more-horizontal</td>
 <td>more-vertical</td>
 <td>move</td>
-<td>music</td>
 </tr>
 <tr>
+<td>music</td>
 <td>navigation-2</td>
 <td>navigation</td>
 <td>octagon</td>
-<td>paquete</td>
 </tr>
 <tr>
+<td>package</td>
 <td>paperclip</td>
 <td>pause-circle</td>
 <td>pause</td>
-<td>percent</td>
 </tr>
 <tr>
+<td>percent</td>
 <td>phone-call</td>
 <td>phone-forwarded</td>
 <td>phone-incoming</td>
-<td>phone-missed</td>
 </tr>
 <tr>
+<td>phone-missed</td>
 <td>phone-off</td>
 <td>phone-outgoing</td>
 <td>phone</td>
-<td>pie-chart</td>
 </tr>
 <tr>
+<td>pie-chart</td>
 <td>play-circle</td>
 <td>play</td>
 <td>plus-circle</td>
-<td>plus-square</td>
 </tr>
 <tr>
+<td>plus-square</td>
 <td>plus</td>
 <td>pocket</td>
 <td>power</td>
-<td>printer</td>
 </tr>
 <tr>
+<td>printer</td>
 <td>radio</td>
 <td>refresh-ccw</td>
 <td>refresh-cw</td>
-<td>repeat</td>
 </tr>
 <tr>
-<td>retroceder</td>
+<td>repeat</td>
+<td>rewind</td>
 <td>rotate-ccw</td>
 <td>rotate-cw</td>
-<td>rss</td>
 </tr>
 <tr>
-<td>save</td>
+<td>rss</td>
+<td>guardar</td>
 <td>scissors</td>
 <td>search</td>
-<td>send</td>
 </tr>
 <tr>
+<td>send</td>
 <td>server</td>
 <td>settings</td>
 <td>share-2</td>
-<td>share</td>
 </tr>
 <tr>
+<td>share</td>
 <td>shield-off</td>
 <td>shield</td>
 <td>shopping-bag</td>
+</tr>
+<tr>
 <td>shopping-cart</td>
-</tr>
-<tr>
 <td>shuffle</td>
-<td>barra lateral</td>
+<td>sidebar</td>
 <td>skip-back</td>
-<td>skip-forward</td>
 </tr>
 <tr>
+<td>skip-forward</td>
 <td>slash</td>
 <td>sliders</td>
 <td>smartphone</td>
+</tr>
+<tr>
 <td>speaker</td>
-</tr>
-<tr>
 <td>square</td>
-<td>estrella</td>
+<td>star</td>
 <td>stop-circle</td>
-<td>sun</td>
 </tr>
 <tr>
+<td>sun</td>
 <td>sunrise</td>
 <td>sunset</td>
 <td>tablet</td>
-<td>etiqueta</td>
 </tr>
 <tr>
+<td>tag</td>
 <td>target</td>
 <td>terminal</td>
 <td>thermometer</td>
-<td>thumbs-down</td>
 </tr>
 <tr>
+<td>thumbs-down</td>
 <td>thumbs-up</td>
 <td>toggle-left</td>
 <td>toggle-right</td>
-<td>trash-2</td>
 </tr>
 <tr>
+<td>trash-2</td>
 <td>trash</td>
 <td>trending-down</td>
 <td>trending-up</td>
-<td>triangle</td>
 </tr>
 <tr>
+<td>triangle</td>
 <td>truck</td>
 <td>tv</td>
 <td>type</td>
-<td>umbrella</td>
 </tr>
 <tr>
+<td>umbrella</td>
 <td>underline</td>
 <td>unlock</td>
 <td>upload-cloud</td>
-<td>cargar</td>
 </tr>
 <tr>
+<td>upload</td>
 <td>user-check</td>
 <td>user-minus</td>
 <td>user-plus</td>
-<td>user-x</td>
 </tr>
 <tr>
-<td>usuario</td>
+<td>user-x</td>
+<td>user</td>
 <td>users</td>
 <td>video-off</td>
-<td>video</td>
 </tr>
 <tr>
+<td>video</td>
 <td>voicemail</td>
 <td>volume-1</td>
 <td>volume-2</td>
+</tr>
+<tr>
 <td>volume-x</td>
-</tr>
-<tr>
 <td>volume</td>
-<td>observar</td>
+<td>watch</td>
 <td>wifi-off</td>
-<td>wifi</td>
 </tr>
 <tr>
+<td>wifi</td>
 <td>wind</td>
 <td>x-circle</td>
 <td>x-square</td>
-<td>x</td>
 </tr>
 <tr>
+<td>x</td>
 <td>zap-off</td>
 <td>zap</td>
 <td>zoom-in</td>
-<td>zoom-out</td>
 </tr>
+<tr>
+<td>zoom-out</td>
+<td></td>
+<td></td>
+<td></td>
 </table>

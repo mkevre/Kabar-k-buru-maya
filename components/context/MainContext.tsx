@@ -93,6 +93,7 @@ export type MainContextT = {
   relativePath?: string
   enterpriseServerReleases: EnterpriseServerReleases
   currentPathWithoutLanguage: string
+  userLanguage: string
   allVersions: Record<string, VersionItem>
   currentVersion?: string
   currentProductTree?: ProductTreeNode | null
@@ -106,7 +107,6 @@ export type MainContextT = {
     fullTitle?: string
     introPlainText?: string
     hidden: boolean
-    noEarlyAccessBanner: boolean
     permalinks?: Array<{
       languageCode: string
       relativePath: string
@@ -170,7 +170,6 @@ export const getMainContext = (req: any, res: any): MainContextT => {
         ])
       ),
       hidden: req.context.page.hidden || false,
-      noEarlyAccessBanner: req.context.page.noEarlyAccessBanner || false,
     },
     enterpriseServerReleases: pick(req.context.enterpriseServerReleases, [
       'isOldestReleaseDeprecated',
@@ -179,6 +178,7 @@ export const getMainContext = (req: any, res: any): MainContextT => {
       'supported',
     ]),
     enterpriseServerVersions: req.context.enterpriseServerVersions,
+    userLanguage: req.context.userLanguage || '',
     allVersions: req.context.allVersions,
     currentVersion: req.context.currentVersion,
     currentProductTree: req.context.currentProductTree

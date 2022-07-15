@@ -1,7 +1,7 @@
 ---
-title: Utilizar jobs en un flujo de trabajo
+title: Using jobs in a workflow
 shortTitle: Utilizar jobs en un flujo de trabajo
-intro: Utilizar flujos de trabajo para ejecutar varios jobs.
+intro: Use workflows to run multiple jobs.
 versions:
   fpt: '*'
   ghes: '*'
@@ -17,14 +17,14 @@ miniTocMaxHeadingLevel: 4
 
 {% data reusables.actions.jobs.section-using-jobs-in-a-workflow %}
 
-## Configurar una ID para un job
+## Setting an ID for a job
 
 {% data reusables.actions.jobs.section-using-jobs-in-a-workflow-id %}
 
-## Configurar el nombre de un job
+## Setting a name for a job
 
 {% data reusables.actions.jobs.section-using-jobs-in-a-workflow-name %}
 
-## Definir los jobs de prerrequisito
+## Defining prerequisite jobs
 
 {% data reusables.actions.jobs.section-using-jobs-in-a-workflow-needs %}

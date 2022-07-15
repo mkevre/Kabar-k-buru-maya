@@ -61,6 +61,7 @@ If you're publishing a package that includes a scope prefix, include the scope i
 
 This example stores the `NPM_TOKEN` secret in the `NODE_AUTH_TOKEN` environment variable. When the `setup-node` action creates an *.npmrc* file, it references the token from the `NODE_AUTH_TOKEN` environment variable.
 
+{% raw %}
 ```yaml{:copy}
 name: Publish Package to npmjs
 on:
@@ -70,17 +71,18 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: {% data reusables.actions.action-checkout %}
+      - uses: actions/checkout@v2
       # Setup .npmrc file to publish to npm
-      - uses: {% data reusables.actions.action-setup-node %}
+      - uses: actions/setup-node@v2
         with:
           node-version: '16.x'
           registry-url: 'https://registry.npmjs.org'
       - run: npm ci
       - run: npm publish
         env:
-          NODE_AUTH_TOKEN: {% raw %}${{ secrets.NPM_TOKEN }}{% endraw %}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 ```
+{% endraw %}
 
 In the example above, the `setup-node` action creates an *.npmrc* file on the runner with the following contents:
 
@@ -128,14 +130,14 @@ on:
     types: [created]
 jobs:
   build:
-    runs-on: ubuntu-latest 
+    runs-on: ubuntu-latest {% ifversion fpt or ghes > 3.1 or ghae or ghec %}
     permissions: 
       contents: read
-      packages: write 
+      packages: write {% endif %}
     steps:
-      - uses: {% data reusables.actions.action-checkout %}
+      - uses: actions/checkout@v2
       # Setup .npmrc file to publish to GitHub Packages
-      - uses: {% data reusables.actions.action-setup-node %}
+      - uses: actions/setup-node@v2
         with:
           node-version: '16.x'
           registry-url: 'https://npm.pkg.github.com'
@@ -159,6 +161,7 @@ always-auth=true
 
 If you use the Yarn package manager, you can install and publish packages using Yarn.
 
+{% raw %}
 ```yaml{:copy}
 name: Publish Package to npmjs
 on:
@@ -168,9 +171,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: {% data reusables.actions.action-checkout %}
+      - uses: actions/checkout@v2
       # Setup .npmrc file to publish to npm
-      - uses: {% data reusables.actions.action-setup-node %}
+      - uses: actions/setup-node@v2
         with:
           node-version: '16.x'
           registry-url: 'https://registry.npmjs.org'
@@ -179,5 +182,6 @@ jobs:
       - run: yarn
       - run: yarn publish
         env:
-          NODE_AUTH_TOKEN: {% raw %}${{ secrets.NPM_TOKEN }}{% endraw %}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 ```
+{% endraw %}

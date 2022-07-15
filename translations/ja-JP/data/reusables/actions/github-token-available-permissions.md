@@ -1,4 +1,4 @@
-利用可能なスコープとアクセス値:
+Available scopes and access values:
 
 ```yaml
 permissions:
@@ -17,15 +17,15 @@ permissions:
   statuses: read|write|none
 ```
 
-これらのスコープのいずれかのアクセスを指定した場合、指定されたなかったものはすべて`none`に設定されます。
+If you specify the access for any of these scopes, all of those that are not specified are set to `none`.
 
-以下の構文を使って、読み取りもしくは書き込みアクセスを利用可能なすべてのスコープに定義できます。
+You can use the following syntax to define read or write access for all of the available scopes:
 
 ```yaml
 permissions: read-all|write-all
 ```
 
-以下の構文を使って、利用可能なすべてのスコープの権限を無効化できます。
+You can use the following syntax to disable permissions for all of the available scopes:
 
 ```yaml
 permissions: {}

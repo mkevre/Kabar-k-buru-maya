@@ -4,7 +4,6 @@ intro: '查看 {% data variables.product.prodname_dotcom %} 上的 web 挂钩交
 redirect_from:
   - /webhooks/testing
   - /developers/webhooks-and-events/testing-webhooks
-  - /articles/testing-webhooks
 versions:
   fpt: '*'
   ghes: '*'

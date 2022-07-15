@@ -22,7 +22,7 @@ shortTitle: Crear & probar con Java & Gradle
 
 ## Introducción
 
-Esta guía te muestra cómo crear un flujo de trabajo que realiza la integración continua (CI) para tu proyecto Java usando el sistema de construcción Gradle. El flujo de trabajo que creas te permitirá ver cuándo las confirmaciones de una solicitud de extracción causan la construcción o las fallas de prueba en tu rama por defecto; este enfoque puede ayudar a garantizar que tu código siempre sea correcto. Puedes extender tu flujo de IC a {% ifversion actions-caching %}los archivos de caché y{% endif %} cargar artefactos desde una ejecución de grupo de trabajo.
+Esta guía te muestra cómo crear un flujo de trabajo que realiza la integración continua (CI) para tu proyecto Java usando el sistema de construcción Gradle. El flujo de trabajo que creas te permitirá ver cuándo las confirmaciones de una solicitud de extracción causan la construcción o las fallas de prueba en tu rama por defecto; este enfoque puede ayudar a garantizar que tu código siempre sea correcto. Puedes extender tu flujo de trabajo de CI para almacenar en caché los archivos y cargar artefactos desde una ejecución de flujo de trabajo.
 
 {% ifversion ghae %}
 {% data reusables.actions.self-hosted-runners-software %}
@@ -60,16 +60,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: {% data reusables.actions.action-checkout %}
+      - uses: actions/checkout@v2
       - name: Set up JDK 11
-        uses: {% data reusables.actions.action-setup-java %}
+        uses: actions/setup-java@v2
         with:
           java-version: '11'
           distribution: 'adopt'
       - name: Validate Gradle wrapper
         uses: gradle/wrapper-validation-action@e6e38bacfdf1a337459f332974bb2327a31aaf4b
       - name: Build with Gradle
-        uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
+        uses: gradle/gradle-build-action@937999e9cc2425eddc7fd62d1053baf041147db7
         with:
           arguments: build
 ```
@@ -95,30 +95,28 @@ El flujo de trabajo de inicio ejecutará la tarea `build` por defecto. En la con
 
 Si usas diferentes comandos para construir tu proyecto, o si quieres usar una tarea diferente, puedes especificarlo. Por ejemplo, es posible que desees ejecutar la tarea `package` que está configurada en tu archivo _ci.gradle_.
 
+{% raw %}
 ```yaml{:copy}
 steps:
-  - uses: {% data reusables.actions.action-checkout %}
-  - uses: {% data reusables.actions.action-setup-java %}
+  - uses: actions/checkout@v2
+  - uses: actions/setup-java@v2
     with:
       java-version: '11'
       distribution: 'adopt'
   - name: Validate Gradle wrapper
     uses: gradle/wrapper-validation-action@e6e38bacfdf1a337459f332974bb2327a31aaf4b
   - name: Run the Gradle package task
-    uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
+    uses: gradle/gradle-build-action@937999e9cc2425eddc7fd62d1053baf041147db7
     with:
       arguments: -b ci.gradle package
 ```
-
-{% ifversion actions-caching %}
+{% endraw %}
 
 ## Almacenar dependencias en caché
 
-Tus dependencias de compilación se pueden guardar en caché para acelerar tus ejecuciones de flujo de trabajo. Después de una ejecución exitosa, la `gradle/gradle-build-action` guarda en caché las partes importantes del directorio principal del usuario de Gradle. En los jobs futuros, el caché se restablecerá para que los scripts de compilación no necesiten recompilarse y las dependencias no necesiten descargarse desde los repositorios de paquetes remotos.
+Cuando utilizas ejecutores hospedados en {% data variables.product.prodname_dotcom %}, tus dependencias de compilación pueden almacenarse en caché para acelerar tus ejecuciones de flujo de trabajo. Después de una ejecución exitosa, la `gradle/gradle-build-action` guarda en caché las partes importantes del directorio principal del usuario de Gradle. En los jobs futuros, el caché se restablecerá para que los scripts de compilación no necesiten recompilarse y las dependencias no necesiten descargarse desde los repositorios de paquetes remotos.
 
 El almacenamiento en caché se habilita predeterminadamente cuando se utiliza la acción `gradle/gradle-build-action`. Para obtener más información, consulta [`gradle/gradle-build-action`](https://github.com/gradle/gradle-build-action#caching).
-
-{% endif %}
 
 ## Empaquetar datos de flujo de trabajo como artefactos
 
@@ -126,21 +124,23 @@ Una vez que tu compilación haya tenido éxito y tus pruebas hayan pasado, es po
 
 Por lo general, Gradle creará archivos de salida como JAR, EAR o WAR en el directorio `build/libs`. Puedes cargar los contenidos de ese directorio utilizando la acción `upload-Artifact`.
 
+{% raw %}
 ```yaml{:copy}
 steps:
-  - uses: {% data reusables.actions.action-checkout %}
-  - uses: {% data reusables.actions.action-setup-java %}
+  - uses: actions/checkout@v2
+  - uses: actions/setup-java@v2
     with:
       java-version: '11'
       distribution: 'adopt'
   - name: Validate Gradle wrapper
     uses: gradle/wrapper-validation-action@e6e38bacfdf1a337459f332974bb2327a31aaf4b
   - name: Build with Gradle
-    uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
+    uses: gradle/gradle-build-action@937999e9cc2425eddc7fd62d1053baf041147db7
     with:
       arguments: build
-  - uses: {% data reusables.actions.action-upload-artifact %}
+  - uses: actions/upload-artifact@v3
     with:
       name: Package
       path: build/libs
 ```
+{% endraw %}

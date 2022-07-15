@@ -10,7 +10,6 @@ type LanguageItem = {
 
 export type LanguagesContextT = {
   languages: Record<string, LanguageItem>
-  userLanguage: string
 }
 
 export const LanguagesContext = createContext<LanguagesContextT | null>(null)

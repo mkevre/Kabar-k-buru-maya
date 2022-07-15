@@ -1,5 +1,5 @@
 ---
-title: Políticas de Privacidad
+title: Privacy Policies
 versions:
   fpt: '*'
 topics:
@@ -10,6 +10,7 @@ children:
   - /global-privacy-practices
   - /github-data-protection-agreement
   - /github-subprocessors-and-cookies
+  - /githubs-notice-about-the-california-consumer-privacy-act
   - /github-codespaces-privacy-statement
   - /github-candidate-privacy-policy
 ---

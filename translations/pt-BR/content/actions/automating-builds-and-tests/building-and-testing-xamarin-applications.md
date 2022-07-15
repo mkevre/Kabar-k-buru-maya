@@ -45,6 +45,7 @@ Recomendamos que você tenha um entendimento básico do Xamarin, .NET Core SDK, 
 
 O exemplo abaixo demonstra como alterar as versões padrão do Xamarin SDK e criar um aplicativo Xamarin.iOS.
 
+{% raw %}
 ```yaml
 name: Build Xamarin.iOS app
 
@@ -56,7 +57,7 @@ jobs:
     runs-on: macos-latest
 
     steps:
-    - uses: {% data reusables.actions.action-checkout %}
+    - uses: actions/checkout@v2
     - name: Set default Xamarin SDK versions
       run: |
         $VM_ASSETS/select-xamarin-sdk-v2.sh --mono=6.12 --ios=14.10
@@ -68,7 +69,7 @@ jobs:
         sudo xcode-select -s $XCODE_ROOT
 
     - name: Setup .NET Core SDK 5.0.x
-      uses: {% data reusables.actions.action-setup-dotnet %}
+      uses: actions/setup-dotnet@v1
       with:
         dotnet-version: '5.0.x'
 
@@ -78,11 +79,13 @@ jobs:
     - name: Build
       run: msbuild <csproj_file_path> /p:Configuration=Debug /p:Platform=iPhoneSimulator /t:Rebuild
 ```
+{% endraw %}
 
 ## Criar aplicativos Xamarin.Android
 
 O exemplo abaixo demonstra como alterar as versões padrão do Xamarin SDK e criar um aplicativo Xamarin.Android.
 
+{% raw %}
 ```yaml
 name: Build Xamarin.Android app
 
@@ -94,13 +97,13 @@ jobs:
     runs-on: macos-latest
 
     steps:
-    - uses: {% data reusables.actions.action-checkout %}
+    - uses: actions/checkout@v2
     - name: Set default Xamarin SDK versions
       run: |
         $VM_ASSETS/select-xamarin-sdk-v2.sh --mono=6.10 --android=10.2
 
     - name: Setup .NET Core SDK 5.0.x
-      uses: {% data reusables.actions.action-setup-dotnet %}
+      uses: actions/setup-dotnet@v1
       with:
         dotnet-version: '5.0.x'
 
@@ -110,6 +113,7 @@ jobs:
     - name: Build
       run: msbuild <csproj_file_path> /t:PackageForAndroid /p:Configuration=Debug
 ```
+{% endraw %}
 
 ## Especificando uma versão do .NET
 

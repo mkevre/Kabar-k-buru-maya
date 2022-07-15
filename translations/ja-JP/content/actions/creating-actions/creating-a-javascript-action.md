@@ -238,6 +238,7 @@ When this workflow is triggered, the runner will download the `hello-world-javas
 
 ワークフローコードを、あなたのアクションのリポジトリの `.github/workflows/main.yml` ファイルにコピーします。 `who-to-greet`の入力を自分の名前に置き換えることもできます。
 
+{% raw %}
 **.github/workflows/main.yml**
 ```yaml{:copy}
 on: [push]
@@ -247,19 +248,20 @@ jobs:
     runs-on: ubuntu-latest
     name: A job to say hello
     steps:
-      # To use this repository's private action,
-      # you must check out the repository
+      # このリポジトリのプライベートアクションを使用するには
+      # リポジトリをチェックアウトする
       - name: Checkout
-        uses: {% data reusables.actions.action-checkout %}
+        uses: actions/checkout@v2
       - name: Hello world action step
         uses: ./ # Uses an action in the root directory
         id: hello
         with:
           who-to-greet: 'Mona the Octocat'
-      # Use the output from the `hello` step
+      # 「hello」ステップの出力を使用する
       - name: Get the output time
-        run: echo "The time was {% raw %}${{ steps.hello.outputs.time }}{% endraw %}"
+        run: echo "The time was ${{ steps.hello.outputs.time }}"
 ```
+{% endraw %}
 
 リポジトリから [**Actions**] タブをクリックして、最新のワークフロー実行を選択します。 Under **Jobs** or in the visualization graph, click **A job to say hello**. "Hello Mona the Octocat"、または`who-to-greet` 入力に指定した名前とタイムスタンプがログに出力されます。
 

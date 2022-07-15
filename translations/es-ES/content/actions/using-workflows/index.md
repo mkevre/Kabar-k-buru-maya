@@ -1,7 +1,7 @@
 ---
 title: Utilizar flujos de trabajo
 shortTitle: Utilizar flujos de trabajo
-intro: 'Crear y administrar flujos de trabajo de las {% data variables.product.prodname_actions %}.'
+intro: 'Creating and managing {% data variables.product.prodname_actions %} workflows.'
 redirect_from:
   - /actions/configuring-and-managing-workflows/configuring-a-workflow
   - /articles/creating-a-workflow-with-github-actions
@@ -21,17 +21,17 @@ versions:
   ghae: '*'
   ghec: '*'
 children:
-  - /about-workflows
   - /triggering-a-workflow
   - /events-that-trigger-workflows
   - /workflow-syntax-for-github-actions
   - /workflow-commands-for-github-actions
   - /reusing-workflows
-  - /caching-dependencies-to-speed-up-workflows
-  - /storing-workflow-data-as-artifacts
+  - /advanced-workflow-features
   - /creating-starter-workflows-for-your-organization
   - /using-starter-workflows
   - /sharing-workflows-secrets-and-runners-with-your-organization
+  - /caching-dependencies-to-speed-up-workflows
+  - /storing-workflow-data-as-artifacts
   - /using-github-cli-in-workflows
 ---
 

@@ -11,11 +11,13 @@ versions:
   ghae: '*'
   ghec: '*'
 type: tutorial
+hidden: true
 topics:
   - CI
   - Node
   - JavaScript
 shortTitle: 构建和测试 Node.js
+hasExperimentalAlternative: true
 ---
 
 {% data reusables.actions.enterprise-beta %}
@@ -40,6 +42,7 @@ shortTitle: 构建和测试 Node.js
 
 要快速开始，请将入门工作流程添加到仓库的 `.github/workflows` 目录中。 下面显示的工作流假定仓库的默认分支是 `main`。
 
+{% raw %}
 ```yaml{:copy}
 name: Node.js CI
 
@@ -59,15 +62,16 @@ jobs:
         node-version: [10.x, 12.x, 14.x, 15.x]
 
     steps:
-      - uses: {% data reusables.actions.action-checkout %}
-      - name: Use Node.js {% raw %}${{ matrix.node-version }}{% endraw %}
-        uses: {% data reusables.actions.action-setup-node %}
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
         with:
-          node-version: {% raw %}${{ matrix.node-version }}{% endraw %}
+          node-version: ${{ matrix.node-version }}
       - run: npm ci
       - run: npm run build --if-present
       - run: npm test
 ```
+{% endraw %}
 
 {% data reusables.actions.example-github-runner %}
 
@@ -81,18 +85,20 @@ jobs:
 
 每个作业都可以使用 `matrix` 上下文访问矩阵 `node-version` 阵列中定义的值。 `setup-node` 操作使用上下文作为 `node-version` 输入。 `setup-node` 操作在构建和测试代码之前使用不同的 Node.js 版本配置每个作业。 有关矩阵策略和上下文的更多信息，请参阅“[{% data variables.product.prodname_actions %} 的工作流程语法](/actions/automating-your-workflow-with-github-actions/workflow-syntax-for-github-actions#jobsjob_idstrategymatrix)”和“[上下文](/actions/learn-github-actions/contexts)”。
 
+{% raw %}
 ```yaml{:copy}
 strategy:
   matrix:
     node-version: [10.x, 12.x, 14.x, 15.x]
 
 steps:
-- uses: {% data reusables.actions.action-checkout %}
-- name: Use Node.js {% raw %}${{ matrix.node-version }}{% endraw %}
-  uses: {% data reusables.actions.action-setup-node %}
+- uses: actions/checkout@v2
+- name: Use Node.js ${{ matrix.node-version }}
+  uses: actions/setup-node@v2
   with:
-    node-version: {% raw %}${{ matrix.node-version }}{% endraw %}
+    node-version: ${{ matrix.node-version }}
 ```
+{% endraw %}
 
 您也可以构建和测试精确的 Node.js 版本。
 
@@ -104,6 +110,7 @@ strategy:
 
 或者，您也可以使用单个版本的 Node.js 构建和测试。
 
+{% raw %}
 ```yaml{:copy}
 name: Node.js CI
 
@@ -115,15 +122,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: {% data reusables.actions.action-checkout %}
+      - uses: actions/checkout@v2
       - name: Use Node.js
-        uses: {% data reusables.actions.action-setup-node %}
+        uses: actions/setup-node@v2
         with:
           node-version: '12.x'
       - run: npm ci
       - run: npm run build --if-present
       - run: npm test
 ```
+{% endraw %}
 
 如果不指定 Node.js 版本，{% data variables.product.prodname_dotcom %} 将使用环境的默认 Node.js 版本。
 {% ifversion ghae %} {% data reusables.actions.self-hosted-runners-software %}
@@ -134,7 +142,7 @@ jobs:
 
 {% data variables.product.prodname_dotcom %} 托管的运行器安装了 npm 和 Yarn 依赖项管理器。 在构建和测试代码之前，可以使用 npm 和 Yarn 在工作流程中安装依赖项。 Windows 和 Linux {% data variables.product.prodname_dotcom %} 托管的运行器也安装了 Grunt、Gulp 和 Bower。
 
-{% ifversion actions-caching %}您也可以缓存依赖项来加快工作流程。 更多信息请参阅“[缓存依赖项以加快工作流程](/actions/using-workflows/caching-dependencies-to-speed-up-workflows)”。{% endif %}
+使用 {% data variables.product.prodname_dotcom %} 托管的运行器时，您还可以缓存依赖项以加速工作流程。 更多信息请参阅“<a href="/actions/guides/caching-dependencies-to-speed-up-workflows" class="dotcom-only">缓存依赖项以加快工作流程</a>”。
 
 ### 使用 npm 的示例
 
@@ -142,9 +150,9 @@ jobs:
 
 ```yaml{:copy}
 steps:
-- uses: {% data reusables.actions.action-checkout %}
+- uses: actions/checkout@v2
 - name: Use Node.js
-  uses: {% data reusables.actions.action-setup-node %}
+  uses: actions/setup-node@v2
   with:
     node-version: '12.x'
 - name: Install dependencies
@@ -153,16 +161,18 @@ steps:
 
 使用 `npm ci` 将版本安装到 *package-lock.json* 或 *npm-shrinkwraw.json* 文件并阻止更新锁定文件。 使用 `npm ci` 通常比运行 `npm install` 更快。 更多信息请参阅 [`npm ci`](https://docs.npmjs.com/cli/ci.html) 和“[引入 `npm ci` 以进行更快、更可靠的构建](https://blog.npmjs.org/post/171556855892/introducing-npm-ci-for-faster-more-reliable)”。
 
+{% raw %}
 ```yaml{:copy}
 steps:
-- uses: {% data reusables.actions.action-checkout %}
+- uses: actions/checkout@v2
 - name: Use Node.js
-  uses: {% data reusables.actions.action-setup-node %}
+  uses: actions/setup-node@v2
   with:
     node-version: '12.x'
 - name: Install dependencies
   run: npm ci
 ```
+{% endraw %}
 
 ### 使用 Yarn 的示例
 
@@ -170,9 +180,9 @@ steps:
 
 ```yaml{:copy}
 steps:
-- uses: {% data reusables.actions.action-checkout %}
+- uses: actions/checkout@v2
 - name: Use Node.js
-  uses: {% data reusables.actions.action-setup-node %}
+  uses: actions/setup-node@v2
   with:
     node-version: '12.x'
 - name: Install dependencies
@@ -183,9 +193,9 @@ steps:
 
 ```yaml{:copy}
 steps:
-- uses: {% data reusables.actions.action-checkout %}
+- uses: actions/checkout@v2
 - name: Use Node.js
-  uses: {% data reusables.actions.action-setup-node %}
+  uses: actions/setup-node@v2
   with:
     node-version: '12.x'
 - name: Install dependencies
@@ -202,11 +212,12 @@ steps:
 
 在安装依赖项之前，使用 `setup-node` 操作创建 *.npmrc* 文件。 该操作有两个输入参数。 `node-version` 参数设置 Node.js 版本，`registry-url` 参数设置默认注册表。 如果包注册表使用作用域，您必须使用 `scope` 参数。 更多信息请参阅 [`npm-scope`](https://docs.npmjs.com/misc/scope)。
 
+{% raw %}
 ```yaml{:copy}
 steps:
-- uses: {% data reusables.actions.action-checkout %}
+- uses: actions/checkout@v2
 - name: Use Node.js
-  uses: {% data reusables.actions.action-setup-node %}
+  uses: actions/setup-node@v2
   with:
     always-auth: true
     node-version: '12.x'
@@ -215,8 +226,9 @@ steps:
 - name: Install dependencies
   run: npm ci
   env:
-    NODE_AUTH_TOKEN: {% raw %}${{ secrets.NPM_TOKEN }}{% endraw %}
+    NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
 ```
+{% endraw %}
 
 上面的示例创建了一个包含以下内容的 *.npmrc* 文件：
 
@@ -226,18 +238,15 @@ steps:
 always-auth=true
 ```
 
-{% ifversion actions-caching %}
-
 ### 缓存依赖项示例
 
-您可以使用 [`setup-node` 操作](https://github.com/actions/setup-node)来缓存和还原依赖项。
+使用 {% data variables.product.prodname_dotcom %} 托管的运行器时，您可以使用 [`setup-node` 操作](https://github.com/actions/setup-node)缓存和恢复依赖项。
 
 以下示例缓存 npm 的依赖项。
-
 ```yaml{:copy}
 steps:
-- uses: {% data reusables.actions.action-checkout %}
-- uses: {% data reusables.actions.action-setup-node %}
+- uses: actions/checkout@v2
+- uses: actions/setup-node@v2
   with:
     node-version: '14'
     cache: 'npm'
@@ -249,8 +258,8 @@ steps:
 
 ```yaml{:copy}
 steps:
-- uses: {% data reusables.actions.action-checkout %}
-- uses: {% data reusables.actions.action-setup-node %}
+- uses: actions/checkout@v2
+- uses: actions/setup-node@v2
   with:
     node-version: '14'
     cache: 'yarn'
@@ -266,11 +275,11 @@ steps:
 # NOTE: pnpm caching support requires pnpm version >= 6.10.0
 
 steps:
-- uses: {% data reusables.actions.action-checkout %}
+- uses: actions/checkout@v2
 - uses: pnpm/action-setup@646cdf48217256a3d0b80361c5a50727664284f2
   with:
     version: 6.10.0
-- uses: {% data reusables.actions.action-setup-node %}
+- uses: actions/setup-node@v2
   with:
     node-version: '14'
     cache: 'pnpm'
@@ -278,9 +287,7 @@ steps:
 - run: pnpm test
 ```
 
-如果您有自定义要求或需要更精确的缓存控制，则可以使用 [`cache` 操作](https://github.com/marketplace/actions/cache)。 更多信息请参阅“[缓存依赖项以加快工作流程](/actions/using-workflows/caching-dependencies-to-speed-up-workflows)”。
-
-{% endif %}
+如果您有自定义要求或需要更精确的缓存控制，则可以使用 [`cache` 操作](https://github.com/marketplace/actions/cache)。 更多信息请参阅“<a href="/actions/guides/caching-dependencies-to-speed-up-workflows" class="dotcom-only">缓存依赖项以加快工作流程</a>”。
 
 ## 构建和测试代码
 
@@ -288,9 +295,9 @@ steps:
 
 ```yaml{:copy}
 steps:
-- uses: {% data reusables.actions.action-checkout %}
+- uses: actions/checkout@v2
 - name: Use Node.js
-  uses: {% data reusables.actions.action-setup-node %}
+  uses: actions/setup-node@v2
   with:
     node-version: '12.x'
 - run: npm install
