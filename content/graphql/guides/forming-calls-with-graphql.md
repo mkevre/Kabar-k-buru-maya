@@ -32,15 +32,14 @@ The following scopes are recommended:
 
 
 ```
+user{% ifversion not ghae %}
+public_repo{% endif %}
 repo
 repo_deployment
-read:packages
+repo:status
+read:repo_hook
 read:org
 read:public_key
-read:repo_hook
-user
-read:discussion
-read:enterprise
 read:gpg_key
 ```
 

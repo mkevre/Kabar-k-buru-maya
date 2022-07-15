@@ -4,7 +4,7 @@ intro: You can prevent your enterprise's information from leaking into personal 
 product: '{% data reusables.gated-features.restrict-email-domain %}'
 versions:
   ghec: '*'
-  ghes: '*'
+  ghes: '>=3.2'
 permissions: Enterprise owners can restrict email notifications for an enterprise.
 type: how_to
 topics:

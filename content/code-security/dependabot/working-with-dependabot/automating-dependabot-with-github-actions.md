@@ -82,6 +82,8 @@ If you have a workflow that will be triggered by {% data variables.product.prodn
 
 To access a private container registry on AWS with a user name and password, a workflow must include a secret for `username` and `password`. In the example below, when {% data variables.product.prodname_dependabot %} triggers the workflow, the {% data variables.product.prodname_dependabot %} secrets with the names `READONLY_AWS_ACCESS_KEY_ID` and `READONLY_AWS_ACCESS_KEY` are used. If another actor triggers the workflow, the actions secrets with those names are used.
 
+{% raw %}
+
 ```yaml
 name: CI
 on:
@@ -93,18 +95,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: {% data reusables.actions.action-checkout %}
+        uses: actions/checkout@v2
 
       - name: Login to private container registry for dependencies
         uses: docker/login-action@v1
         with:
           registry: https://1234567890.dkr.ecr.us-east-1.amazonaws.com
-          username: {% raw %}${{ secrets.READONLY_AWS_ACCESS_KEY_ID }}{% endraw %}
-          password: {% raw %}${{ secrets.READONLY_AWS_ACCESS_KEY }}{% endraw %}
+          username: ${{ secrets.READONLY_AWS_ACCESS_KEY_ID }}
+          password: ${{ secrets.READONLY_AWS_ACCESS_KEY }}
 
       - name: Build the Docker image
         run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
 ```
+
+{% endraw %}
 
 {% endif %}
 
@@ -124,6 +128,8 @@ If your workflow needs access to secrets or a `GITHUB_TOKEN` with write permissi
 
 Below is a simple example of a `pull_request` workflow that might now be failing:
 
+{% raw %}
+
 ```yaml
 ### This workflow now has no secrets and a read-only token
 name: Dependabot Workflow
@@ -134,10 +140,12 @@ jobs:
   dependabot:
     runs-on: ubuntu-latest
     # Always check the actor is Dependabot to prevent your workflow from failing on non-Dependabot PRs
-    if: {% raw %}${{ github.actor == 'dependabot[bot]' }}{% endraw %}
+    if: ${{ github.actor == 'dependabot[bot]' }}
     steps:
-      - uses: {% data reusables.actions.action-checkout %}
+      - uses: actions/checkout@v2
 ```
+
+{% endraw %}
 
 You can replace `pull_request` with `pull_request_target`, which is used for pull requests from forks, and explicitly check out the pull request `HEAD`.
 
@@ -146,6 +154,8 @@ You can replace `pull_request` with `pull_request_target`, which is used for pul
 **Warning:** Using `pull_request_target` as a substitute for `pull_request` exposes you to insecure behavior. We recommend you use the two workflow method, as described below in "[Handling `push` events](#handling-push-events)."
 
 {% endwarning %}
+
+{% raw %}
 
 ```yaml
 ### This workflow has access to secrets and a read-write token
@@ -159,14 +169,16 @@ permissions:
 jobs:
   dependabot:
     runs-on: ubuntu-latest
-    if: {% raw %}${{ github.actor == 'dependabot[bot]' }}{% endraw %}
+    if: ${{ github.actor == 'dependabot[bot]' }}
     steps:
-      - uses: {% data reusables.actions.action-checkout %}
+      - uses: actions/checkout@v2
         with:
           # Check out the pull request HEAD
-          ref: {% raw %}${{ github.event.pull_request.head.sha }}{% endraw %}
-          github-token: {% raw %}${{ secrets.GITHUB_TOKEN }}{% endraw %}
+          ref: ${{ github.event.pull_request.head.sha }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
 ```
+
+{% endraw %}
 
 It is also strongly recommended that you downscope the permissions granted to the `GITHUB_TOKEN` in order to avoid leaking a token with more privilege than necessary. For more information, see "[Permissions for the `GITHUB_TOKEN`](/actions/reference/authentication-in-a-workflow#permissions-for-the-github_token)."
 
@@ -452,9 +464,9 @@ jobs:
 
 ### Enable auto-merge on a pull request
 
-If you want to allow maintainers to mark certain pull requests for auto-merge, you can use {% data variables.product.prodname_dotcom %}'s auto-merge functionality. This enables the pull request to be merged when all required tests and approvals are successfully met. For more information on auto-merge, see "[Automatically merging a pull request](/pull-requests/collaborating-with-pull-requests/incorporating-changes-from-a-pull-request/automatically-merging-a-pull-request)."
+If you want to auto-merge your pull requests, you can use {% data variables.product.prodname_dotcom %}'s auto-merge functionality. This enables the pull request to be merged when all required tests and approvals are successfully met. For more information on auto-merge, see "[Automatically merging a pull request"](/pull-requests/collaborating-with-pull-requests/incorporating-changes-from-a-pull-request/automatically-merging-a-pull-request)."
 
-You can instead use {% data variables.product.prodname_actions %} and the {% data variables.product.prodname_cli %}. Here is an example that auto merges all patch updates to `my-dependency`:
+Here is an example of enabling auto-merge for all patch updates to `my-dependency`:
 
 {% ifversion ghes = 3.3 %}
 
@@ -465,6 +477,7 @@ name: Dependabot auto-merge
 on: pull_request_target
 
 permissions:
+  pull-requests: write
   contents: write
 
 jobs:
@@ -496,6 +509,7 @@ name: Dependabot auto-merge
 on: pull_request
 
 permissions:
+  pull-requests: write
   contents: write
 
 jobs:

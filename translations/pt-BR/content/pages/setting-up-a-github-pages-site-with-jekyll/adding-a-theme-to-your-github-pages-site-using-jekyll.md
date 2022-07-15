@@ -49,7 +49,7 @@ Pessoas com permissões de gravação para um repositório podem adicionar um te
   ---
   ---
 
-  @import "{% raw %}{{ site.theme }}{% endraw %}";
+  @import "{{ site.theme }}";
   ```
 3. Adicione o CSS ou Sass personalizado (incluindo importações) que deseja imediatamente após a linha `@import`.
 

@@ -22,7 +22,6 @@ children:
   - /marking-issues-or-pull-requests-as-a-duplicate
   - /pinning-an-issue-to-your-repository
   - /transferring-an-issue-to-another-repository
-  - /closing-an-issue
   - /deleting-an-issue
   - /planning-and-tracking-work-for-your-team-or-project
 redirect_from:

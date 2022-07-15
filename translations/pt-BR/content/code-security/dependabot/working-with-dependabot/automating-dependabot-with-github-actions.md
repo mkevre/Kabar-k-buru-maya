@@ -82,6 +82,8 @@ Se você tiver um fluxo de trabalho que será acionado por {% data variables.pro
 
 Para acessar um registro de contêiner privado no AWS com um nome de usuário e senha, um fluxo de trabalho deverá incluir um segredo para `nome de usuário` e `senha`. No exemplo abaixo, quando {% data variables.product.prodname_dependabot %} aciona o fluxo de trabalho, os segredos de {% data variables.product.prodname_dependabot %} com os nomes `READONLY_AWS_ACCESS_KEY_ID` e `READONLY_AWS_ACCESS_KEY` são usados. Se outro ator disparar o fluxo de trabalho, as ações secretas com esses nomes serão usadas.
 
+{% raw %}
+
 ```yaml
 name: CI
 on:
@@ -93,18 +95,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: {% data reusables.actions.action-checkout %}
+        uses: actions/checkout@v2
 
       - name: Login to private container registry for dependencies
         uses: docker/login-action@v1
         with:
           registry: https://1234567890.dkr.ecr.us-east-1.amazonaws.com
-          username: {% raw %}${{ secrets.READONLY_AWS_ACCESS_KEY_ID }}{% endraw %}
-          password: {% raw %}${{ secrets.READONLY_AWS_ACCESS_KEY }}{% endraw %}
+          username: ${{ secrets.READONLY_AWS_ACCESS_KEY_ID }}
+          password: ${{ secrets.READONLY_AWS_ACCESS_KEY }}
 
       - name: Build the Docker image
         run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
 ```
+
+{% endraw %}
 
 {% endif %}
 
@@ -124,6 +128,8 @@ Se o fluxo de trabalho precisar de acesso a segredos ou um `GITHUB_TOKEN` com pe
 
 Abaixo está um exemplo simples de um fluxo de trabalho `pull_request` que agora pode ter falha:
 
+{% raw %}
+
 ```yaml
 ### This workflow now has no secrets and a read-only token
 name: Dependabot Workflow
@@ -134,10 +140,12 @@ jobs:
   dependabot:
     runs-on: ubuntu-latest
     # Always check the actor is Dependabot to prevent your workflow from failing on non-Dependabot PRs
-    if: {% raw %}${{ github.actor == 'dependabot[bot]' }}{% endraw %}
+    if: ${{ github.actor == 'dependabot[bot]' }}
     steps:
-      - uses: {% data reusables.actions.action-checkout %}
+      - uses: actions/checkout@v2
 ```
+
+{% endraw %}
 
 Você pode substituir `pull_request` com `pull_request_target`, que é usado para pull requests a partir da bifurcação e fazer checkout explicitamente do `HEAD` do o pull request.
 
@@ -146,6 +154,8 @@ Você pode substituir `pull_request` com `pull_request_target`, que é usado par
 **Aviso:** Usar `pull_request_target` como um substituto para `pull_request` expõe você a um comportamento inseguro. Recomendamos que você use o método de fluxo de trabalho, conforme descrito abaixo em "[Gerenciar `eventos` de push](#handling-push-events).
 
 {% endwarning %}
+
+{% raw %}
 
 ```yaml
 ### This workflow has access to secrets and a read-write token
@@ -159,14 +169,16 @@ permissions:
 jobs:
   dependabot:
     runs-on: ubuntu-latest
-    if: {% raw %}${{ github.actor == 'dependabot[bot]' }}{% endraw %}
+    if: ${{ github.actor == 'dependabot[bot]' }}
     steps:
-      - uses: {% data reusables.actions.action-checkout %}
+      - uses: actions/checkout@v2
         with:
           # Check out the pull request HEAD
-          ref: {% raw %}${{ github.event.pull_request.head.sha }}{% endraw %}
-          github-token: {% raw %}${{ secrets.GITHUB_TOKEN }}{% endraw %}
+          ref: ${{ github.event.pull_request.head.sha }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
 ```
+
+{% endraw %}
 
 Também é altamente recomendável que você reduza o escopo das permissões concedidas ao `GITHUB_TOKEN` para evitar vazamento de um token com mais privilégios do que o necessário. Para obter mais informações, consulte "[Permissões para o `GITHUB_TOKEN`](/actions/reference/authentication-in-a-workflow#permissions-for-the-github_token)".
 
@@ -452,9 +464,9 @@ jobs:
 
 ### Habilitar o merge automático em um pull request
 
-Se você quiser permitir que os mantenedores marquem certos pull requests para o merge automático, você pode usar a funcionalidade de merge automático de {% data variables.product.prodname_dotcom %}. Isto permite que o pull request seja mesclado quando todos os testes e aprovações forem cumpridos com sucesso. Para obter mais informações sobre merge automático, consulte "[Fazer merge automático de um pull request](/pull-requests/collaborating-with-pull-requests/incorporating-changes-from-a-pull-request/automatically-merging-a-pull-request)".
+Se você quiser fazer merge automático dos seus pull requests, você poderá usar a funcionalidade de merge automático de {% data variables.product.prodname_dotcom %}. Isto permite que o pull request seja mesclado quando todos os testes e aprovações forem cumpridos com sucesso. Para obter mais informações sobre merge automático, consulte "[Fazer merge automático de um pull request"](/pull-requests/collaborating-with-pull-requests/incorporating-changes-from-a-pull-request/automatically-merging-a-pull-request)".
 
-Em vez disso, você pode usar {% data variables.product.prodname_actions %} e {% data variables.product.prodname_cli %}. Aqui está um exemplo que faz o merge automático de todas as atualizações do patch para `my-dependency`:
+Aqui está um exemplo de como habilitar o merge automático para todas as atualizações de patch para `my-dependency`:
 
 {% ifversion ghes = 3.3 %}
 
@@ -465,6 +477,7 @@ name: Dependabot auto-merge
 on: pull_request_target
 
 permissions:
+  pull-requests: write
   contents: write
 
 jobs:
@@ -496,6 +509,7 @@ name: Dependabot auto-merge
 on: pull_request
 
 permissions:
+  pull-requests: write
   contents: write
 
 jobs:

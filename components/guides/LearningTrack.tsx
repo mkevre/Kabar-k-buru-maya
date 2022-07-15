@@ -51,52 +51,61 @@ export const LearningTrack = ({ track }: Props) => {
 
         {track && track.guides && (
           <div style={{ counterReset: 'li' }}>
-            <ActionList as="ol" variant="full">
-              {track?.guides?.slice(0, numVisible).map((guide) => {
-                return (
-                  <ActionList.Item
-                    as="li"
-                    key={guide.href + track?.trackName}
-                    className="width-full p-0"
-                    sx={{
-                      position: 'relative',
-                      borderRadius: 0,
-                      ':hover': {
+            <ActionList
+              {...{ as: 'ol' }}
+              items={track?.guides?.slice(0, numVisible).map((guide) => {
+                return {
+                  renderItem: () => (
+                    <ActionList.Item
+                      as="li"
+                      key={guide.href + track?.trackName}
+                      sx={{
+                        position: 'relative',
                         borderRadius: 0,
-                      },
-                      ':before': {
-                        width: 'calc(1.5rem - 0px)',
-                        height: 'calc(1.5rem - 0px)',
-                        fontSize: 'calc(1rem - 1px)',
-                        margin: '22px 0 0 1rem',
-                        content: 'counter(li)',
-                        counterIncrement: 'li',
-                        position: 'absolute',
-                        left: 0,
-                        color: 'var(--color-canvas-default)',
-                        fontWeight: 500,
-                        textAlign: 'center',
-                        borderRadius: '50%',
-                        backgroundColor: 'var(--color-fg-default)',
-                      },
-                    }}
-                  >
-                    <a
-                      className="rounded-0 pl-7 py-4 width-full d-block Box-row d-flex flex-items-center color-fg-default no-underline"
-                      href={`${guide.href}?learn=${track?.trackName}&learnProduct=${track?.trackProduct}`}
+                        padding: 0,
+                        ':hover': {
+                          borderRadius: 0,
+                        },
+                        ':last-of-type': {
+                          marginBottom: '-8px',
+                        },
+                        ':first-of-type': {
+                          marginTop: '-8px',
+                        },
+                        ':before': {
+                          width: 'calc(1.5rem - 0px)',
+                          height: 'calc(1.5rem - 0px)',
+                          fontSize: 'calc(1rem - 1px)',
+                          margin: '22px 0 0 1rem',
+                          content: 'counter(li)',
+                          counterIncrement: 'li',
+                          position: 'absolute',
+                          left: 0,
+                          color: 'var(--color-canvas-default)',
+                          fontWeight: 500,
+                          textAlign: 'center',
+                          borderRadius: '50%',
+                          backgroundColor: 'var(--color-fg-default)',
+                        },
+                      }}
                     >
-                      <h4
-                        className="flex-auto pr-2 f5"
-                        dangerouslySetInnerHTML={{ __html: guide.title }}
-                      />
-                      <div className="color-fg-muted h6 text-uppercase flex-shrink-0">
-                        {t('guide_types')[guide.page?.type || '']}
-                      </div>
-                    </a>
-                  </ActionList.Item>
-                )
+                      <a
+                        className="rounded-0 pl-7 py-4 width-full d-block Box-row d-flex flex-items-center color-fg-default no-underline"
+                        href={`${guide.href}?learn=${track?.trackName}&learnProduct=${track?.trackProduct}`}
+                      >
+                        <h4
+                          className="flex-auto pr-2 f5"
+                          dangerouslySetInnerHTML={{ __html: guide.title }}
+                        />
+                        <div className="color-fg-muted h6 text-uppercase flex-shrink-0">
+                          {t('guide_types')[guide.page?.type || '']}
+                        </div>
+                      </a>
+                    </ActionList.Item>
+                  ),
+                }
               })}
-            </ActionList>
+            ></ActionList>
           </div>
         )}
         {

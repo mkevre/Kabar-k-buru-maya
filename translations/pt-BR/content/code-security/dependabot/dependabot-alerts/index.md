@@ -6,7 +6,7 @@ allowTitleToDifferFromFilename: true
 versions:
   fpt: '*'
   ghes: '*'
-  ghae: '*'
+  ghae: issue-4864
   ghec: '*'
 topics:
   - Dependabot
@@ -15,10 +15,9 @@ topics:
   - Repositories
   - Dependencies
 children:
-  - /browsing-security-advisories-in-the-github-advisory-database
+  - /browsing-security-vulnerabilities-in-the-github-advisory-database
   - /editing-security-advisories-in-the-github-advisory-database
   - /about-dependabot-alerts
-  - /configuring-dependabot-alerts
   - /viewing-and-updating-dependabot-alerts
   - /configuring-notifications-for-dependabot-alerts
 ---
