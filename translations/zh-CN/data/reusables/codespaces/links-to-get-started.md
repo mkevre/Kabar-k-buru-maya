@@ -1,0 +1,1 @@
+要开始使用 {% data variables.product.prodname_codespaces %}，请参阅“[{% data variables.product.prodname_github_codespaces %}](/codespaces/getting-started/quickstart)快速入门</0>”。 To learn more about how {% data variables.product.prodname_codespaces %} works, see "[Deep dive into {% data variables.product.prodname_github_codespaces %}](/codespaces/getting-started/deep-dive)."
