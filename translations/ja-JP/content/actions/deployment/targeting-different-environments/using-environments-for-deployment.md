@@ -18,7 +18,7 @@ versions:
 
 ## 環境について
 
-環境は、`production`、`staging`、`development`のような一般的なターゲットを記述するために使われます。 {% data variables.product.prodname_actions %}ワークフローが環境にデプロイする場合、その環境はリポジトリのメインページに表示されます。 For more information about viewing deployments to environments, see "[Viewing deployment history](/developers/overview/viewing-deployment-history)."
+Environments are used to describe a general deployment target like `production`, `staging`, or `development`. When a {% data variables.product.prodname_actions %} workflow deploys to an environment, the environment is displayed on the main page of the repository. For more information about viewing deployments to environments, see "[Viewing deployment history](/developers/overview/viewing-deployment-history)."
 
 保護ルールとシークレットを持つ環境を設定できます。 ワークフローのジョブが環境を参照すると、その環境の保護ルールをすべてパスするまではジョブは開始されません。 すべての環境の保護ルールをパスするまで、ジョブは環境で定義されているシークレットにアクセスできません。
 
@@ -34,7 +34,7 @@ Organizations that use {% data variables.product.prodname_ghe_cloud %} can confi
 
 ## 環境の保護ルール
 
-環境の保護ルールは、その環境を参照しているジョブが進行する前に特定の条件をパスすることを要求します。 環境の保護ルールでは、手動による承認を要求したり、ジョブを遅延させたり、環境を特定のブランチに制限したりすることができます。
+環境の保護ルールは、その環境を参照しているジョブが進行する前に特定の条件をパスすることを要求します。 {% ifversion fpt or ghae or ghes > 3.1 or ghec %}環境保護ルールを使用して、手動による承認を要求したり、ジョブを遅延させたり、環境を特定のブランチに制限したりすることができます。{% else %}環境保護ルールを使用して、手動による承認を要求したり、ジョブを遅延させたりすることができます。{% endif %}
 
 ### 必須のレビュー担当者
 
@@ -46,6 +46,7 @@ Organizations that use {% data variables.product.prodname_ghe_cloud %} can confi
 
 ジョブが最初にトリガーされた後、特定の時間ジョブを遅延させるために、待機タイマーを使ってください。 時間（分）は、0から43,200（30日）の間の整数でなければなりません。
 
+{% ifversion fpt or ghae or ghes > 3.1 or ghec %}
 ### デプロイメントブランチ
 
 デプロイメントブランチを使用して、環境にデプロイできるブランチを制限します。 環境のデプロイメントブランチのオプションは以下のとおりです。
@@ -55,6 +56,7 @@ Organizations that use {% data variables.product.prodname_ghe_cloud %} can confi
 * **選択したブランチ**: 環境にデプロイできるのは指定した名前パターンに一致するブランチのみです。
 
   たとえば、デプロイメントブランチルールとして `releases/*` を指定した場合、名前が `releases/` で始まるブランチのみが環境にデプロイできます。 （ワイルドカード文字は `/` と一致しません。 `release/` で始まり、追加の単一スラッシュを含むブランチを一致させるには、`release/*/*` を使用します。） `main` をデプロイメントブランチルールとして追加すると、`main` という名前のブランチも環境にデプロイできます。 デプロイメントブランチの構文オプションの詳細については、[Ruby File.fnmatch documentation](https://ruby-doc.org/core-2.5.1/File.html#method-c-fnmatch) のドキュメントを参照してください。
+{% endif %}
 ## 環境のシークレット
 
 環境に保存されたシークレットは、その環境を参照するワークフロージョブからのみ利用できます。 環境が承認を必要とするなら、ジョブは必須のレビュー担当者の一人が承認するまで環境のシークレットにアクセスできません。 シークレットに関する詳しい情報については「[暗号化されたシークレット](/actions/reference/encrypted-secrets)」を参照してください。
@@ -68,14 +70,6 @@ Organizations that use {% data variables.product.prodname_ghe_cloud %} can confi
 ## 環境の作成
 
 {% data reusables.actions.permissions-statement-environment %}
-
-{% ifversion fpt or ghec %}
-{% note %}
-
-**Note:** To create an environment in a private repository, your organization must use {% data variables.product.prodname_ghe_cloud %}. {% data reusables.enterprise.link-to-ghec-trial %}
-
-{% endnote %}
-{% endif %}
 
 {% data reusables.repositories.navigate-to-repo %}
 {% data reusables.repositories.sidebar-settings %}
@@ -99,7 +93,7 @@ Organizations that use {% data variables.product.prodname_ghe_cloud %} can confi
    1. Enter the secret value.
    1. [**Add secret（シークレットの追加）**] をクリックします。
 
-REST API を介して環境を作成および設定することもできます。 詳細については、「[環境](/rest/reference/repos#environments)」および「[シークレット](/rest/reference/actions#secrets)」を参照してください。
+{% ifversion fpt or ghae or ghes > 3.1 or ghec %}REST API を介して環境を作成および設定することもできます。 詳しい情報については、「[環境](/rest/reference/repos#environments)」および「[シークレット](/rest/reference/actions#secrets)」を参照してください。{% endif %}
 
 存在しない環境を参照するワークフローを実行すると、参照された名前を持つ環境が作成されます。 新しく作成される環境には、保護ルールやシークレットは設定されていません。 リポジトリのワークフローを編集できる人は、ワークフローファイルを通じて環境を作成できますが、その環境を設定できるのはリポジトリ管理者だけです。
 
@@ -123,13 +117,13 @@ REST API を介して環境を作成および設定することもできます�
 1. 削除する環境の横にある {% octicon "trash" aria-label="The trash icon" %} をクリックします。
 2. **I understand, delete this environment（分かりました、この環境を削除してください）**をクリックしてください。
 
-REST API を介して環境を削除することもできます。 詳しい情報については、「[環境](/rest/reference/repos#environments)」を参照してください。
+{% ifversion fpt or ghae or ghes > 3.1 or ghec %}REST API を介して環境を削除することもできます。 詳しい情報については、「[環境](/rest/reference/repos#environments)」を参照してください。{% endif %}
 
 ## How environments relate to deployments
 
 {% data reusables.actions.environment-deployment-event %}
 
-You can access these objects through the REST API or GraphQL API. You can also subscribe to these webhook events. For more information, see "[Repositories](/rest/reference/repos#deployments)" (REST API), "[Objects](/graphql/reference/objects#deployment)" (GraphQL API), or "[Webhook events and payloads](/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#deployment)."
+You can access these objects through the REST API or GraphQL API. You can also subscribe to these webhook events. For more information, see "[Repositories](/rest/reference/repos#deployments)" (REST API), "[Objects]({% ifversion ghec %}/free-pro-team@latest{% endif %}/graphql/reference/objects#deployment)" (GraphQL API), or "[Webhook events and payloads](/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#deployment)."
 
 ## 次のステップ
 

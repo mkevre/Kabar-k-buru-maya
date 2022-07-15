@@ -37,13 +37,11 @@ shortTitle: Trabajar con archivos sin código
 
 ## Representar y comparar imágenes
 
-{% data variables.product.product_name %} puede mostrar varios formatos de imagen comunes, incluidos PNG, JPG, GIF, PSD y SVG. Asimismo, para simplificar mostrarlas, existen diversas formas de comparar las diferencias entre las versiones de esos formatos de imagen.
+{% data variables.product.product_name %} puede mostrar varios formatos de imagen comunes, incluidos PNG, JPG, GIF, PSD y SVG. Asimismo, para simplificar mostrarlas, existen diversas formas de comparar las diferencias entre las versiones de esos formatos de imagen.'
 
 {% note %}
 
-**Nota:**
-- {% data variables.product.prodname_dotcom %} no es compatible con comparar las diferencias entre archivos PSD.
-- Si estás utilizando el buscador Firefox, podrían no interpretarse los SVG en {% data variables.product.prodname_dotcom %}.
+**Nota:** Si estás utilizando el navegador Firefox, puede que los SVG en {% data variables.product.prodname_dotcom %} no se representen.
 
 {% endnote %}
 
@@ -132,7 +130,7 @@ Por defecto, la representación insertada es de 420 píxeles de ancho por 620 de
 
 {% endtip %}
 
-{% ifversion mermaid %}
+{% if mermaid %}
 ### Representar en lenguaje de marcado
 
 Puedes embeber una sintaxis de ASCII STL directamente en el lenguaje de marcado. Para obtener más información, consulta la sección "[Crear diagramas](/get-started/writing-on-github/working-with-advanced-formatting/creating-diagrams#creating-stl-3d-models)".
@@ -245,7 +243,6 @@ Cuando haces clic en el ícono de papel a la derecha, también verás los cambio
 
 Los mapas en {% data variables.product.product_name %} utilizan [Leaflet.js](http://leafletjs.com) y admiten todos los tipos de Geometry indicados en [las especificaciones de geoJSON](http://www.geojson.org/geojson-spec.html) (Point, LineString, Polygon, MultiPoint, MultiLineString, MultiPolygon y GeometryCollection). Los archivos TopoJSON deberían ser del tipo "Topology" y adherir a las especificaciones [topoJSON](https://github.com/mbostock/topojson/wiki/Specification).
 
-{% ifversion geoJSON-with-MapBox %}
 ### Características de estilo
 
 Puedes personalizar la manera en que se muestran las características, como especificar un color particular o agregar un ícono descriptivo, al pasar metadatos adicionales dentro de las propiedades del objeto geoJSON. Las opciones son:
@@ -260,7 +257,6 @@ Puedes personalizar la manera en que se muestran las características, como espe
 * `fill-opacity` - la opacidad del interior de un polígono (0.0-1.0)
 
 Consulta la versión [1.1.0 de las especificaciones de estilo simple abierto](https://github.com/mapbox/simplestyle-spec/tree/master/1.1.0) para obtener más información.
-{% endif %}
 
 ### Incrustrar tu mapa en otro lugar
 
@@ -284,7 +280,7 @@ Por defecto, el mapa incrustado es 420px x 620px, pero puedes personalizar el re
 
 {% endtip %}
 
-{% ifversion mermaid %}
+{% if mermaid %}
 ### Mapear en lenguaje de marcado
 
 Puedes embeber geoJSON y topoJSON directamente en el lenguaje de marcado. Para obtener más información, consulta la sección "[Crear diagramas](/get-started/writing-on-github/working-with-advanced-formatting/creating-diagrams#creating-geojson-and-topojson-maps)".
@@ -310,12 +306,8 @@ Todavía se podrían representar los datos al convertir el archivo `.geojson` a 
 
 ### Leer más
 
-{% ifversion geoJSON-with-MapBox %}
-* [Documentación de Leaflet.js](https://leafletjs.com/)
+* [Documentación Leaflet.js geojson](http://leafletjs.com/examples/geojson.html)
 * [Documentación de estilización de marcador MapBox](http://www.mapbox.com/developers/simplestyle/)
-{%- else %}
-* [Documentación de Azure Maps](https://docs.microsoft.com/en-us/azure/azure-maps/)
-{%- endif %}
 * [TopoJSON Wiki](https://github.com/mbostock/topojson/wiki)
 
 ## Trabajar con arhivos de Jupyter Notebook en {% data variables.product.prodname_dotcom %}
@@ -339,14 +331,14 @@ $ jupyter nbconvert --to html <em>NOTEBOOK-NAME.ipynb</em>
 ### Leer más
 
 - [Repositorio GitHub de notebook Jupyter](https://github.com/jupyter/jupyter_notebook)
-- [Galería de notebooks Jupyter](https://github.com/jupyter/jupyter/wiki)
+- [Galería de notebooks Jupyter](https://github.com/jupyter/jupyter/wiki/A-gallery-of-interesting-Jupyter-Notebooks)
 
-{% ifversion mermaid %}
-## Mostrar los archivos de Mermaid en {% data variables.product.prodname_dotcom %}
+{% if mermaid %}
+## Displaying Mermaid files on {% data variables.product.prodname_dotcom %}
 
-{% data variables.product.product_name %} es compatible con el procesamiento de archivos de Mermaid dentro de los repositorios. Confirma el archivo como lo harías habitualmente utilizando una extensión `.mermaid` o `.mmd`. Luego, navega a la ruta del archivo Mermaid en {% data variables.product.prodname_dotcom %}.
+{% data variables.product.product_name %} supports rendering Mermaid files within repositories. Commit the file as you would normally using a `.mermaid` or `.mmd` extension. Then, navigate to the path of the Mermaid file on {% data variables.product.prodname_dotcom %}.
 
-Por ejemplo, si agregas un archivo `.mmd` con el siguiente contenido a tu repositorio:
+For example, if you add a `.mmd` file with the following content to your repository:
 
 ```
 graph TD
@@ -357,27 +349,27 @@ graph TD
     C -->|Three| F[fa:fa-car Car]
 ```
 
-Cuando ves el archivo en el repositorio, este se procesa como un diagrama de flujo. ![Diagrama de archivo mermaid procesado](/assets/images/help/repository/mermaid-file-diagram.png)
+When you view the file in the repository, it is rendered as a flow chart. ![Rendered mermaid file diagram](/assets/images/help/repository/mermaid-file-diagram.png)
 
 ### Solución de problemas
 
-Si tu gráfica no se procesa, verifica que contenga una sintaxis de lenguaje de marcado de Mermaid verificándola con el [Editor de Mermaid](https://mermaid.live/edit).
+If your chart does not render at all, verify that it contains valid Mermaid Markdown syntax by checking your chart with the [Mermaid live editor](https://mermaid.live/edit).
 
-Si se muestra la gráfica, pero esta no se ve como lo esperabas, puedes crear un [debate de retroalimentación](https://github.com/github/feedback/discussions/categories/general-feedback) nuevo y agregar la etiqueta `mermaid`.
+If the chart displays, but does not appear as you'd expect, you can create a new [feedback discussion](https://github.com/github/feedback/discussions/categories/general-feedback), and add the `mermaid` tag.
 
 #### Problemas conocidos
 
-* Las gráficas de diagramas secuenciales a menudo se interpretan con espacios adicionales debajo de ellas y se les agrega aún más espacio conforme el tamaño de la gráfica aumenta. Este es un problema conocido de la librería de Mermaid.
-* Los nodos actores con menús emergentes no funcionan como se esperaba dentro de las gráficas de diagrama secuencial. Esto es debido a una discrepancia en la forma en la que se agregan los eventos de JavaScript cuando se utiliza la API de la librería de Mermaid para interpretar una gráfica.
-* No todas las gráficas cumplen con a11y. Esto podría afectar a los usuarios que dependen en un lector de pantalla.
+* Sequence diagram charts frequently render with additional padding below the chart, with more padding added as the chart size increases. This is a known issue with the Mermaid library.
+* Actor nodes with popover menus do not work as expected within sequence diagram charts. This is due to a discrepancy in how JavaScript events are added to a chart when the Mermaid library's API is used to render a chart.
+* Not all charts are a11y compliant. This may affect users who rely on a screen reader.
 
-### Mermaid en el lenguaje de marcado
+### Mermaid in Markdown
 
-Puedes embeber una sintaxis de Mermaid directamente en el lenguaje de marcado. Para obtener más información, consulta la sección "[Crear diagramas](/get-started/writing-on-github/working-with-advanced-formatting/creating-diagrams#creating-mermaid-diagrams)".
+You can embed Mermaid syntax directly in Markdown. For more information, see "[Creating diagrams](/get-started/writing-on-github/working-with-advanced-formatting/creating-diagrams#creating-mermaid-diagrams)."
 
 ### Leer más
 
-* [Documentación de Mermaid.js](https://mermaid-js.github.io/mermaid/#/)
-* [Editor de Mermaid.js](https://mermaid.live/edit)
+* [Mermaid.js documentation](https://mermaid-js.github.io/mermaid/#/)
+* [Mermaid.js live editor](https://mermaid.live/edit)
 {% endif %}
 

@@ -1,16 +1,16 @@
 ---
 title: Referência
-intro: 'Esta seção contém referências que permitirão seu sucesso com {% data variables.product.prodname_github_codespaces %}'
+intro: 'Esta seção contém referências que permitirão seu sucesso com {% data variables.product.prodname_codespaces %}'
 versions:
   fpt: '*'
   ghec: '*'
 product: '{% data reusables.gated-features.codespaces %}'
 children:
-  - /understanding-billing-for-github-codespaces
+  - /understanding-billing-for-codespaces
   - /allowing-your-codespace-to-access-a-private-image-registry
-  - /using-github-copilot-in-github-codespaces
+  - /using-github-copilot-in-codespaces
   - /using-the-vs-code-command-palette-in-codespaces
-  - /security-in-github-codespaces
-  - /disaster-recovery-for-github-codespaces
+  - /security-in-codespaces
+  - /disaster-recovery-for-codespaces
 ---
 

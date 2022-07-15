@@ -1,11 +1,12 @@
 ---
-title: セキュリティの概要でのアラートのフィルタリング
-intro: 特定カテゴリのアラートを表示させるためのフィルタの利用
-permissions: '{% data reusables.security-center.permissions %}'
+title: Filtering alerts in the security overview
+intro: Use filters to view specific categories of alerts
+permissions: Organization owners and security managers can access the security overview for organizations. Members of a team can see the security overview for repositories that the team has admin privileges for.
 product: '{% data reusables.gated-features.security-center %}'
 versions:
-  ghae: '*'
-  ghes: '*'
+  fpt: '*'
+  ghae: issue-4554
+  ghes: '>3.1'
   ghec: '*'
 type: how_to
 topics:
@@ -14,28 +15,26 @@ topics:
   - Alerts
   - Organizations
   - Teams
-shortTitle: アラートのフィルタリング
+shortTitle: Filtering alerts
 ---
 
-{% ifversion ghes < 3.5 or ghae %}
 {% data reusables.security-center.beta %}
-{% endif %}
 
-## セキュリティの概要のフィルタリングについて
+## About filtering the security overview
 
-アラートのリスクレベル、アラートの種類、機能の有効化の状況といった様々な要素に基づいて焦点を絞り込むために、セキュリティの概要でフィルタを利用できます。 特定のビューや、分析がOrganization、Team、リポジトリのレベルなのかといったことに応じて、様々なフィルタが利用できます。
+You can use filters in the security overview to narrow your focus based on a range of factors, like alert risk level, alert type and feature enablement. Different filters are available depending on the specific view and whether you analysing at the organization, team or repository level.
 
-## リポジトリでフィルタリング
+## リポジトリでフィルタ
 
-すべてのOrganizationレベル及びTeamレベルのビューで利用可能。
+Available in all organization-level and team-level views.
 
-| 修飾子                    | 説明                |
-| ---------------------- | ----------------- |
-| `repo:REPOSITORY-NAME` | 特定のリポジトリのアラートを表示。 |
+| 修飾子                    | 説明                                            |
+| ---------------------- | --------------------------------------------- |
+| `repo:REPOSITORY-NAME` | Displays alerts for the specified repository. |
 
-## セキュリティ機能が有効化されているかによるフィルタリング
+## Filter by whether security features are enabled
 
-Organizationレベル及びTeamレベルの概要で利用可能。
+Available in the organization-level and team-level overview.
 
 | 修飾子                           | 説明                                                                              |
 | ----------------------------- | ------------------------------------------------------------------------------- |
@@ -45,26 +44,26 @@ Organizationレベル及びTeamレベルの概要で利用可能。
 | `secret-scanning:not-enabled` | {% data variables.product.prodname_secret_scanning %}が有効化されているリポジトリを表示します。    |
 | `dependabot:enabled`          | {% data variables.product.prodname_dependabot_alerts %}が有効化されているリポジトリを表示します。  |
 | `dependabot:not-enabled`      | {% data variables.product.prodname_dependabot_alerts %}が有効化されていないリポジトリを表示します。 |
-| `not-enabled:any`             | 少なくとも1つのセキュリティ機能が有効化されていないリポジトリを表示します。                                          |
+| `not-enabled:any`             | Display repositories with at least one security feature that is not enabled.    |
 
-## リポジトリの種類によるフィルタリング
+## リポジトリの種類によるフィルタ
 
-Organizationレベル及びTeamレベルの概要で利用可能。
+Available in the organization-level and team-level overview.
 
 | 修飾子 | 説明 |
 | --- | -- |
 |     |    |
-{%- ifversion ghes or ghec %}
-| `is:public` | パブリックリポジトリを表示。 |
+{%- ifversion fpt or ghes or ghec %}
+| `is:public` | Display public repositories. |
 {%- endif %}
 {%- ifversion ghes or ghec or ghae %}
-| `is:internal` | インターナルリポジトリを表示。 |
+| `is:internal` | Display internal repositories. |
 {%- endif %}
-| `is:private` | プライベートリポジトリを表示。 | | `archived:true` | アーカイブされたリポジトリを表示。 | | `archived:true` | アーカイブされたリポジトリを表示。 |
+| `is:private` | Display private repositories. | | `archived:true` | Display archived repositories. | | `archived:true` | Display archived repositories. |
 
 ## リポジトリに対するリスクレベルによるフィルタリング
 
-リポジトリのリスクレベルは、セキュリティ機能からのアラートの数と重要度によって決まります。 1つ以上のセキュリティ機能がリポジトリで有効化されていない場合、そのリポジトリのリスクレベルは不明になります。 リポジトリにおいてセキュリティ機能によって検出されたリスクがない場合、リポジトリのリスクレベルはクリアになります。 Organizationレベルの概要で利用できます。
+The level of risk for a repository is determined by the number and severity of alerts from security features. If one or more security features are not enabled for a repository, the repository will have an unknown level of risk. If a repository has no risks that are detected by security features, the repository will have a clear level of risk. Available in the organization-level overview.
 
 | 修飾子            | 説明                          |
 | -------------- | --------------------------- |
@@ -74,75 +73,65 @@ Organizationレベル及びTeamレベルの概要で利用可能。
 | `risk:unknown` | リスクレベルが不明なリポジトリを表示します。      |
 | `risk:clear`   | リスクレベルが検出されていないリポジトリを表示します。 |
 
-## アラート数によるフィルタリング
+## アラート数によるフィルタ
 
-Organizationレベルの概要で利用できます。
+Available in the organization-level overview.
 
-| 修飾子                       | 説明                                                                                                                      |
-| ------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
-| <code>code-scanning:<em>n</em></code> | *n*件の{% data variables.product.prodname_code_scanning %}アラートがあるリポジトリを表示します。 この修飾子は`=`、`>`、`<`という比較演算子を利用できます。   |
-| <code>secret-scanning:<em>n</em></code> | *n*件の{% data variables.product.prodname_secret_scanning %}アラートを持つリポジトリを表示します。 この修飾子は`=`、`>`、`<`という比較演算子を利用できます。 |
-| <code>dependabot:<em>n</em></code> | *n*件の{% data variables.product.prodname_dependabot_alerts %}を持つリポジトリを表示します。 この修飾子は`=`、`>`、`<`という比較演算子を利用できます。   |
+| 修飾子                       | 説明                                                                                                                                                  |
+| ------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| <code>code-scanning:<em>n</em></code> | *n*件の{% data variables.product.prodname_code_scanning %}アラートがあるリポジトリを表示します。 This qualifier can use `=`, `>` and `<` comparison operators.   |
+| <code>secret-scanning:<em>n</em></code> | *n*件の{% data variables.product.prodname_secret_scanning %}アラートを持つリポジトリを表示します。 This qualifier can use `=`, `>` and `<` comparison operators. |
+| <code>dependabot:<em>n</em></code> | *n*件の{% data variables.product.prodname_dependabot_alerts %}を持つリポジトリを表示します。 This qualifier can use `=`, `>` and `<` comparison operators.   |
 
 
-## Teamによるフィルタリング
+## Teamによるフィルタ
 
-Organizationレベルの概要で利用できます。
+Available in the organization-level overview.
 
 | 修飾子                       | 説明                               |
 | ------------------------- | -------------------------------- |
 | <code>team:<em>TEAM-NAME</em></code> | *TEAM-NAME*が管理者権限を持つリポジトリを表示します。 |
 
-## トピックによるフィルタリング
+## トピックによるフィルタ
 
-Organizationレベルの概要で利用できます。
+Available in the organization-level overview.
 
 | 修飾子                       | 説明                             |
 | ------------------------- | ------------------------------ |
 | <code>topic:<em>TOPIC-NAME</em></code> | *TOPIC-NAME*で分類されるリポジトリを表示します。 |
 
-{% ifversion security-overview-views %}
+{% if security-overview-views %}
 
-## 重要度でのフィルタリング
+## Filter by severity
 
-Code scanningアラートビューで利用できます。 すべてのCode scanningアラートは、以下のカテゴリのいずれかを持ちます。 結果をクリックして、関連するルールの完全な詳細と、アラートをトリガーしたコードの行を見ることができます。
+Available in the code scanning alert views. All code scanning alerts have one of the categories shown below. You can click any result to see full details of the relevant rule, and the line of code that triggered the alert.
 
-| 修飾子                 | 説明                                                                               |
-| ------------------- | -------------------------------------------------------------------------------- |
-| `severity:critical` | criticalとして分類される{% data variables.product.prodname_code_scanning %}アラートを表示します。 |
-| `severity:high`     | highとして分類される{% data variables.product.prodname_code_scanning %}アラートを表示します。     |
-| `severity:medium`   | mediumとして分類される{% data variables.product.prodname_code_scanning %}アラートを表示します。   |
-| `severity:low`      | lowとして分類される{% data variables.product.prodname_code_scanning %}アラートを表示します。      |
-| `severity:error`    | errorsとして分類される{% data variables.product.prodname_code_scanning %}アラートを表示します。   |
-| `severity:warning`  | warningsとして分類される{% data variables.product.prodname_code_scanning %}アラートを表示します。 |
-| `severity:note`     | notesとして分類される{% data variables.product.prodname_code_scanning %}アラートを表示します。    |
-
-{% ifversion dependabot-alerts-vulnerable-calls %}
-## {% data variables.product.prodname_dependabot %}アラートタイプによるフィルタリング
-
-{% data variables.product.prodname_dependabot %}アラートビューで利用できます。 修正の準備ができているか、露出に関する追加情報がある{% data variables.product.prodname_dependabot_alerts %}を表示するために、ビューをフィルタリングできます。 いずれの結果も、クリックすると完全なアラートの詳細を見ることができます。
-
-| 修飾子                    | 説明                                                                                                                                                                                                                                                                                    |
-| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `has:patch`            | セキュアなバージョンが既に利用可能となっている脆弱性に対する{% data variables.product.prodname_dependabot %}アラートを表示します。                                                                                                                                                                                             |
-| `has:vulnerable-calls` | リポジトリから脆弱性のある関数への読み出しが少なくとも1つ検出されている{% data variables.product.prodname_dependabot %}アラートを表示します。 詳しい情報については「[Dependabotアラートの表示と更新](/code-security/dependabot/dependabot-alerts/viewing-and-updating-dependabot-alerts#about-the-detection-of-calls-to-vulnerable-functions)」を参照してください。 |
-{% endif %}
+| 修飾子                 | 説明                                                                                             |
+| ------------------- | ---------------------------------------------------------------------------------------------- |
+| `severity:critical` | Displays {% data variables.product.prodname_code_scanning %} alerts categorized as critical. |
+| `severity:high`     | Displays {% data variables.product.prodname_code_scanning %} alerts categorized as high.     |
+| `severity:medium`   | Displays {% data variables.product.prodname_code_scanning %} alerts categorized as medium.   |
+| `severity:low`      | Displays {% data variables.product.prodname_code_scanning %} alerts categorized as low.      |
+| `severity:error`    | Displays {% data variables.product.prodname_code_scanning %} alerts categorized as errors.   |
+| `severity:warning`  | Displays {% data variables.product.prodname_code_scanning %} alerts categorized as warnings. |
+| `severity:note`     | Displays {% data variables.product.prodname_code_scanning %} alerts categorized as notes.    |
 
 {% endif %}
 
-## シークレットタイプによるフィルタリング
+## Filter by secret types
 
-Secret scanningアラートビューで利用できます。
+Available in the secret scanning alert views.
 
-| 修飾子                            | 説明                                                                                                                                                                                |
-| ------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `secret-type:SERVICE_PROVIDER` | 特定のシークレット及びプロバイダに対するアラートを表示します。 詳しい情報については「[{% data variables.product.prodname_secret_scanning_caps %}パターン](/code-security/secret-scanning/secret-scanning-patterns)」を参照してください。 |
-| `secret-type:CUSTOM-PATTERN`   | 指定されたカスタムパターンにマッチするシークレットに対するアラートを表示します。 詳しい情報については「[Secret scanningのカスタムパターンの定義](/code-security/secret-scanning/defining-custom-patterns-for-secret-scanning)」を参照してください。         |
+| 修飾子                                                                                                                                                                                        | 説明                                                                                                                                                                                                                   |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `secret-type:SERVICE_PROVIDER`                                                                                                                                                             | Displays alerts for the specified secret and provider. For more information, see "[{% data variables.product.prodname_secret_scanning_caps %} patterns](/code-security/secret-scanning/secret-scanning-patterns)." |
+| `secret-type:CUSTOM-PATTERN`                                                                                                                                                               | Displays alerts for secrets matching the specified custom pattern.                                                                                                                                                   |
+| {% ifversion not fpt %}For more information, see "[Defining custom patterns for secret scanning](/code-security/secret-scanning/defining-custom-patterns-for-secret-scanning)."{% endif %} |                                                                                                                                                                                                                      |
 
-## プロバイダによるフィルタリング
+## Filter by provider
 
-Secret scanningアラートビューで利用できます。
+Available in the secret scanning alert views.
 
-| 修飾子                      | 説明                                                                                                                                                                                         |
-| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `provider:PROVIDER_NAME` | 指定されたプロバイダが発行したすべてのシークレットに対するアラートを表示します。 詳しい情報については「[{% data variables.product.prodname_secret_scanning_caps %}パターン](/code-security/secret-scanning/secret-scanning-patterns)」を参照してください。 |
+| 修飾子                      | 説明                                                                                                                                                                                                                              |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `provider:PROVIDER_NAME` | Displays alerts for all secrets issues by the specified provider. For more information, see "[{% data variables.product.prodname_secret_scanning_caps %} patterns](/code-security/secret-scanning/secret-scanning-patterns)." |

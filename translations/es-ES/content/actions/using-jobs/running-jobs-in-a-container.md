@@ -1,7 +1,7 @@
 ---
 title: Ejecutar trabajos en un contenedor
 shortTitle: Ejecutar trabajos en un contenedor
-intro: Utiliza un contenedor para ejecutar los pasos de un job.
+intro: Use a container to run the steps in a job.
 versions:
   fpt: '*'
   ghes: '*'
@@ -17,27 +17,27 @@ miniTocMaxHeadingLevel: 4
 
 {% data reusables.actions.jobs.section-running-jobs-in-a-container %}
 
-## Definir la imagen de contenedor
+## Defining the container image
 
 {% data reusables.actions.jobs.section-running-jobs-in-a-container-image %}
 
-## Definir las credenciales para un registro de contenedores
+## Defining credentials for a container registry
 
 {% data reusables.actions.jobs.section-running-jobs-in-a-container-credentials %}
 
-## Utilziar variables de ambiente con un contenedor
+## Using environment variables with a container
 
 {% data reusables.actions.jobs.section-running-jobs-in-a-container-env %}
 
-## Exponer puertos de red en un contenedor
+## Exposing network ports on a container
 
 {% data reusables.actions.jobs.section-running-jobs-in-a-container-ports %}
 
-## Montar volúmenes en un contenedor
+## Mounting volumes in a container
 
 {% data reusables.actions.jobs.section-running-jobs-in-a-container-volumes %}
 
-## Configurar las opciones de recursos de contenedor
+## Setting container resource options
 
 {% data reusables.actions.jobs.section-running-jobs-in-a-container-options %}
 

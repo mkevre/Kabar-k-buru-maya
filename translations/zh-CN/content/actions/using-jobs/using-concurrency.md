@@ -1,7 +1,7 @@
 ---
 title: 使用并发
 shortTitle: 使用并发
-intro: 一次运行一个作业。
+intro: Run a single job at a time.
 versions:
   fpt: '*'
   ghes: '> 3.1'
@@ -17,7 +17,7 @@ miniTocMaxHeadingLevel: 4
 
 {% data reusables.actions.jobs.section-using-concurrency-jobs %}
 
-{% ifversion github-runner-dashboard %}
+{% if github-runner-dashboard %}
 ## 监控组织或企业中的当前作业
 
 {% data reusables.actions.github-hosted-runners-check-concurrency %}

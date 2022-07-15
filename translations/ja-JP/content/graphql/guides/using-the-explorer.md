@@ -18,6 +18,12 @@ topics:
 
 [GraphQL Explorer](/graphql/overview/explorer)は、「グラフィカルでインタラクティブなブラウザ内のGraphQL IDE」である[ GraphiQL](https://github.com/graphql/graphiql)のインスタンスです。
 
+{% note %}
+
+**ノート**: {% data variables.product.prodname_dotcom %}はExplorer内での[ミューテーション](/graphql/reference/mutations)を無効化していますが、独自のGraphiQLのインスタンスではミューテーションが利用できます。
+
+{% endnote %}
+
 {% else %}
 
 [ GraphiQL](https://github.com/graphql/graphiql)はこのドキュメンテーション内ではGraphQL Explorerとも呼ばれており、「グラフィカルでインタラクティブなGraphQL IDE」です。

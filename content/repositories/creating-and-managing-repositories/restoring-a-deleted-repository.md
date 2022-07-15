@@ -1,7 +1,6 @@
 ---
 title: Restoring a deleted repository
-intro: '{% ifversion ghes or ghae %}An enterprise owner{% elsif fpt or ghec %}You{% endif %} can restore some deleted repositories to recover their contents.'
-permissions: '{% ifversion ghes or ghae %}{% elsif fpt or ghec %}Anyone can restore deleted repositories that were owned by their own personal account. Organization owners can restore deleted repositories that were owned by the organization.{% endif %}'
+intro: You can restore some deleted repositories to recover their contents.
 redirect_from:
   - /articles/restoring-a-deleted-repository
   - /github/administering-a-repository/restoring-a-deleted-repository
@@ -15,12 +14,8 @@ topics:
   - Repositories
 shortTitle: Restore deleted repository
 ---
-
-{% ifversion ghes or ghae %}
-
-Usually, deleted repositories can be restored within 90 days by an enterprise owner{% ifversion ghes %} on {% data variables.product.product_location %}{% endif %}. For more information, see "[Restoring a deleted repository](/admin/user-management/managing-repositories-in-your-enterprise/restoring-a-deleted-repository)." 
-
-{% else %}
+{% ifversion fpt or ghec %}
+Anyone can restore deleted repositories that were owned by their own user account. Organization owners can restore deleted repositories that were owned by the organization.
 
 ## About repository restoration
 
@@ -32,7 +27,7 @@ It can take up to an hour after a repository is deleted before that repository i
 
 Restoring a repository will not restore release attachments or team permissions. Issues that are restored will not be labeled.
 
-## Restoring a deleted repository that was owned by a personal account
+## Restoring a deleted repository that was owned by a user account
 
 {% data reusables.user-settings.access_settings %}
 {% data reusables.user-settings.repo-tab %}
@@ -53,4 +48,6 @@ Restoring a repository will not restore release attachments or team permissions.
 
 - "[Deleting a repository](/articles/deleting-a-repository)"
 
+{% else %}
+Usually, deleted repositories can be restored within 90 days by a {% data variables.product.prodname_enterprise %} site administrator. For more information, see "[Restoring a deleted repository](/admin/user-management/managing-repositories-in-your-enterprise/restoring-a-deleted-repository)." 
 {% endif %}

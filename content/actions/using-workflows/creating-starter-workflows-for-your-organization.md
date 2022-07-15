@@ -66,7 +66,7 @@ This procedure demonstrates how to create a starter workflow and metadata file. 
        runs-on: ubuntu-latest
 
        steps:
-         - uses: {% data reusables.actions.action-checkout %}
+         - uses: actions/checkout@v2
 
          - name: Run a one-line script
            run: echo Hello from Octo Organization

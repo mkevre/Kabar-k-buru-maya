@@ -89,11 +89,10 @@ Ao contrário dos aplicativos OAuth, os aplicativos GitHub têm permissões dire
 
 ## Webhooks
 
-| Aplicativos do GitHub                                                                                                                                      | Aplicativos OAuth                                                                                                                                                                                                              |
-| ---------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Por padrão, os aplicativos GitHub têm um único webhook que recebe os eventos que estão configurados para receber para cada repositório ao qual têm acesso. | Os aplicativos OAuth solicitam o escopo do webhook para criar um webhook do repositório para cada repositório do qual precisam receber eventos.                                                                                |
-| O aplicativo GitHub recebe certos eventos a nível da organização com a permissão do integrante da organização.                                             | Os aplicativos OAuth solicitam o escopo do webhook da organização para criar um webhook da organização para cada organização da qual precisam para receber eventos a nível da organização.                                     |
-| Os webhooks são automaticamente desabilitados quando o aplicativo GitHub é desinstalado.                                                                   | Os webhooks não são automaticamente desabilitados se o token de acesso do OAuth do aplicativo for excluído, e não há nenhuma maneira de limpá-los automaticamente. Você terá que pedir que os usuários façam isso manualmente. |
+| Aplicativos do GitHub                                                                                                                                      | Aplicativos OAuth                                                                                                                                                                          |
+| ---------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Por padrão, os aplicativos GitHub têm um único webhook que recebe os eventos que estão configurados para receber para cada repositório ao qual têm acesso. | Os aplicativos OAuth solicitam o escopo do webhook para criar um webhook do repositório para cada repositório do qual precisam receber eventos.                                            |
+| O aplicativo GitHub recebe certos eventos a nível da organização com a permissão do integrante da organização.                                             | Os aplicativos OAuth solicitam o escopo do webhook da organização para criar um webhook da organização para cada organização da qual precisam para receber eventos a nível da organização. |
 
 ## Acesso Git
 
@@ -104,7 +103,7 @@ Ao contrário dos aplicativos OAuth, os aplicativos GitHub têm permissões dire
 
 ## Máquina vs. contas de bot
 
-Contas de usuário de máquina são contas pessoal baseadas no OAuth que separam sistemas automatizados usando o sistema de usuário do GitHub.
+Contas de usuário de máquina são contas de usuário baseadas no OAuth que separam sistemas automatizados usando o sistema de usuário do GitHub.
 
 As contas do bot são específicas para os aplicativos GitHub e são construídas em todos os aplicativos GitHub.
 

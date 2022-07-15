@@ -1,11 +1,11 @@
 ---
 title: Solución de problemas del gráfico de dependencias
-intro: 'Si la información de las dependencias que reporta la gráfica de dependencias no es la que esperabas, existen varios puntos a considerar y varias cosas que puedes verificar.'
-shortTitle: Solucionar problemas en la gráfica de dependencias
+intro: 'If the dependency information reported by the dependency graph is not what you expected, there are a number of points to consider, and various things you can check.'
+shortTitle: Troubleshoot dependency graph
 versions:
   fpt: '*'
   ghes: '*'
-  ghae: '*'
+  ghae: issue-4864
   ghec: '*'
 type: how_to
 topics:
@@ -22,19 +22,15 @@ topics:
 
 ## ¿Acaso la gráfica de dependencias solo encuentra depedencias en los manifiestos y lockfiles?
 
-La gráfica de dependencias incluye {% ifversion dependency-submission-api %}automáticamente{% endif %} la información de las dependencias que se declaran explícitamente en tu ambiente. Esto es, dependencias que se especifican en un manifiesto o en un lockfile. La gráfica de dependencias también incluye dependencias transitivas generalmente, aún cuando no se especifican en un lockfile, mediante la revisión de las dependencias de las dependencias en un archivo de manifiesto.
+La gráfica de dependencias incluye información sobre las dependencias, la cual se declara explícitamente en tu ambiente. Esto es, dependencias que se especifican en un manifiesto o en un lockfile. La gráfica de dependencias también incluye dependencias transitivas generalmente, aún cuando no se especifican en un lockfile, mediante la revisión de las dependencias de las dependencias en un archivo de manifiesto.
 
-La gráfica de dependencias no incluye {% ifversion dependency-submission-api %}automáticamente{% endif %} las dependencias "sueltas". Las dependencias "sueltas" son archivos individuales que se copian de otra fuernte y se revisan directamente en el repositorio o dentro de un archivo (tal como un archivo ZIP o JAR) en ves de que se referencien en un manifiesto de paquete de administrador o en un lockfile.
+La gráfica de dependencias no incluye dependencias "sueltas". Las dependencias "sueltas" son archivos individuales que se copian de otra fuernte y se revisan directamente en el repositorio o dentro de un archivo (tal como un archivo ZIP o JAR) en ves de que se referencien en un manifiesto de paquete de administrador o en un lockfile.
 
-{% ifversion dependency-submission-api %}Sin embargo, puedes utilizar la API de emisión de dependencias (beta) para agregar dependencias a la gráfica de dependencias de un proyecto, incluso si estas no se declaran en un archivo de bloqueo o de manifiesto, tales como las dependencias que se resolvieron cuando se creó un proyecto. La gráfica de dependencias mostrará las dependencias emitidas agrupadas por ecosistema, pero separadas de aquellas que se analizan de archivos de bloqueo o de manifiesto. Para obtener más información sobre la API de emisión de dependencias, consulta la sección "[Utilizar la API de emisión de dependencias](/code-security/supply-chain-security/understanding-your-software-supply-chain/using-the-dependency-submission-api)".{% endif %}
-
-**Verifica**: ¿La dependencia faltante es para un componente que no se especifica en los archivos de bloqueo o de manifiesto en el repositorio?
+**Check**: Is the missing dependency for a component that's not specified in the repository's manifest or lockfile?
 
 ## ¿Acaso la gráfica de dependencias detecta dependencias que se especifican utilizando variables?
 
-La gráfica de dependencias analiza los manifiestos mientras se suben a {% data variables.product.prodname_dotcom %}. Por lo tanto, la gráfica de dependencias no tiene acceso al ambiente de compilación del proyecto, así que no puede resolver variables que se utilizan dentro de los manifiestos. Si utilizas variables dentro de un manifiesto para especificar el nombre o, más comúnmente, la versión de una dependencia, entonces dicha dependencia no se incluirá {% ifversion dependency-submission-api %}automáticamente{% endif %} en la gráfica de dependencias.
-
-{% ifversion dependency-submission-api %}Sin embargo, puedes utilizar la API de emisión de dependencias (beta) para agregar dependencias la gráfica de dependencias de un proyecto, incluso si estas solo se resuelven cuando se crea un proyecto. Para obtener más información sobre la API de emisión de dependencias, consulta la sección "[Utilizar la API de emisión de dependencias](/code-security/supply-chain-security/understanding-your-software-supply-chain/using-the-dependency-submission-api)".{% endif %}
+La gráfica de dependencias analiza los manifiestos mientras se suben a {% data variables.product.prodname_dotcom %}. Por lo tanto, la gráfica de dependencias no tiene acceso al ambiente de compilación del proyecto, así que no puede resolver variables que se utilizan dentro de los manifiestos. Si utilizas variables dentro de un manifiesto para especificar el nombre, o más comunmente la versión de una dependencia, entonces dicha dependencia no se incluirá en la gráfica de dependencias.
 
 **Verifica**: ¿Acaso la dependencia faltante se declara en el manifiesto utilizando una variable para su nombre o versión?
 

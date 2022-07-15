@@ -41,28 +41,29 @@ YAML、{% data variables.product.prodname_actions %}の構文、PosgreSQLの基�
 
 {% data reusables.actions.copy-workflow-file %}
 
+{% raw %}
 ```yaml{:copy}
 name: PostgreSQL service example
 on: push
 
 jobs:
-  # Label of the container job
+  # コンテナジョブのラベル
   container-job:
-    # Containers must run in Linux based operating systems
+    # コンテナは Linux ベースのオペレーティングシステムで実行しなければならない
     runs-on: ubuntu-latest
-    # Docker Hub image that `container-job` executes in
+    # `container-job` が実行される Docker Hub イメージ
     container: node:10.18-jessie
 
-    # Service containers to run with `container-job`
+    # `container-job` で実行するサービスコンテナ
     services:
-      # Label used to access the service container
+      # サービスコンテナへのアクセスに使用されるラベル
       postgres:
-        # Docker Hub image
+        # Docker Hub のイメージ
         image: postgres
-        # Provide the password for postgres
+        # postgres のパスワードを入力する
         env:
           POSTGRES_PASSWORD: postgres
-        # Set health checks to wait until postgres has started
+        # postgres が起動するまで待機するようにヘルスチェックを設定する
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
@@ -70,18 +71,18 @@ jobs:
           --health-retries 5
 
     steps:
-      # Downloads a copy of the code in your repository before running CI tests
+      # CI テストを実行する前に、リポジトリにコードのコピーをダウンロードする
       - name: Check out repository code
-        uses: {% data reusables.actions.action-checkout %}
+        uses: actions/checkout@v2
 
-      # Performs a clean installation of all dependencies in the `package.json` file
-      # For more information, see https://docs.npmjs.com/cli/ci.html
+      # `package.json` ファイル内のすべての依存関係のクリーンインストールを実行する
+      # 詳しい情報については https://docs.npmjs.com/cli/ci.html を参照
       - name: Install dependencies
         run: npm ci
 
       - name: Connect to PostgreSQL
-        # Runs a script that creates a PostgreSQL table, populates
-        # the table with data, and then retrieves the data.
+        # PostgreSQLテーブルを作成し、テーブルにデータを入力してから
+        # データを取得するスクリプトを実行する。
         run: node client.js
         # `client.js` スクリプトが新しいPostgreSQLクライアントの作成に使う環境変数。
         env:
@@ -90,6 +91,7 @@ jobs:
           # デフォルトのPostgreSQLポート
           POSTGRES_PORT: 5432
 ```
+{% endraw %}
 
 ### ランナージョブの設定
 
@@ -129,18 +131,18 @@ jobs:
 
 ```yaml{:copy}
 steps:
-  # Downloads a copy of the code in your repository before running CI tests
+  # CI テストを実行する前に、リポジトリにコードのコピーをダウンロードする
   - name: Check out repository code
-    uses: {% data reusables.actions.action-checkout %}
+    uses: actions/checkout@v2
 
-  # Performs a clean installation of all dependencies in the `package.json` file
-  # For more information, see https://docs.npmjs.com/cli/ci.html
+  # `package.json` ファイル内のすべての依存関係のクリーンインストールを実行する
+  # 詳しい情報については https://docs.npmjs.com/cli/ci.html を参照する
   - name: Install dependencies
     run: npm ci
 
   - name: Connect to PostgreSQL
-    # Runs a script that creates a PostgreSQL table, populates
-    # the table with data, and then retrieves the data.
+    # PostgreSQL テーブルを作成し、テーブルにデータを入力してから
+    # データを取得するスクリプトを実行する。
     run: node client.js
     # 新しい PostgreSQL クライアントを作成するために
     # `client.js` スクリプトによって使用される環境変数。
@@ -161,57 +163,59 @@ PostgreSQLサービスのホスト名は、ワークフロー中で設定され�
 
 {% data reusables.actions.copy-workflow-file %}
 
+{% raw %}
 ```yaml{:copy}
 name: PostgreSQL Service Example
 on: push
 
 jobs:
-  # Label of the runner job
+  # ランナージョブのラベル
   runner-job:
-    # You must use a Linux environment when using service containers or container jobs
+    # サービスコンテナまたはコンテナジョブを使用する場合は Linux 環境を使用する必要がある
     runs-on: ubuntu-latest
 
-    # Service containers to run with `runner-job`
+    # `runner-job` で実行されるサービスコンテナ
     services:
-      # Label used to access the service container
+      # サービスコンテナへのアクセスに使用されるラベル
       postgres:
-        # Docker Hub image
+        # Docker Hub イメージ
         image: postgres
-        # Provide the password for postgres
+        # postgres のパスワードを入力する
         env:
           POSTGRES_PASSWORD: postgres
-        # Set health checks to wait until postgres has started
+        # postgres が起動するまで待機するようにヘルスチェックを設定する
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
         ports:
-          # Maps tcp port 5432 on service container to the host
+          # サービスコンテナの tcp ポート 5432 をホストにマップする
           - 5432:5432
 
     steps:
-      # Downloads a copy of the code in your repository before running CI tests
+      # CI テストを実行する前に、リポジトリにコードのコピーをダウンロードする
       - name: Check out repository code
-        uses: {% data reusables.actions.action-checkout %}
+        uses: actions/checkout@v2
 
-      # Performs a clean installation of all dependencies in the `package.json` file
-      # For more information, see https://docs.npmjs.com/cli/ci.html
+      # `package.json` ファイル内のすべての依存関係のクリーンインストールを実行する
+      # 詳しい情報については https://docs.npmjs.com/cli/ci.html を参照する
       - name: Install dependencies
         run: npm ci
 
       - name: Connect to PostgreSQL
-        # Runs a script that creates a PostgreSQL table, populates
-        # the table with data, and then retrieves the data
+        # PostgreSQLテーブルを作成し、テーブルにデータを入力してから
+        # データを取得するスクリプトを実行する
         run: node client.js
-        # Environment variables used by the `client.js` script to create
-        # a new PostgreSQL table.
+        # `client.js` スクリプトが新しいPostgreSQLクライアントの
+        # 作成に使う環境変数
         env:
           # PostgreSQLサービスコンテナとの通信に使われるホスト名
           POSTGRES_HOST: localhost
           # デフォルトのPostgreSQLポート
           POSTGRES_PORT: 5432
 ```
+{% endraw %}
 
 ### ランナージョブの設定
 
@@ -254,21 +258,21 @@ jobs:
 
 ```yaml{:copy}
 steps:
-  # Downloads a copy of the code in your repository before running CI tests
+  # CI テストを実行する前に、リポジトリにコードのコピーをダウンロードする
   - name: Check out repository code
-    uses: {% data reusables.actions.action-checkout %}
+    uses: actions/checkout@v2
 
-  # Performs a clean installation of all dependencies in the `package.json` file
-  # For more information, see https://docs.npmjs.com/cli/ci.html
+  # `package.json` ファイル内のすべての依存関係のクリーンインストールを実行する
+  # 詳しい情報については https://docs.npmjs.com/cli/ci.html を参照する
   - name: Install dependencies
     run: npm ci
 
   - name: Connect to PostgreSQL
-    # Runs a script that creates a PostgreSQL table, populates
-    # the table with data, and then retrieves the data
+    # PostgreSQL テーブルを作成し、テーブルにデータを入力してから
+    # データを取得するスクリプトを実行する
     run: node client.js
-    # Environment variables used by the `client.js` script to create
-    # a new PostgreSQL table.
+    # `client.js` スクリプトが新しいPostgreSQLクライアントの
+    # 作成に使う環境変数
     env:
       # PostgreSQLサービスコンテナとの通信に使われるホスト名
       POSTGRES_HOST: localhost

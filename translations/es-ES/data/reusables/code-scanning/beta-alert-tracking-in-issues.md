@@ -1,4 +1,4 @@
-{% ifversion code-scanning-task-lists %}
+{% if code-scanning-task-lists %}
 
 {% note %}
 

@@ -121,7 +121,7 @@ If your repository contains multiple compiled languages, you can specify languag
 ```yaml
 - if: matrix.language == 'cpp' || matrix.language == 'csharp' 
   name: Autobuild
-  uses: {% data reusables.actions.action-codeql-action-autobuild %}
+  uses: github/codeql-action/autobuild@v1
 
 - if: matrix.language == 'java' 
   name: Build Java

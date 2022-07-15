@@ -1,7 +1,7 @@
 ---
 title: Utilizar la concurrencia
 shortTitle: Utilizar la concurrencia
-intro: Ejecutar un solo job a la vez.
+intro: Run a single job at a time.
 versions:
   fpt: '*'
   ghes: '> 3.1'
@@ -17,7 +17,7 @@ miniTocMaxHeadingLevel: 4
 
 {% data reusables.actions.jobs.section-using-concurrency-jobs %}
 
-{% ifversion github-runner-dashboard %}
+{% if github-runner-dashboard %}
 ## Monitorear tus jobs actuales en tu organización o empresa
 
 {% data reusables.actions.github-hosted-runners-check-concurrency %}

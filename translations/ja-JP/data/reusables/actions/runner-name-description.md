@@ -1,1 +1,1 @@
-ジョブを実行しているランナーの名前。
+The name of the runner executing the job.
