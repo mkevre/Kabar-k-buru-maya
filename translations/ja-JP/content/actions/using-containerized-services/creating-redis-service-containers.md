@@ -41,25 +41,26 @@ YAML、{% data variables.product.prodname_actions %}の構文、Redisの基本�
 
 {% data reusables.actions.copy-workflow-file %}
 
+{% raw %}
 ```yaml{:copy}
 name: Redis container example
 on: push
 
 jobs:
-  # Label of the container job
+  # コンテナジョブのラベル
   container-job:
-    # Containers must run in Linux based operating systems
+    # コンテナはLinuxベースのオペレーティングシステム内で実行しなければならない
     runs-on: ubuntu-latest
-    # Docker Hub image that `container-job` executes in
+    # `container-job`が実行されるDocker Hubのイメージ
     container: node:10.18-jessie
 
-    # Service containers to run with `container-job`
+    # `container-job`と実行されるサービスコンテナ
     services:
-      # Label used to access the service container
+      # サービスコンテナへのアクセスに使われるラベル
       redis:
-        # Docker Hub image
+        # Docker Hubのイメージ
         image: redis
-        # Set health checks to wait until redis has started
+        # redisが起動するまで待つヘルスチェックの設定
         options: >-
           --health-cmd "redis-cli ping"
           --health-interval 10s
@@ -67,26 +68,27 @@ jobs:
           --health-retries 5
 
     steps:
-      # Downloads a copy of the code in your repository before running CI tests
+      # CIテストの実行前にリポジトリからコードのコピーをダウンロード
       - name: Check out repository code
-        uses: {% data reusables.actions.action-checkout %}
+        uses: actions/checkout@v2
 
-      # Performs a clean installation of all dependencies in the `package.json` file
-      # For more information, see https://docs.npmjs.com/cli/ci.html
+      # `package.json`ファイル内のすべての依存関係のクリーンインストールの実行
+      # 詳しい情報についてはhttps://docs.npmjs.com/cli/ci.htmlを参照
       - name: Install dependencies
         run: npm ci
 
       - name: Connect to Redis
-        # Runs a script that creates a Redis client, populates
-        # the client with data, and retrieves data
+        # Redisクライアントを作成し、クライアントにデータを展開し、
+        # データを取り出すスクリプトを実行
         run: node client.js
-        # Environment variable used by the `client.js` script to create a new Redis client.
+        # `client.js`スクリプトが新しいRedisクライアントを作成するのに使う環境変数
         env:
           # Redisサービスコンテナとの通信に使われるホスト名
           REDIS_HOST: redis
           # デフォルトのRedisポート
           REDIS_PORT: 6379
 ```
+{% endraw %}
 
 ### コンテナジョブの設定
 
@@ -123,20 +125,20 @@ jobs:
 
 ```yaml{:copy}
 steps:
-  # Downloads a copy of the code in your repository before running CI tests
+  # CIテストの実行前にリポジトリのコードのコピーをダウンロード
   - name: Check out repository code
-    uses: {% data reusables.actions.action-checkout %}
+    uses: actions/checkout@v2
 
-  # Performs a clean installation of all dependencies in the `package.json` file
-  # For more information, see https://docs.npmjs.com/cli/ci.html
+  # `package.json`ファイル中のすべての依存関係のクリーンインストールの実行
+  # 詳しい情報については https://docs.npmjs.com/cli/ci.html を参照
   - name: Install dependencies
     run: npm ci
 
   - name: Connect to Redis
-    # Runs a script that creates a Redis client, populates
-    # the client with data, and retrieves data
+    # Redisクライアントを作成し、クライアントにデータを展開し、
+    # データを取り出すスクリプトを実行
     run: node client.js
-    # Environment variable used by the `client.js` script to create a new Redis client.
+    # `client.js`スクリプトが新しいRedisクライアントを作成する際に利用する環境変数
     env:
           # Redisサービスコンテナとの通信に使われるホスト名
           REDIS_HOST: redis
@@ -154,54 +156,56 @@ Redisサービスのホスト名は、ワークフロー中で設定されたラ
 
 {% data reusables.actions.copy-workflow-file %}
 
+{% raw %}
 ```yaml{:copy}
 name: Redis runner example
 on: push
 
 jobs:
-  # Label of the runner job
+  # ランナージョブのラベル
   runner-job:
-    # You must use a Linux environment when using service containers or container jobs
+    # サービスコンテナもしくはコンテナジョブを使う際にはLinux環境を使わなければならない
     runs-on: ubuntu-latest
 
-    # Service containers to run with `runner-job`
+    # `runner-job`と実行されるサービスコンテナ
     services:
-      # Label used to access the service container
+      # サービスコンテナへのアクセスに使われるラベル
       redis:
-        # Docker Hub image
+        # Docker Hubのイメージ
         image: redis
-        # Set health checks to wait until redis has started
+        # redisが起動するまで待つヘルスチェックの設定
         options: >-
           --health-cmd "redis-cli ping"
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
         ports:
-          # Maps port 6379 on service container to the host
+          # サービスコンテナのポート6379をホストにマップ
           - 6379:6379
 
     steps:
-      # Downloads a copy of the code in your repository before running CI tests
+      # CIテストの実行前にリポジトリのコードのコピーをダウンロード
       - name: Check out repository code
-        uses: {% data reusables.actions.action-checkout %}
+        uses: actions/checkout@v2
 
-      # Performs a clean installation of all dependencies in the `package.json` file
-      # For more information, see https://docs.npmjs.com/cli/ci.html
+      # `package.json`ファイル内のすべての依存関係のクリーンインストールの実行
+      # 詳しい情報についてはhttps://docs.npmjs.com/cli/ci.htmlを参照
       - name: Install dependencies
         run: npm ci
 
       - name: Connect to Redis
-        # Runs a script that creates a Redis client, populates
-        # the client with data, and retrieves data
+        # Redisクライアントを作成し、クライアントにデータを展開し、
+        # データを取り出すスクリプトを実行
         run: node client.js
-        # Environment variable used by the `client.js` script to create
-        # a new Redis client.
+        # `client.js`スクリプトが新しいRedisクライアントを作成するのに
+        # 使う環境変数
         env:
           # Redisサービスコンテナとの通信に使われるホスト名
           REDIS_HOST: localhost
           # デフォルトのRedisポート
           REDIS_PORT: 6379
 ```
+{% endraw %}
 
 ### ランナージョブの設定
 
@@ -241,21 +245,21 @@ jobs:
 
 ```yaml{:copy}
 steps:
-  # Downloads a copy of the code in your repository before running CI tests
+  # CIテストの実行前にリポジトリのコードのコピーをダウンロード
   - name: Check out repository code
-    uses: {% data reusables.actions.action-checkout %}
+    uses: actions/checkout@v2
 
-  # Performs a clean installation of all dependencies in the `package.json` file
-  # For more information, see https://docs.npmjs.com/cli/ci.html
+  # `package.json`ファイル中のすべての依存関係のクリーンインストールの実行
+  # 詳しい情報については https://docs.npmjs.com/cli/ci.html を参照
   - name: Install dependencies
     run: npm ci
 
   - name: Connect to Redis
-    # Runs a script that creates a Redis client, populates
-    # the client with data, and retrieves data
+    # Redisクライアントを作成し、クライアントにデータを展開し、
+    # データを取り出すスクリプトを実行
     run: node client.js
-    # Environment variable used by the `client.js` script to create
-    # a new Redis client.
+    # `client.js`スクリプトが新しいRedisクライアントを作成する際に
+    # 利用する環境変数
     env:
           # Redisサービスコンテナとの通信に使われるホスト名
           REDIS_HOST: localhost

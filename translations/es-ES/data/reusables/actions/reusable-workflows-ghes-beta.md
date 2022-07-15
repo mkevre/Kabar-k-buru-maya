@@ -2,7 +2,7 @@
 
 {% note %}
 
-**Nota**: los flujos de trabajo reutilizables se encuentran actualmente en beta y están sujetos a cambios.
+**Note**: Reusable workflows are currently in beta and subject to change.
 
 {% endnote %}
 

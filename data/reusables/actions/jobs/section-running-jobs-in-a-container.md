@@ -4,14 +4,9 @@ If you do not set a `container`, all steps will run directly on the host specifi
 
 ### Example: Running a job within a container
 
-```yaml{:copy}
-name: CI
-on:
-  push:
-    branches: [ main ]
+```yaml
 jobs:
-  container-test-job:
-    runs-on: ubuntu-latest
+  my_job:
     container:
       image: node:14.16
       env:
@@ -21,16 +16,12 @@ jobs:
       volumes:
         - my_docker_volume:/volume_mount
       options: --cpus 1
-    steps:
-      - name: Check for dockerenv file
-        run: (ls /.dockerenv && echo Found dockerenv) || (echo No dockerenv)
 ```
 
 When you only specify a container image, you can omit the `image` keyword.
 
 ```yaml
 jobs:
-  container-test-job:
-    runs-on: ubuntu-latest
+  my_job:
     container: node:14.16
 ```

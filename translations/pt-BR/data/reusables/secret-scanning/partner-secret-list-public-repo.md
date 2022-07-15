@@ -22,10 +22,6 @@
 | Contributed Systems       | Contributed Systems Credentials                           |
 | Databricks                | Token de acesso de Databricks                             |
 | Datadog                   | Chave de API de Datadog                                   |
-| DigitalOcean              | DigitalOcean Personal Access Token                        |
-| DigitalOcean              | DigitalOcean OAuth Token                                  |
-| DigitalOcean              | DigitalOcean Refresh Token                                |
-| DigitalOcean              | DigitalOcean System Token                                 |
 | Discord                   | Token de Bot de Discord                                   |
 | Doppler                   | Token pessoal de Doppler                                  |
 | Doppler                   | Token de serviço de Doppler                               |
@@ -53,7 +49,6 @@
 | Hubspot                   | Chave da API de Hubspot                                   |
 | Ionic                     | Ionic Personal Access Token                               |
 | Ionic                     | Ionic Refresh Token                                       |
-| JD Cloud                  | JD Cloud Access Key                                       |
 | Linear                    | Linear API Key                                            |
 | Linear                    | Linear OAuth Access Token                                 |
 | Mailchimp                 | Chave da API de Mailchimp                                 |
@@ -77,7 +72,6 @@
 | Proctorio                 | Chave de segredo de Proctorio                             |
 | Pulumi                    | Token de acesso de Pulumi                                 |
 | PyPI                      | PyPI API Token                                            |
-| redirect.pizza            | redirect.pizza API Token                                  |
 | RubyGems                  | RubyGems API Key                                          |
 | Samsara                   | Token de API de Samsara                                   |
 | Samsara                   | Token de acesso de OAuth de Samsara                       |
@@ -97,10 +91,8 @@
 | Stripe                    | Chave secreta da API de Teste de Stripe                   |
 | Stripe                    | Chave restrita da API de Stripe Live                      |
 | Stripe                    | Chave restrita da API de testes de Stripe                 |
-| Supabase                  | Supabase Service Key                                      |
 | Tencent Cloud             | ID de segredot de Tencent Cloud                           |
 | Twilio                    | Identificador de string de conta de Twilio                |
 | Twilio                    | Chave da API de Twilio                                    |
 | Typeform                  | Typeform Personal Access Token                            |
 | Valour                    | Valour Access Token                                       |
-| Zuplo                     | Zuplo Consumer API                                        |

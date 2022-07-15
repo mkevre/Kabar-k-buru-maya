@@ -1,6 +1,6 @@
 
 {% note %}
 
-**注意：** 试运行功能目前处于测试阶段，可能会有所变化。
+**Note:** The dry run feature is currently in beta and subject to change.
 
 {% endnote %}

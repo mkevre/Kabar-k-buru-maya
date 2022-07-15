@@ -65,14 +65,7 @@ You can manage the runner service in the Windows **Services** application, or yo
    sudo ./svc.sh install
    ```
 
-1. Alternatively, the command takes an optional `user` argument to install the service as a different user.
-
-  ```shell
-  ./svc.sh install <em>USERNAME</em>
-  ```
-
 {% endlinux %}
-
 {% mac %}
 
 ## Installing the service
@@ -84,6 +77,12 @@ You can manage the runner service in the Windows **Services** application, or yo
    ./svc.sh install
    ```
 {% endmac %}
+
+The command takes an optional `user` argument to install the service as a different user.
+
+```shell
+./svc.sh install --user <em>USERNAME</em>
+```
 
 ## Starting the service
 

@@ -1,7 +1,7 @@
 ---
-title: Elegir un ejecutor para un job
+title: Choosing the runner for a job
 shortTitle: Elegir un ejecutor para un job
-intro: Definir el tipo de máquina que procesará un job en tu flujo de trabajo.
+intro: Define the type of machine that will process a job in your workflow.
 versions:
   fpt: '*'
   ghes: '*'

@@ -59,9 +59,9 @@ Travis CI puede utilizar `stages` para ejecutar jobs en paralelo. De forma simil
 
 Tanto Travis CI como {% data variables.product.prodname_actions %} son compatibles con las insignias de estado, lo cual te permite indicar si una compilación pasa o falla. Para obtener más información, consulta la sección "[Agregar una insignia de estado de un flujo de trabajo a tu repositorio](/actions/managing-workflow-runs/adding-a-workflow-status-badge)".
 
-### Utilizar una matriz
+### Utilizar una matriz de compilaciones
 
-Tanto Travis CI como {% data variables.product.prodname_actions %} son compatibles con una matriz, lo cual te permite llevar a cabo pruebas utilizando combinaciones de sistemas operativos y paquetes de software. Para obtener más información, consulta la sección "[Utilizar una matriz para tus jobs](/actions/using-jobs/using-a-matrix-for-your-jobs)".
+Tanto Travis CI como {% data variables.product.prodname_actions %} son compatibles con matrices de compilación, lo cual te permite realizar pruebas utilizando combinaciones de sistemas operativos y paquetes de software. Para obtener más información, consulta "[Utilizar una matriz de compilaciones](/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix)".
 
 A continuación podrás encontrar un ejemplo que compara la sintaxis para cada sistema:
 
@@ -164,13 +164,13 @@ git:
 {% endraw %}
 </td>
 <td class="d-table-cell v-align-top">
-
+{% raw %}
 ```yaml
-- uses: {% data reusables.actions.action-checkout %}
+- uses: actions/checkout@v2
   with:
     submodules: false
 ```
-
+{% endraw %}
 </td>
 </tr>
 </table>
@@ -208,8 +208,7 @@ Los jobs simultáneos y los tiempos de ejecución de los flujos de trabajo en {%
 ### Utilizar lenguajes diferentes en {% data variables.product.prodname_actions %}
 
 Cuando trabajas con lenguajes diferentes en {% data variables.product.prodname_actions %}, pueeds crear un paso en tu job para configurar tus dependencias de lenguaje. Para obtener más información acerca de cómo trabajar con un lenguaje en particular, consulta la guía específica:
-  - [Crear y probar en Node.js](/actions/guides/building-and-testing-nodejs)
-  - [Crear y probar en Python](/actions/guides/building-and-testing-python)
+  - [Crear y probar Node.js o Python](/actions/guides/building-and-testing-nodejs-or-python)
   - [Compilar y probar PowerShell](/actions/guides/building-and-testing-powershell)
   - [Construir y probar Java con Maven](/actions/guides/building-and-testing-java-with-maven)
   - [Construir y probar Java con Gradle](/actions/guides/building-and-testing-java-with-gradle)
@@ -284,30 +283,26 @@ script:
 {% endraw %}
 </td>
 <td class="d-table-cell v-align-top">
-
+{% raw %}
 ```yaml
 jobs:
   run_python:
     runs-on: ubuntu-latest
     steps:
-      - uses: {% data reusables.actions.action-setup-python %}
+      - uses: actions/setup-python@v2
         with:
           python-version: '3.7'
           architecture: 'x64'
       - run: python script.py
 ```
-
+{% endraw %}
 </td>
 </tr>
 </table>
 
 ## Almacenar dependencias en caché
 
-Travis CI y {% data variables.product.prodname_actions %} te permiten guardar dependencias en caché manualmente para reutilizarlas posteriormente.
-
-{% ifversion actions-caching %}
-
-Este ejemplo ilustra la sintaxis de caché para cada sistema.
+Travis CI y {% data variables.product.prodname_actions %} te permiten guardar dependencias en caché manualmente para reutilizarlas posteriormente. Este ejemplo ilustra la sintaxis de caché para cada sistema.
 
 <table>
 <tr>
@@ -328,25 +323,21 @@ cache: npm
 {% endraw %}
 </td>
 <td class="d-table-cell v-align-top">
-
+{% raw %}
 ```yaml
 - name: Cache node modules
-  uses: {% data reusables.actions.action-cache %}
+  uses: actions/cache@v2
   with:
     path: ~/.npm
-    key: {% raw %}v1-npm-deps-${{ hashFiles('**/package-lock.json') }}{% endraw %}
+    key: v1-npm-deps-${{ hashFiles('**/package-lock.json') }}
     restore-keys: v1-npm-deps-
 ```
-
+{% endraw %}
 </td>
 </tr>
 </table>
 
-{% else %}
-
-{% data reusables.actions.caching-availability %}
-
-{% endif %}
+El almacenamiento en caché de las {% data variables.product.prodname_actions %} solo se aplica a los repositorios que se hospedan en {% data variables.product.prodname_dotcom_the_website %}. Para obtener más información, consulta la sección "<a href="/actions/guides/caching-dependencies-to-speed-up-workflows" class="dotcom-only">Almacenar las dependencias en caché para agilizar los flujos de trabajo</a>".
 
 ## Ejemplos de tareas comunes
 
@@ -411,7 +402,7 @@ script:
 {% endraw %}
 </td>
 <td>
-
+{% raw %}
 ```yaml
 name: Node.js CI
 on: [push]
@@ -419,16 +410,16 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: {% data reusables.actions.action-checkout %}
+      - uses: actions/checkout@v2
       - name: Use Node.js
-        uses: {% data reusables.actions.action-setup-node %}
+        uses: actions/setup-node@v2
         with:
           node-version: '12.x'
       - run: npm install
       - run: npm run build
       - run: npm test
 ```
-
+{% endraw %}
 </td>
 </tr>
 </table>

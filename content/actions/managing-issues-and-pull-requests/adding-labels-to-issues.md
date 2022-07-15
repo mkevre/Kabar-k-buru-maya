@@ -40,9 +40,9 @@ In the tutorial, you will first make a workflow file that uses the [`andymckay/l
           - opened
     jobs:
       label_issues:
-        runs-on: ubuntu-latest
+        runs-on: ubuntu-latest{% ifversion fpt or ghes > 3.1 or ghae or ghec %}
         permissions:
-          issues: write
+          issues: write{% endif %}
         steps:
           - name: Label issues
             uses: andymckay/labeler@e6c4322d0397f3240f0e7e30a33b5c5df2d39e90

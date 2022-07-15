@@ -20,7 +20,7 @@ topics:
 
 Este guia explica como usar {% data variables.product.prodname_actions %} para criar e implantar um aplicativo web nos [Azure Static Web Apps](https://azure.microsoft.com/services/app-service/static/).
 
-{% ifversion fpt or ghec or ghae-issue-4856 or ghes > 3.4 %}
+{% ifversion fpt or ghec or ghae-issue-4856 %}
 
 {% note %}
 
@@ -61,7 +61,7 @@ env:
   API_LOCATION: "api" # location of your api source code - optional
   APP_ARTIFACT_LOCATION: "build" # location of client code build output
 
-on:
+  on:
   push:
     branches:
       - main
@@ -72,7 +72,6 @@ on:
 
 permissions:
   issues: write
-  contents: read
 
 jobs:
   build_and_deploy:
@@ -80,7 +79,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Build and Deploy
     steps:
-      - uses: {% data reusables.actions.action-checkout %}
+      - uses: actions/checkout@v2
         with:
           submodules: true
       - name: Build And Deploy

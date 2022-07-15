@@ -62,7 +62,7 @@ versions:
   ![[Download logs] ドロップダウンメニュー](/assets/images/help/repository/download-logs-drop-down-updated-2.png)
 
 
-  {% ifversion re-run-jobs %}
+  {% if re-run-jobs %}
 
   {% note %}
 

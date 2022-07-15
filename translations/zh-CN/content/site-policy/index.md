@@ -17,6 +17,5 @@ children:
   - /content-removal-policies
   - /security-policies
   - /github-company-policies
-  - /site-policy-deprecated
 ---
 

@@ -70,11 +70,7 @@ export const PlaygroundContentBlock = ({ sectionIndex, contentBlock }: Props) =>
           </a>
         </h3>
       )}
-      <div data-search="article-body">
-        <ArticleMarkdown className="markdown-body playground">
-          {contentBlock.content}
-        </ArticleMarkdown>
-      </div>
+      <ArticleMarkdown className="markdown-body playground">{contentBlock.content}</ArticleMarkdown>
     </div>
   )
 }

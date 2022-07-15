@@ -1,5 +1,5 @@
 {% data reusables.actions.self-hosted-runner-configure-runner-group %}
-1. 修改策略选项。
+1. Modify your policy options.
 
    {% ifversion not ghae %}
    {% warning %}

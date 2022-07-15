@@ -1,10 +1,10 @@
 ---
-title: Administrar la seguridad de la cadena de suministro para tu empresa
+title: Managing supply chain security for your enterprise
 shortTitle: Seguridad de la cadena de suministro
-intro: 'Puedes visualizar, mantener y asegurar las dependencias en tu cadena de suministro de software de los desarrolladores.'
+intro: 'You can visualize, maintain, and secure the dependencies in your developers'' software supply chain.'
 versions:
   ghes: '*'
-  ghae: '*'
+  ghae: issue-4864
 topics:
   - Enterprise
 children:
